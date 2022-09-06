@@ -21,7 +21,7 @@ function sum(a, b) {
 //я могу создавать массив,помещая в него expressions for instance call of function
 const values = [sum(4, 5), sum(4, 6), sum(5, 6)];
 console.log(values);
-[9, 10, 11];
+//[9, 10, 11];
 
 //challenge
 //decision by array as parameter in function
