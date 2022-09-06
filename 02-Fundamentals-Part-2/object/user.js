@@ -4,6 +4,7 @@ const user = {
     birthYear: 2000,
     job: 'developer',
     friends: ['mike', 'tom', 'ann'],
+    driveLicense: false,
     getFriends() {//что-то наподобие function declaration
         //let myFriends=[...this.friends];
         //return myFriends;
@@ -19,6 +20,11 @@ const user = {
         this.age = new Date().getFullYear() - this.birthYear;
         return this.age;
     },
+    summarizeInfo() {
+        this.info = `${this.firstName} is a ${this.calcAge()}-year old ${this.job}
+         and he has ${this.driveLicense ? 'a' : 'no'} driver's license`;
+        return this.info;
+    }
 }
 const nameKey = 'Name';
 console.log(user["firstName"]);
@@ -29,7 +35,7 @@ console.log(user[Object.keys(user)[0]]);
 console.log(user[`first${nameKey}`]);
 console.log(user[`last${nameKey}`]);
 let keyObj = prompt('choose from these words: firstName,lastName,job,friends');
-alert(user[keyObj]);
+//alert(user[keyObj]);
 //можно через условный оператор проверять наличие свойства у объекта,поскольку обращение к несуществующему свойству
 //вернет undefined ===false, то блок if не сработает ш
 if (user[keyObj]) {
@@ -50,3 +56,5 @@ console.log(user.calcAge());
 console.log(user.age);
 console.log(user.age);
 console.log(user.age);
+console.log(user.summarizeInfo());
+console.log(user.info);
