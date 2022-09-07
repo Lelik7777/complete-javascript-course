@@ -58,3 +58,59 @@ console.log(user.age);
 console.log(user.age);
 console.log(user.summarizeInfo());
 console.log(user.info);
+
+//challenge#3
+function calcBMI(weight, height) {
+    return weight / height ** 2;
+}
+
+const mark = {
+    firstName: 'Mark',
+    lastName: 'Miller',
+    weight: 78,
+    height: 1.69,
+    getFullName() {
+        return this.firstName + ' ' + this.lastName;
+    },
+    getBMI() {
+        this.bmi = +(this.weight / this.height ** 2).toFixed();
+        return {
+            bmi: this.bmi,
+            fullName: this.getFullName(),
+        };
+    }
+};
+const john = {
+    firstName: 'John',
+    lastName: 'Smith',
+    weight: 92,
+    height: 1.95,
+    getFullName() {
+        return this.firstName + ' ' + this.lastName;
+    },
+    getBMI() {
+        this.bmi = +(this.weight / this.height ** 2).toFixed();
+        return {
+            bmi: this.bmi,
+            fullName: this.getFullName(),
+        };
+    }
+}
+console.log(john.bmi ?? john.getBMI().bmi);
+console.log(mark.bmi ?? mark.getBMI().bmi);
+const higherBMI = (man1, man2) => {
+    function createStr(obj1, obj2) {
+        const bmi1 = obj1.getBMI().bmi;
+        const bmi2 = obj2.getBMI().bmi;
+        const name1 = obj1.getBMI().fullName;
+        const name2 = obj2.getBMI().fullName;
+
+        return `${bmi1 > bmi2 ? name1 : name2}'s BMI (${bmi1 > bmi2 ? bmi1 : bmi2})
+        is higher than ${bmi1 > bmi2 ? name2 : name1}'s (${bmi1 > bmi2 ? bmi2 : bmi1})!`
+    }
+
+    return createStr(man1, man2);
+};
+console.log(higherBMI(mark, john));
+console.log(mark);
+
