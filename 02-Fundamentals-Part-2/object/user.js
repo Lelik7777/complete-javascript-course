@@ -96,6 +96,7 @@ const john = {
         };
     }
 }
+
 console.log(john.bmi ?? john.getBMI().bmi);
 console.log(mark.bmi ?? mark.getBMI().bmi);
 const higherBMI = (man1, man2) => {
@@ -113,4 +114,5 @@ const higherBMI = (man1, man2) => {
 };
 console.log(higherBMI(mark, john));
 console.log(mark);
+
 
