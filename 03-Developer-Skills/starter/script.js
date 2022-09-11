@@ -68,15 +68,39 @@ const measureKelvin = () => {
     const measurement = {
         type: 'temperature',
         unit: 'celsius',
-        value: +prompt('enter temperature in celsius'),
+        //value: +prompt('enter temperature in celsius'),
+        value: 20,
     }
     console.table(measurement)
     return measurement.value + 273;
 }
 console.log(` temperature in kelvin is ${measureKelvin()}`);
-console.table([3,['hello',43,'world'],'bob',true,{name:'bob'}]);
+console.table([3, ['hello', 43, 'world'], 'bob', true, {name: 'bob'}]);
 
-console.log('17°C');
+
+//challenge #1    ф-ция получает массив и выводит строку с цифрами из массива.
+//уточнения: какой массив получает ф-ция, там могут быть разные типы данных? если да,то нам нужно отсортировать цифры
+// разбитие на субтаски: 1.проверить массив и отсортировать из него только цифры 2. собственно создать универсальную строку
+// и вывести ее в консоль
+//3.в процессе разработки всплыла необходимость создания отдельно ф-ции,которая конструирует строку,которая будет в консоли
+function printForecast(arr) {
+    const tempers = [];
+    arr.forEach(x => {
+        if (typeof x === "number") tempers.push(x);
+    });
+    const sign = '°C';
+    const createString = (arrNum) => {
+        let string = '';
+        arrNum.forEach((x, i) => {
+            string += `...${arrNum[i] + sign} in ${i + 1} days`;
+        });
+        return string + '...';
+    }
+    console.log(createString(tempers));
+}
+
+printForecast([17, 'hee', true, 21, 23, {name: 'bob'}]);
+printForecast([12, 5, -5, 0, 4])
 
 
 
