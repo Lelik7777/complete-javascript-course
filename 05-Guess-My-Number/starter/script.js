@@ -13,22 +13,23 @@ let $highScore = document.querySelector('.highscore');
 const $again = document.querySelector('.again');
 const $number = document.querySelector('.number');
 
-let count = 20;
+let score = 20;
+let highScore = 0;
 
 function decrease() {
-    count--;
-    $score.textContent = count;
+    score--;
+    $score.textContent = score;
 }
 
 $again.addEventListener('click', () => {
-    count = 20;
-    $score.textContent = count;
+    score = 20;
+    $score.textContent = score;
     document.querySelector('.guess').value = null;
     $message.textContent = 'Start guessing...';
     secretNumber = Math.trunc(Math.random() * 20 + 1);
-    document.body.style.backgroundColor='#222';
-    $number.style.width='15rem';
-    $number.textContent='?';
+    document.body.style.backgroundColor = '#222';
+    $number.style.width = '15rem';
+    $number.textContent = '?';
 })
 $btn.addEventListener('click', () => {
     const guess = +document.querySelector('.guess').value;
@@ -36,13 +37,16 @@ $btn.addEventListener('click', () => {
     if (!guess) {
         $message.textContent = '⛔ No number';
         decrease();
-    } else if (count <= 1) {
+    } else if (score <= 1) {
         $message.textContent = 'You lost. Try again';
     } else if (guess === secretNumber) {
         $message.textContent = '🎉 You guess the number!';
-        $highScore.textContent = +$highScore.textContent > count ? $highScore.textContent : count;
+        if (score > highScore) {
+            highScore = score;
+            $highScore.textContent = highScore;
+        }
         document.body.style.backgroundColor = 'green';
-        $number.textContent = secretNumber.toString();
+        $number.textContent = secretNumber;
         $number.style.width = '30rem';
     } else if (guess < secretNumber) {
         $message.textContent = 'too low';
