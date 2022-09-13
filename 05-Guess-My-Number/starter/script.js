@@ -1,8 +1,17 @@
 'use strict';
-console.log(document.querySelector('.message').textContent);
-//document.querySelector('.message').textContent='hello,world';
-let secretNumber = Math.trunc(Math.random() * 20 + 1);
-//document.querySelector('.number').textContent = secretNumber.toString();
+const getSecretNumber = () => {
+    return Math.trunc(Math.random() * 20 + 1);
+};
+function decrease() {
+    score--;
+    $score.textContent = score;
+}
+function displayGame(color, width, value) {
+    document.body.style.backgroundColor = color;
+    $number.style.width = width;
+    $number.textContent = value;
+}
+
 
 //здесь я получаю интерактивную связь между кнопкой и инпутом,имея возможность
 //доступа к актуальному значению инпута
@@ -15,25 +24,21 @@ const $number = document.querySelector('.number');
 
 let score = 20;
 let highScore = 0;
+let secretNumber = getSecretNumber();
 
-function decrease() {
-    score--;
-    $score.textContent = score;
-}
+
 
 $again.addEventListener('click', () => {
     score = 20;
     $score.textContent = score;
     document.querySelector('.guess').value = null;
     $message.textContent = 'Start guessing...';
-    secretNumber = Math.trunc(Math.random() * 20 + 1);
-    document.body.style.backgroundColor = '#222';
-    $number.style.width = '15rem';
-    $number.textContent = '?';
+    secretNumber = getSecretNumber();
+    displayGame('#222', '15rem', '?');
+
 })
 $btn.addEventListener('click', () => {
     const guess = +document.querySelector('.guess').value;
-    console.log(guess, typeof guess);
     if (!guess) {
         $message.textContent = '⛔ No number';
         decrease();
@@ -45,19 +50,10 @@ $btn.addEventListener('click', () => {
             highScore = score;
             $highScore.textContent = highScore;
         }
-        document.body.style.backgroundColor = 'green';
-        $number.textContent = secretNumber;
-        $number.style.width = '30rem';
+        displayGame('green', '30rem', secretNumber);
     } else if (guess !== secretNumber) {
         $message.textContent = guess > secretNumber ? 'too high' : 'too low';
         decrease();
     }
-    // } else if (guess < secretNumber) {
-    //     $message.textContent = 'too low';
-    //     decrease();
-    // } else if (guess > secretNumber) {
-    //     $message.textContent = 'too high';
-    //     decrease();
-    // }
 
 });
