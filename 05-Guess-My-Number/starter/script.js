@@ -2,14 +2,20 @@
 const getSecretNumber = () => {
     return Math.trunc(Math.random() * 20 + 1);
 };
+
 function decrease() {
     score--;
     $score.textContent = score;
 }
+
 function displayGame(color, width, value) {
     document.body.style.backgroundColor = color;
     $number.style.width = width;
     $number.textContent = value;
+}
+
+function createMessage(text) {
+    $message.textContent = text;
 }
 
 
@@ -27,12 +33,11 @@ let highScore = 0;
 let secretNumber = getSecretNumber();
 
 
-
 $again.addEventListener('click', () => {
     score = 20;
     $score.textContent = score;
     document.querySelector('.guess').value = null;
-    $message.textContent = 'Start guessing...';
+    createMessage('Start guessing...');
     secretNumber = getSecretNumber();
     displayGame('#222', '15rem', '?');
 
@@ -40,19 +45,19 @@ $again.addEventListener('click', () => {
 $btn.addEventListener('click', () => {
     const guess = +document.querySelector('.guess').value;
     if (!guess) {
-        $message.textContent = '⛔ No number';
+        createMessage('⛔ No number');
         decrease();
     } else if (score <= 1) {
-        $message.textContent = 'You lost. Try again';
+        createMessage('You lost. Try again');
     } else if (guess === secretNumber) {
-        $message.textContent = '🎉 You guess the number!';
+        createMessage('🎉 You guess the number!');
         if (score > highScore) {
             highScore = score;
             $highScore.textContent = highScore;
         }
         displayGame('green', '30rem', secretNumber);
     } else if (guess !== secretNumber) {
-        $message.textContent = guess > secretNumber ? 'too high' : 'too low';
+        createMessage(guess > secretNumber ? 'too high' : 'too low');
         decrease();
     }
 
