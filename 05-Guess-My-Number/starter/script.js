@@ -48,12 +48,16 @@ $btn.addEventListener('click', () => {
         document.body.style.backgroundColor = 'green';
         $number.textContent = secretNumber;
         $number.style.width = '30rem';
-    } else if (guess < secretNumber) {
-        $message.textContent = 'too low';
-        decrease();
-    } else if (guess > secretNumber) {
-        $message.textContent = 'too high';
+    } else if (guess !== secretNumber) {
+        $message.textContent = guess > secretNumber ? 'too high' : 'too low';
         decrease();
     }
+    // } else if (guess < secretNumber) {
+    //     $message.textContent = 'too low';
+    //     decrease();
+    // } else if (guess > secretNumber) {
+    //     $message.textContent = 'too high';
+    //     decrease();
+    // }
 
 });
