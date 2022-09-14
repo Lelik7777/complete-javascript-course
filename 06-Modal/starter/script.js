@@ -36,7 +36,10 @@ document.body.addEventListener('click', (ev) => {
 // $btnClosedModal.addEventListener('click', () => {
 //     closeElement('hidden');
 // });
-document.body.addEventListener('keydown', (ev) => {
+//поскольку нажатие на клавишу - это глобальное событие,то вешать обработчик
+//нужно на объект document
+document.addEventListener('keydown', (ev) => {
+    console.log('a key was pressed')
     ev.code === 'Escape' && closeElement(arrElements, 'hidden');
 });
 
