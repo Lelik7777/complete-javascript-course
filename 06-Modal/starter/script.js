@@ -26,11 +26,11 @@ function closeElement(token) {
 //моя реализация всплытия события и его поимка на уровне body с проверкой
 // имени класса элемента,где это событие возникло
 document.body.addEventListener('click', (ev) => {
-    console.log(ev.target)
     ev.target.classList.value==='show-modal'&& showElement('hidden');
+    ev.target.classList.value==='close-modal'&&closeElement('hidden');
 });
-$btnClosedModal.addEventListener('click', () => {
-    closeElement('hidden');
-});
+// $btnClosedModal.addEventListener('click', () => {
+//     closeElement('hidden');
+// });
 
 
