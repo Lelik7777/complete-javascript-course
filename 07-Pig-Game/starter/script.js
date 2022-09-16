@@ -1,5 +1,5 @@
 'use strict';
-
+// variables store DOM elements
 const $player_0 = document.querySelector('.player--0');
 const $player_1 = document.querySelector('.player--1');
 const $dice = document.querySelector('.dice');
@@ -9,16 +9,22 @@ const $current_0 = document.querySelector('#current--0');
 const $current_1 = document.querySelector('#current--1');
 const arrPlayers = [$player_0.classList, $player_1.classList];
 const arrScoreElem = [$score_0, $score_1];
-let current = [0, 0];
-let score = [0, 0]
+const arrCurrentElem = [$current_0, $current_1];
+const dice = $dice.classList;
+
+//simple js variables
 const [active, hidden, winner, rollBtn, holdBtn, newGameBtn] =
     ['player--active', 'hidden', 'player--winner', 'btn--roll', 'btn--hold', 'btn--new'];
 let activePlayer = 0;
+let current = [0, 0];
+let score = [0, 0]
+
+//functions
 
 function getRandomNum() {
     return Math.trunc(Math.random() * 6 + 1);
 }
-
+//remove class $player
 const removeActive = (playerNum) => {
     switch (playerNum) {
         case 0:
@@ -31,18 +37,20 @@ const removeActive = (playerNum) => {
             console.error(`not ${playerNum} - only 0 or 1`);
     }
 }
+//add class $player
 const addActive = (playerNum) => {
     if (playerNum >= 0 && playerNum <= 1) {
         playerNum ? arrPlayers[1].add(active) :
             arrPlayers[0].add(active);
     } else console.error(`not ${playerNum} - only 0 or 1`);
 }
+
 const showDice = (num) => {
     $dice.src = `dice-${num}.png`;
-    $dice.classList.remove(hidden);
+    dice.remove(hidden);
 }
 
-function getNewGame(arr) {
+function startNewGame(arr) {
     score = [0, 0];
     arr.forEach(x => {
         x.textContent = score[activePlayer];
@@ -51,43 +59,40 @@ function getNewGame(arr) {
     arrPlayers[0].remove(winner);
     arrPlayers[0].add(active);
     arrPlayers[1].remove(active);
-    $dice.classList.add(hidden);
+    dice.add(hidden);
 
 }
-
+//reset current score
 const currentToZero = () => {
-    // current_0 = 0;
-    // current_1 = 0;
     current = [0, 0];
-    $current_1.textContent = current[0];
-    $current_0.textContent = current[1];
+    arrCurrentElem[1].textContent = current[0];
+    arrCurrentElem[0].textContent = current[1];
 }
 
-function sumCurrent(num, numPlayer) {
+function sumCurrentScore(num, numPlayer) {
     if (numPlayer) {
         current[1] += num;
-        $current_1.textContent = current[1];
+        arrCurrentElem[1].textContent = current[1];
     } else {
         current[0] += num;
-        $current_0.textContent = current[0];
+        arrCurrentElem[0].textContent = current[0];
     }
 }
 
-function sumScore(num, player) {
+function sumTotalScore(num, player) {
     if (player) {
         score[player] += num;
-        $score_1.textContent = score[player];
+        arrScoreElem[1].textContent = score[player];
     } else {
         score[player] += num;
-        $score_0.textContent = score[player];
+        arrScoreElem[0].textContent = score[player];
     }
 }
 
 const hold = (numPlayer) => {
-
     removeActive(numPlayer);
     addActive(!numPlayer);
-    sumScore(numPlayer ? current[1] : current[0], numPlayer);
+    sumTotalScore(numPlayer ? current[1] : current[0], numPlayer);
     currentToZero();
     activePlayer = numPlayer ? 0 : 1;
     if (score[numPlayer] >= 40) {
@@ -101,7 +106,7 @@ function rollDice(numberPlayer) {
     const randomNum = getRandomNum();
     showDice(randomNum);
     if (randomNum !== 1) {
-        sumCurrent(randomNum, numberPlayer);
+        sumCurrentScore(randomNum, numberPlayer);
     } else {
         currentToZero();
         removeActive(numberPlayer);
@@ -111,9 +116,11 @@ function rollDice(numberPlayer) {
 
 }
 
+//listen events
 document.body.addEventListener('click', (ev) => {
-    ev.target.classList.contains(rollBtn) && rollDice(activePlayer);
-    ev.target.classList.contains(holdBtn) && hold(activePlayer);
-    ev.target.classList.contains(newGameBtn) && getNewGame(arrScoreElem);
+    const event = ev.target.classList;
+    event.contains(rollBtn) && rollDice(activePlayer);
+    event.contains(holdBtn) && hold(activePlayer);
+    event.contains(newGameBtn) && startNewGame(arrScoreElem);
 
-})
+});
