@@ -1,29 +1,42 @@
 'use strict';
+//function return element by class or id name
+//if true return element by class else by id
+const getDomEl = (name, boolean = true) => {
+    return boolean
+        ? document.querySelector(`.${name}`)
+        : document.getElementById(name);
+}
+
 // variables store DOM elements
-const $player_0 = document.querySelector('.player--0');
-const $player_1 = document.querySelector('.player--1');
-const $dice = document.querySelector('.dice');
-const $score_0 = document.querySelector('#score--0');
-const $score_1 = document.querySelector('#score--1');
-const $current_0 = document.querySelector('#current--0');
-const $current_1 = document.querySelector('#current--1');
+const [player0, player1, dice0, score0, score1, current0, current1,] =
+    ['player--0', 'player--1', 'dice', 'score--0', 'score--1', 'current--0', 'current--1'];
+const $player_0 = getDomEl(player0);
+const $player_1 = getDomEl(player1);
+const $dice = getDomEl(dice0);
+const $score_0 = getDomEl(score0, false);
+const $score_1 = getDomEl(score1, false);
+const $current_0 = getDomEl(current0, false);
+const $current_1 = getDomEl(current1, false);
 const arrPlayers = [$player_0.classList, $player_1.classList];
 const arrScoreElem = [$score_0, $score_1];
 const arrCurrentElem = [$current_0, $current_1];
 const dice = $dice.classList;
 
+
 //simple js variables
 const [active, hidden, winner, rollBtn, holdBtn, newGameBtn] =
     ['player--active', 'hidden', 'player--winner', 'btn--roll', 'btn--hold', 'btn--new'];
+//start conditions
 let activePlayer = 0;
 let current = [0, 0];
-let score = [0, 0]
+let score = [0, 0];
 
 //functions
 
 function getRandomNum() {
     return Math.trunc(Math.random() * 6 + 1);
 }
+
 //remove class $player
 const removeActive = (playerNum) => {
     switch (playerNum) {
@@ -62,6 +75,7 @@ function startNewGame(arr) {
     dice.add(hidden);
 
 }
+
 //reset current score
 const currentToZero = () => {
     current = [0, 0];
