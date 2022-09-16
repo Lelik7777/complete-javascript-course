@@ -9,15 +9,10 @@ const $current_0 = document.querySelector('#current--0');
 const $current_1 = document.querySelector('#current--1');
 const arrPlayers = [$player_0.classList, $player_1.classList];
 const arrScoreElem = [$score_0, $score_1];
-let current_0 = 0;
-let current_1 = 0;
+let current = [0, 0];
 let score = [0, 0]
-const active = 'player--active';
-const hidden = 'hidden';
-const winner = 'player--winner';
-const rollBtn = 'btn--roll';
-const holdBtn = 'btn--hold';
-const newGameBtn = 'btn--new';
+const [active, hidden, winner, rollBtn, holdBtn, newGameBtn] =
+    ['player--active', 'hidden', 'player--winner', 'btn--roll', 'btn--hold', 'btn--new'];
 let activePlayer = 0;
 
 function getRandomNum() {
@@ -61,19 +56,20 @@ function getNewGame(arr) {
 }
 
 const currentToZero = () => {
-    current_0 = 0;
-    current_1 = 0;
-    $current_1.textContent = current_0;
-    $current_0.textContent = current_1;
+    // current_0 = 0;
+    // current_1 = 0;
+    current = [0, 0];
+    $current_1.textContent = current[0];
+    $current_0.textContent = current[1];
 }
 
 function sumCurrent(num, numPlayer) {
     if (numPlayer) {
-        current_1 += num;
-        $current_1.textContent = current_1;
+        current[1] += num;
+        $current_1.textContent = current[1];
     } else {
-        current_0 += num;
-        $current_0.textContent = current_0;
+        current[0] += num;
+        $current_0.textContent = current[0];
     }
 }
 
@@ -91,7 +87,7 @@ const hold = (numPlayer) => {
 
     removeActive(numPlayer);
     addActive(!numPlayer);
-    sumScore(numPlayer ? current_1 : current_0, numPlayer);
+    sumScore(numPlayer ? current[1] : current[0], numPlayer);
     currentToZero();
     activePlayer = numPlayer ? 0 : 1;
     if (score[numPlayer] >= 40) {
