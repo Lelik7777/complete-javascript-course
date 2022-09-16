@@ -28,12 +28,15 @@ const dice = $dice.classList;
 const [active, hidden, winner, rollBtn, holdBtn, newGameBtn, disabled] =
     ['player--active', 'hidden', 'player--winner', 'btn--roll', 'btn--hold', 'btn--new', 'disabled'];
 //start conditions
-let activePlayer = 0;
-let currentScore = 0;
-let playing = true;
-let totalScore = [0, 0];
+let activePlayer, currentScore, playing, totalScore;
 
 //functions
+function init() {
+    activePlayer = 0;
+    currentScore = 0;
+    playing = true;
+    totalScore = [0, 0];
+}
 
 function getRandomNum() {
     return Math.trunc(Math.random() * 6) + 1;
@@ -73,8 +76,7 @@ function sumTotalScore(num, player) {
 }
 
 function startNewGame(arr) {
-    playing = true;
-    totalScore = [0, 0];
+    init();
     arr.forEach(x => {
         x.textContent = totalScore[activePlayer];
     });
@@ -83,7 +85,6 @@ function startNewGame(arr) {
     }
     arrPlayers[1].remove(active);
     arrPlayers[0].add(active);
-    activePlayer = 0;
 }
 
 function rollDice(numberPlayer) {
@@ -92,19 +93,13 @@ function rollDice(numberPlayer) {
     if (randomNum !== 1) {
         sumCurrentScore(randomNum, numberPlayer);
     } else {
-        // currentToZero(numberPlayer);
-        // toggleActive();
-        // activePlayer = numberPlayer ? 0 : 1;
         switchPlayer(numberPlayer);
     }
 
 }
 
 const hold = (numPlayer) => {
-    //toggleActive();
     sumTotalScore(currentScore, numPlayer);
-    // currentToZero(numPlayer);
-    // activePlayer = numPlayer ? 0 : 1;
     switchPlayer(numPlayer);
     if (totalScore[numPlayer] >= 40) {
         playing = false;
@@ -115,7 +110,7 @@ const hold = (numPlayer) => {
     }
 }
 
-
+init();
 //listen events
 document.body.addEventListener('click', (ev) => {
     const event = ev.target.classList;
