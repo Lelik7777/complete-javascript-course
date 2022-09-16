@@ -55,6 +55,11 @@ const currentToZero = (numPlayer) => {
     arrCurrentElem[numPlayer].textContent = currentScore;
 
 }
+const switchPlayer = (numberPlayer) => {
+    currentToZero(numberPlayer);
+    toggleActive();
+    activePlayer = numberPlayer ? 0 : 1;
+}
 
 function sumCurrentScore(num, numPlayer) {
     currentScore += num;
@@ -75,12 +80,10 @@ function startNewGame(arr) {
     });
     for (const el of arrPlayers) {
         if (el.contains(winner)) el.remove(winner);
-        if (el.contains(winner) && el.contains(active)) el.remove(active);
     }
+    arrPlayers[1].remove(active);
     arrPlayers[0].add(active);
-    dice.add(hidden);
-    // document.querySelector(`.${rollBtn}`).removeAttribute(disabled)
-    // document.querySelector(`.${holdBtn}`).removeAttribute(disabled,'');
+    activePlayer = 0;
 }
 
 function rollDice(numberPlayer) {
@@ -89,26 +92,26 @@ function rollDice(numberPlayer) {
     if (randomNum !== 1) {
         sumCurrentScore(randomNum, numberPlayer);
     } else {
-        currentToZero(numberPlayer);
-        toggleActive();
-        activePlayer = numberPlayer ? 0 : 1;
-
+        // currentToZero(numberPlayer);
+        // toggleActive();
+        // activePlayer = numberPlayer ? 0 : 1;
+        switchPlayer(numberPlayer);
     }
 
 }
 
 const hold = (numPlayer) => {
-    toggleActive();
+    //toggleActive();
     sumTotalScore(currentScore, numPlayer);
-    currentToZero(numPlayer);
-    activePlayer = numPlayer ? 0 : 1;
+    // currentToZero(numPlayer);
+    // activePlayer = numPlayer ? 0 : 1;
+    switchPlayer(numPlayer);
     if (totalScore[numPlayer] >= 40) {
         playing = false;
+        dice.add(hidden);
         numPlayer
             ? arrPlayers[1].add(winner)
             : arrPlayers[0].add(winner);
-// document.querySelector(`.${rollBtn}`).setAttribute(disabled,'');
-// document.querySelector(`.${holdBtn}`).setAttribute(disabled,'');
     }
 }
 
