@@ -25,42 +25,30 @@ const dice = $dice.classList;
 
 
 //simple js variables
-const [active, hidden, winner, rollBtn, holdBtn, newGameBtn] =
-    ['player--active', 'hidden', 'player--winner', 'btn--roll', 'btn--hold', 'btn--new'];
+const [active, hidden, winner, rollBtn, holdBtn, newGameBtn, disabled] =
+    ['player--active', 'hidden', 'player--winner', 'btn--roll', 'btn--hold', 'btn--new', 'disabled'];
 //start conditions
 let activePlayer = 0;
 let currentScore = 0;
+let playing = true;
 let totalScore = [0, 0];
 
 //functions
 
 function getRandomNum() {
-    return Math.trunc(Math.random() * 6 + 1);
+    return Math.trunc(Math.random() * 6) + 1;
 }
 
 const showDice = (num) => {
     $dice.src = `dice-${num}.png`;
     dice.remove(hidden);
 }
+//toggle between players
 const toggleActive = () => {
     for (const el of arrPlayers) {
         el.toggle(active);
     }
 }
-
-function startNewGame(arr) {
-    totalScore = [0, 0];
-    arr.forEach(x => {
-        x.textContent = totalScore[activePlayer];
-    });
-    arrPlayers[1].remove(winner);
-    arrPlayers[0].remove(winner);
-    arrPlayers[0].add(active);
-    arrPlayers[1].remove(active);
-    dice.add(hidden);
-
-}
-
 //reset current score
 const currentToZero = (numPlayer) => {
     currentScore = 0;
@@ -75,25 +63,24 @@ function sumCurrentScore(num, numPlayer) {
 }
 
 function sumTotalScore(num, player) {
-    if (player) {
-        totalScore[player] += num;
-        arrScoreElem[1].textContent = totalScore[player];
-    } else {
-        totalScore[player] += num;
-        arrScoreElem[0].textContent = totalScore[player];
-    }
+    totalScore[player] += num;
+    arrScoreElem[player].textContent = totalScore[player];
 }
 
-const hold = (numPlayer) => {
-    toggleActive();
-    sumTotalScore(currentScore, numPlayer);
-    currentToZero(numPlayer);
-    activePlayer = numPlayer ? 0 : 1;
-    if (totalScore[numPlayer] >= 40) {
-        numPlayer
-            ? arrPlayers[1].add(winner)
-            : arrPlayers[0].add(winner);
+function startNewGame(arr) {
+    playing = true;
+    totalScore = [0, 0];
+    arr.forEach(x => {
+        x.textContent = totalScore[activePlayer];
+    });
+    for (const el of arrPlayers) {
+        if (el.contains(winner)) el.remove(winner);
+        if (el.contains(winner) && el.contains(active)) el.remove(active);
     }
+    arrPlayers[0].add(active);
+    dice.add(hidden);
+    // document.querySelector(`.${rollBtn}`).removeAttribute(disabled)
+    // document.querySelector(`.${holdBtn}`).removeAttribute(disabled,'');
 }
 
 function rollDice(numberPlayer) {
@@ -110,11 +97,27 @@ function rollDice(numberPlayer) {
 
 }
 
+const hold = (numPlayer) => {
+    toggleActive();
+    sumTotalScore(currentScore, numPlayer);
+    currentToZero(numPlayer);
+    activePlayer = numPlayer ? 0 : 1;
+    if (totalScore[numPlayer] >= 40) {
+        playing = false;
+        numPlayer
+            ? arrPlayers[1].add(winner)
+            : arrPlayers[0].add(winner);
+// document.querySelector(`.${rollBtn}`).setAttribute(disabled,'');
+// document.querySelector(`.${holdBtn}`).setAttribute(disabled,'');
+    }
+}
+
+
 //listen events
 document.body.addEventListener('click', (ev) => {
     const event = ev.target.classList;
-    event.contains(rollBtn) && rollDice(activePlayer);
-    event.contains(holdBtn) && hold(activePlayer);
+    event.contains(rollBtn) && playing && rollDice(activePlayer);
+    event.contains(holdBtn) && playing && hold(activePlayer);
     event.contains(newGameBtn) && startNewGame(arrScoreElem);
 
 });
