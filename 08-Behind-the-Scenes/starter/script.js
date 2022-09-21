@@ -81,3 +81,38 @@ var countProducts = 10;
 function deleteProducts() {
     console.log('all products delete');
 }
+
+console.log(countProducts===window.countProducts);//true
+console.log(fun1===window.fun1);//true
+window.fun1();// и ф-ция отработает
+
+
+const jonas={
+    name:'Jonas',
+    yearBorn:1991,
+    getAge(){
+        console.log(this);
+        return new Date().getFullYear()-this.yearBorn;
+    }
+}
+jonas.getAge();//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
+const ageJonas=jonas.getAge;
+//throw error in strict mode or NaN in sloppy mode
+//console.log(ageJonas());//TypeError: Cannot read properties of undefined (reading 'yearBorn')
+
+const button=document.createElement('button');
+button.innerHTML='button';
+document.body.append(button);
+function listen() {
+    console.log(this);
+}
+// 110 and 112 одинаковы по смыслу
+console.log(this)
+button.addEventListener('click',()=>{
+    console.log(this)//window - поскольку у стрелочной ф-ции нет собственного this, поэтому this указывает на window
+})
+button.addEventListener('click',function () {
+
+    console.log(this);// <button>button</button>
+});
+button.addEventListener('click',listen)//<button>button</button>
