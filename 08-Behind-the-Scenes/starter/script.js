@@ -59,12 +59,25 @@ const fun = () => {
     console.log(`it's fun function`);
 }
 
-console.log(fun1);//undefined
+//console.log(fun1());// TypeError: fun1 is not a function -- мы здесь пытаемся вызвать undefined()
 var fun1 = function () {
     console.log(`it's fun1 function`);
 }
+//fun2(); reference error: cannot access fun2 before initialization -- because fun2 in TDZ
 
+let fun2 = function () {
+    console.log('some text');
+}
 // someVariable находится сейчас in TDZ,поэтому будет выброшена reference error
 //console.log(somVariable);
 
-let someVariable=100;
+let someVariable = 100;
+
+//example pitfall of var variable declaration
+if (!countProducts) deleteProducts();
+
+var countProducts = 10;
+
+function deleteProducts() {
+    console.log('all products delete');
+}
