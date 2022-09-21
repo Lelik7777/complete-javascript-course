@@ -197,3 +197,20 @@ const tom = {
 }
 
 tom.getAge();
+
+
+// arguments keyword
+function add(a,b) {
+    console.log(arguments);
+    return a+b;
+}
+add(4,5,6);//Arguments(3) [4, 5, 6, callee: (...), Symbol(Symbol.iterator): ƒ]
+
+const addArrow = (a,b) => {
+    //console.log(arguments);//Uncaught ReferenceError: arguments is not defined
+   // at addArrow
+
+    return a+b;
+}
+
+addArrow(3,4,5,6);
