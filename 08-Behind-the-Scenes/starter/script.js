@@ -87,19 +87,44 @@ console.log(fun1===window.fun1);//true
 window.fun1();// и ф-ция отработает
 
 
+//this
+
 const jonas={
     name:'Jonas',
     yearBorn:1991,
     getAge(){
-        console.log(this);
+        console.log(this);//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
+        const arrowFun = () => {
+            console.log(this);//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
+        }
+        arrowFun();
         return new Date().getFullYear()-this.yearBorn;
+    },
+    someMethod:()=>{
+        console.log(this);//window
     }
 }
+jonas.someMethod();
 jonas.getAge();//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
 const ageJonas=jonas.getAge;
 //throw error in strict mode or NaN in sloppy mode
 //console.log(ageJonas());//TypeError: Cannot read properties of undefined (reading 'yearBorn')
 
+//на что указывает this
+const ann={
+    name:'Ann',
+    yearBorn: 1984,
+}
+//method borrow
+ann.getAge=jonas.getAge;
+console.log(ann);
+console.log(ann.getAge());
+//the same only with using method call()
+console.log('using .call()',jonas.getAge.call(ann));// 38
+//the same using bind()
+const ageAnn=jonas.getAge.bind(ann);
+console.log(ageAnn());
+console.log(ann);
 const button=document.createElement('button');
 button.innerHTML='button';
 document.body.append(button);
@@ -116,3 +141,22 @@ button.addEventListener('click',function () {
     console.log(this);// <button>button</button>
 });
 button.addEventListener('click',listen)//<button>button</button>
+
+function someFun() {
+    console.log(this);
+}
+someFun()//undefined
+const arrow = () => {
+    console.log(this)
+}
+arrow();//window
+const someFun2 = (arg) => {
+    console.log(arg);
+}
+
+function parentFun() {
+    console.log(this);//undefined
+    someFun2(this);//undefined
+}
+
+parentFun()
