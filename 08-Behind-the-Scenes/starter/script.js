@@ -82,69 +82,72 @@ function deleteProducts() {
     console.log('all products delete');
 }
 
-console.log(countProducts===window.countProducts);//true
-console.log(fun1===window.fun1);//true
+console.log(countProducts === window.countProducts);//true
+console.log(fun1 === window.fun1);//true
 window.fun1();// и ф-ция отработает
 
 
 //this
 
-const jonas={
-    name:'Jonas',
-    yearBorn:1991,
-    getAge(){
+const jonas = {
+    name: 'Jonas',
+    yearBorn: 1991,
+    getAge() {
         console.log(this);//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
         const arrowFun = () => {
             console.log(this);//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
         }
         arrowFun();
-        return new Date().getFullYear()-this.yearBorn;
+        return new Date().getFullYear() - this.yearBorn;
     },
-    someMethod:()=>{
+    someMethod: () => {
         console.log(this);//window
     }
 }
 jonas.someMethod();
 jonas.getAge();//{name: 'Jonas', yearBorn: 1991, getAge: ƒ}
-const ageJonas=jonas.getAge;
+const ageJonas = jonas.getAge;
 //throw error in strict mode or NaN in sloppy mode
 //console.log(ageJonas());//TypeError: Cannot read properties of undefined (reading 'yearBorn')
 
 //на что указывает this
-const ann={
-    name:'Ann',
+const ann = {
+    name: 'Ann',
     yearBorn: 1984,
 }
 //method borrow
-ann.getAge=jonas.getAge;
+ann.getAge = jonas.getAge;
 console.log(ann);
 console.log(ann.getAge());
 //the same only with using method call()
-console.log('using .call()',jonas.getAge.call(ann));// 38
+console.log('using .call()', jonas.getAge.call(ann));// 38
 //the same using bind()
-const ageAnn=jonas.getAge.bind(ann);
+const ageAnn = jonas.getAge.bind(ann);
 console.log(ageAnn());
 console.log(ann);
-const button=document.createElement('button');
-button.innerHTML='button';
+const button = document.createElement('button');
+button.innerHTML = 'button';
 document.body.append(button);
+
 function listen() {
     console.log(this);
 }
+
 // 110 and 112 одинаковы по смыслу
 console.log(this)
-button.addEventListener('click',()=>{
+button.addEventListener('click', () => {
     console.log(this)//window - поскольку у стрелочной ф-ции нет собственного this, поэтому this указывает на window
 })
-button.addEventListener('click',function () {
+button.addEventListener('click', function () {
 
     console.log(this);// <button>button</button>
 });
-button.addEventListener('click',listen)//<button>button</button>
+button.addEventListener('click', listen)//<button>button</button>
 
 function someFun() {
     console.log(this);
 }
+
 someFun()//undefined
 const arrow = () => {
     console.log(this)
@@ -160,3 +163,37 @@ function parentFun() {
 }
 
 parentFun()
+
+
+// regular functions vs arrow functions
+//there in object window create property firstName: Ann
+//var firstName='Ann';
+const bob = {
+    firstName: 'Bob',
+    year: 1990,
+    calcAge: function () {
+        console.log(new Date().getFullYear() - this.year);
+    },
+    greet: () => console.log(`hey,${this.firstName}`),
+};
+bob.greet();// hey,undefined or  you see hey,Ann если раскомментить 170
+//если мы объявляем и вызываем ф-ию в методе и в ней используем this,то нужно использовать стрелочную ф-цию!!!
+const tom = {
+    name: 'tom',
+    year: 2000,
+    getAge() {
+        console.log(new Date().getFullYear() - this.year);
+        //const self=this; //и использовать эту переменную в ф-ции вместо this - это решение из ES5
+        // function isUSSR() {
+        //     console.log(this.year<1993);//get TypeError: cannot read properties of undefined
+        //  }
+        //     isUSSR();
+        // это решение из ES6 - использование стрелочной ф-цииi
+     const isUssrArr = () => {
+         console.log(this.year<1993);
+     }
+        isUssrArr();
+    }
+}
+
+tom.getAge();
