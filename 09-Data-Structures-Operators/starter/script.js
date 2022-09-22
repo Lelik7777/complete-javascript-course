@@ -105,3 +105,34 @@ restaurant.orderDelivery({
     mainIndex: 3,
     starterIndex: 1,
 });
+
+//spread operator
+const arr = [1, 3, 4];
+const newArr = [5, 6, ...arr];
+console.log(newArr);
+const newArr1 = Object.assign([], arr);
+let arr00 = [];
+const newArr2 = Object.assign(arr00, arr);
+console.log(newArr1);
+console.log(newArr2);
+const alex = 'Alex';
+console.log([...alex]);
+const arrayAl = [...alex];
+console.log(arrayAl);
+
+//using spread operator for function arguments
+const sum = (a, b, c) => {
+    return a + b + c;
+}
+//const arrayNum = [+prompt('first number'), +prompt('second number'), +prompt('third number')];
+//console.log(sum(...arrayNum));
+const arrNum=[4,5,6,5,6];
+console.log(sum(...arrNum));
+
+ //spread for copy and add new properties for object from 2018
+const bob1={name:'bob'};
+const copyBob={...bob1};
+console.log(bob1===copyBob);
+console.log(copyBob);
+const copyBobNew={...bob1,age:33,job:'developer'};
+console.log(copyBobNew);
