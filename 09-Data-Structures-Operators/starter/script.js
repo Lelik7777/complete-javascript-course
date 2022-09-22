@@ -126,13 +126,32 @@ const sum = (a, b, c) => {
 }
 //const arrayNum = [+prompt('first number'), +prompt('second number'), +prompt('third number')];
 //console.log(sum(...arrayNum));
-const arrNum=[4,5,6,5,6];
+const arrNum = [4, 5, 6, 5, 6];
 console.log(sum(...arrNum));
 
- //spread for copy and add new properties for object from 2018
-const bob1={name:'bob'};
-const copyBob={...bob1};
-console.log(bob1===copyBob);
+//spread for copy and add new properties for object from 2018
+const bob1 = {name: 'bob'};
+const copyBob = {...bob1};
+console.log(bob1 === copyBob);
 console.log(copyBob);
-const copyBobNew={...bob1,age:33,job:'developer'};
+const copyBobNew = {...bob1, age: 33, job: 'developer'};
 console.log(copyBobNew);
+
+// starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+//         mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+//rest pattern
+const [pizza, , risotto, ...otherFood] = [...restaurant.mainMenu, ...restaurant.starterMenu];
+console.log(pizza, risotto, otherFood);
+
+const {sat, ...workWeek} = restaurant.openingHours;
+console.log(sat);
+console.log(workWeek);
+
+//rest for functions
+const sumNums = (...nums) => {
+    return nums.reduce((acc, cur) => acc + cur);
+}
+console.log(sumNums(3, 4, 5));
+console.log(sumNums(4, 5, 6, 5, 6, 4));
+const arrNums=[3,4,5,6,7];
+console.log(sumNums(...arrNums));
