@@ -6,29 +6,35 @@ const flights =
 
 // Data needed for first part of the section
 const restaurant = {
-    name: 'Classico Italiano',
-    location: 'Via Angelo Tavanti 23, Firenze, Italy',
-    categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
-    starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
-    mainMenu: ['Pizza', 'Pasta', 'Risotto'],
-    order(startMenuIndex, mainMenuIndex) {
-        return [this.starterMenu[startMenuIndex], this.mainMenu[mainMenuIndex]];
-    },
-    openingHours: {
-        thu: {
-            open: 12,
-            close: 22,
+        name: 'Classico Italiano',
+        location: 'Via Angelo Tavanti 23, Firenze, Italy',
+        categories: ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'],
+        starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
+        mainMenu: ['Pizza', 'Pasta', 'Risotto'],
+        order(startMenuIndex, mainMenuIndex) {
+            return [this.starterMenu[startMenuIndex], this.mainMenu[mainMenuIndex]];
         },
-        fri: {
-            open: 11,
-            close: 23,
+        openingHours: {
+            thu: {
+                open: 12,
+                close: 22,
+            },
+            fri: {
+                open: 11,
+                close: 23,
+            },
+            sat: {
+                open: 0, // Open 24 hours
+                close: 24,
+            },
         },
-        sat: {
-            open: 0, // Open 24 hours
-            close: 24,
-        },
-    },
-};
+        //осуществляем деструктуризацию объекта,который будет аргументом этого метода при его вызове; при этом мы сразу же можем задать значения по умолчанию
+        orderDelivery({time, address, mainIndex = 1, starterIndex = 1, unknownValue = null}) {
+            console.log(`${this.starterMenu[0]} ${starterIndex} and ${this.mainMenu[2]} ${mainIndex} will be delivered to ${address} at ${time}. also unknown property  equal  ${unknownValue}`);
+        }
+    }
+
+;
 //destructuring
 const [first, second] = restaurant.categories;
 console.log(first, second);
@@ -73,21 +79,29 @@ const {
 } = restaurant;
 console.log(restaurantName, workTimes, types);
 //value by default
-const {menu=[],starterMenu=[]}=restaurant;
-console.log(menu,starterMenu);
+const {menu = [], starterMenu = []} = restaurant;
+console.log(menu, starterMenu);
 
 //mutating variables
-let a=44;
-let b=66;
-let obj={a:2,b:3,u:5};
+let a = 44;
+let b = 66;
+let obj = {a: 2, b: 3, u: 5};
 //{a,b,c}=obj;//Uncaught SyntaxError: Identifier 'a' has already been declared
 //that why use () and mutate variables
-({a,b}=obj);
-console.log(a,b);
+({a, b} = obj);
+console.log(a, b);
 
 //nested objects
-const {fri:{close,open}}=restaurant.openingHours;
-console.log(close,open);
-const {fri:{close:c,open:o}}=restaurant.openingHours;
-console.log(c,o);
+const {fri: {close, open}} = restaurant.openingHours;
+console.log(close, open);
+const {fri: {close: c, open: o}} = restaurant.openingHours;
+console.log(c, o);
 
+// destructuring object as argument in function
+
+restaurant.orderDelivery({
+    time: '20:00',
+    address: 'Via del Sole,24',
+    mainIndex: 3,
+    starterIndex: 1,
+});
