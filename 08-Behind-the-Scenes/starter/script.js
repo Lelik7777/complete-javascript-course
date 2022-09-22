@@ -193,7 +193,8 @@ const tom = {
          console.log(this.year<1993);
      }
         isUssrArr();
-    }
+    },
+    family:['bob','ann'],
 }
 
 tom.getAge();
@@ -214,3 +215,9 @@ const addArrow = (a,b) => {
 }
 
 addArrow(3,4,5,6);
+
+const newTom={...tom};
+console.log(newTom===tom);
+newTom.year=1999;
+tom.family.push('john','nick');
+console.log(tom);
