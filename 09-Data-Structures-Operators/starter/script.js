@@ -362,27 +362,30 @@ const entries = Object.entries(restaurant.openingHours);
 console.log(entries);
 for (const [key, {open, close}] of entries) {
     console.log(`on ${key} we open at ${open} and close at ${close}`);
-};
+}
+;
 
 //challenge #2
 //1
 
-game.scored.forEach((x,i)=>{
-    console.log(`goal ${i+1}: ${x}`);
+game.scored.forEach((x, i) => {
+    console.log(`goal ${i + 1}: ${x}`);
 });
 //2
-const odds=Object.values(game.odds);
+const odds = Object.values(game.odds);
 const getAverage = (arr) => {
-  return arr.reduce((acc,curr)=>acc+curr)/arr.length;
+    return arr.reduce((acc, curr) => acc + curr) / arr.length;
 }
 console.log(getAverage(odds).toFixed(2));
 //3
-for (const [key,value] of Object.entries(game.odds)) {
-    console.log(`odd of ${game[key]?'victory':'draw:'}  ${game[key]?game[key]+':':''}${value}`)
+for (const [team, odd] of Object.entries(game.odds)) {
+    const teamStr = team === 'x' ? 'draw' : `victory ${game[team]}`;
+    console.log(`odd of ${teamStr}:${odd}`);
+    // console.log(`odd of ${game[key]?'victory':'draw:'}  ${game[key]?game[key]+':':''}${value}`)
 }
 //bonus
-const scorers={};
+const scorers = {};
 
-game.scored.forEach(x=>{
-    Object.create(scorers,{})
+game.scored.forEach(x => {
+    Object.create(scorers, {})
 })
