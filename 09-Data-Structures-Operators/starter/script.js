@@ -292,3 +292,35 @@ console.log(winner);
 team1 < team2 && console.log('team1 is more likely to win');
 team2 < team1 && console.log('team2 is more likely to win');
 
+
+// for...of
+for (const pl of player1) {
+    if(pl.indexOf('G')!=-1) continue;
+    if(pl.indexOf('M')!=-1)break;
+    console.log(pl);
+}
+for (const el of player1.entries()) {
+    console.log(`index ${el[0]}: value ${el[1]}`);
+}
+//using destructuring
+for (const [i,el] of player1.entries()) {
+    console.log(i+1,el);
+}
+
+// enhanced object literals
+const locationAlex={
+    city:'Simferopol',
+    street:'Tambovska',
+    house:7,
+}
+const alex7={
+    name:'alex',
+    age:45,
+    //ES6 enhanced object literals
+    locationAlex,
+    //ES6 enhance object key by calculating it
+    [`count week training ${7-4}`]:3,
+    [`${2}-d son in family`]:true,
+}
+console.log(alex7);
+
