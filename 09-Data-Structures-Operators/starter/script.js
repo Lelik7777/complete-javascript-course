@@ -200,3 +200,95 @@ rest1.owner && '=<ANONYMOUS>';
 rest2.owner &&= '<ANONYMOUS>';
 console.log(rest2);
 console.log(rest1);
+
+//challenge #1
+const game = {
+    team1: 'Bayern Munich',
+    team2: 'Borrussia Dortmund',
+    players: [
+        [
+            'Neuer',
+            'Pavard',
+            'Martinez',
+            'Alaba',
+            'Davies',
+            'Kimmich',
+            'Goretzka',
+            'Coman',
+            'Muller',
+            'Gnarby',
+            'Lewandowski',
+        ],
+        [
+            'Burki',
+            'Schulz',
+            'Hummels',
+            'Akanji',
+            'Hakimi',
+            'Weigl',
+            'Witsel',
+            'Hazard',
+            'Brandt',
+            'Sancho',
+            'Gotze',
+        ],
+    ],
+    score: '4:0',
+    scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+    date: 'Nov 9th, 2037',
+    odds: {
+        team1: 1.33,
+        x: 3.25,
+        team2: 6.5,
+    },
+};
+//1
+const [nameTeam1, nameTeam2] = [game.team1, game.team2];
+console.log(nameTeam1, nameTeam2);
+const [player1, player2] = game.players;
+console.log('player1: ', player1);
+console.log('player2: ', player2);
+//2
+const [gk1, ...fieldPlayers1] = player1;
+console.log(gk1, fieldPlayers1);
+const [gk2, ...fieldPlayer2] = player2;
+console.log(gk2, fieldPlayer2);
+//3
+const allPlayers = [...player1, ...player2];
+console.log(allPlayers);
+//4
+const players1Final = [...player1, 'Thiago', 'Coutinho', 'Perisic'];
+console.log(players1Final);
+//5
+const {team1, team2, x: draw} = game.odds;
+console.log(team1, team2, draw);
+const {odds: {team1: team11, team2: team22, x: draw1}} = game;
+console.log(team11, team22, draw1);
+//6 
+const printGoals = (...numNames) => {
+    const numGoals = numNames.length;
+    numNames.forEach(x => {
+        console.log(`player ${x} scored ${numGoals} goals `);
+    })
+}
+const getRandomNumPlayer = (arrPlayers, numPlayer) => {
+    const arrRandomPlayers = [];
+    for (let i = 0; i < numPlayer; i++) {
+        const random = Math.floor(Math.random() * arrPlayers.length) + 1;
+        arrRandomPlayers.push(arrPlayers[random] ??= arrPlayers[i]);
+    }
+    const set = new Set(arrRandomPlayers);
+    console.log(set);
+    return Array.from(set);
+}
+console.log(allPlayers)
+console.log(getRandomNumPlayer(allPlayers, 10));
+printGoals(...getRandomNumPlayer(allPlayers, 7));
+//7
+const winner1 = team1 < team2 && game.team1;
+const winner2 = team2 < team1 && game.team2;
+const winner = (team1 < team2 && game.team1) || (team2 < team1 && game.team2);
+console.log(winner);
+team1 < team2 && console.log('team1 is more likely to win');
+team2 < team1 && console.log('team2 is more likely to win');
+
