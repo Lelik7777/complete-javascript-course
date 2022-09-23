@@ -344,3 +344,45 @@ const notEx = 'not exist';
 console.log(users[0]?.name ?? notEx);
 console.log(users[4]?.name ?? notEx);
 
+
+// looping objects by keys or values
+let str = `we are opening on ${Object.keys(restaurant.openingHours).length} days:`;
+console.log(str);
+// for (const day of Object.keys(restaurant.openingHours)) {
+//     str+=day+',';
+// }
+const arrKeys = Object.keys(restaurant.openingHours);
+arrKeys.forEach((x, i) => {
+    str += x + `${i + 1 === arrKeys.length ? '' : ','}`;
+})
+console.log(str);
+
+//entries
+const entries = Object.entries(restaurant.openingHours);
+console.log(entries);
+for (const [key, {open, close}] of entries) {
+    console.log(`on ${key} we open at ${open} and close at ${close}`);
+};
+
+//challenge #2
+//1
+
+game.scored.forEach((x,i)=>{
+    console.log(`goal ${i+1}: ${x}`);
+});
+//2
+const odds=Object.values(game.odds);
+const getAverage = (arr) => {
+  return arr.reduce((acc,curr)=>acc+curr)/arr.length;
+}
+console.log(getAverage(odds).toFixed(2));
+//3
+for (const [key,value] of Object.entries(game.odds)) {
+    console.log(`odd of ${game[key]?'victory':'draw:'}  ${game[key]?game[key]+':':''}${value}`)
+}
+//bonus
+const scorers={};
+
+game.scored.forEach(x=>{
+    Object.create(scorers,{})
+})
