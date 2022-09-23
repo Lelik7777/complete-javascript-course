@@ -153,5 +153,50 @@ const sumNums = (...nums) => {
 }
 console.log(sumNums(3, 4, 5));
 console.log(sumNums(4, 5, 6, 5, 6, 4));
-const arrNums=[3,4,5,6,7];
+const arrNums = [3, 4, 5, 6, 7];
 console.log(sumNums(...arrNums));
+
+// new using or ||  and && - it names  short circuiting
+console.log(0 || 'bob');
+console.log(0 && 'bob');
+
+const obj22 = {
+    name: 'tom', age: 44, getName() {
+        console.log(this.name)
+    }
+};
+
+obj22.getName && obj22.getName();
+
+// logical assignment operators
+
+const rest1 = {
+    name: 'Capri',
+    numGuests: 31,
+};
+const rest2 = {
+    name: 'La Piazza',
+    owner: 'Rossi',
+    location: '',
+}
+const setNumGuests = (obj) => {
+    //return obj.numGuests = obj.numGuests || 10;
+    //concise method to write short circuiting
+    return obj.numGuests ||= 10;
+}
+setNumGuests(rest1);
+setNumGuests(rest2);
+console.log(rest1);
+console.log(rest2);
+// concise method to write short circuiting using OR operator assignment
+//rest2.location||='city center';
+// this variant is more universal using nullish assignment
+rest2.location ??= 'city center';
+console.log(rest2);
+
+//assignment AND operator
+//rest2.owner = rest2.owner && '<ANONYMOUS>';
+rest1.owner && '=<ANONYMOUS>';
+rest2.owner &&= '<ANONYMOUS>';
+console.log(rest2);
+console.log(rest1);
