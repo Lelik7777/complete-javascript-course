@@ -388,4 +388,11 @@ const scorers = {};
 
 game.scored.forEach(x => {
     Object.create(scorers, {})
-})
+});
+
+
+// collection  Set
+
+const arrNumbers=[3,4,5,4,5,2,5,3,4,2,1];
+console.log([...new Set(arrNumbers)]);
+console.log(Array.from(new Set(arrNumbers)));
