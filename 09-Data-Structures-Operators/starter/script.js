@@ -295,32 +295,52 @@ team2 < team1 && console.log('team2 is more likely to win');
 
 // for...of
 for (const pl of player1) {
-    if(pl.indexOf('G')!=-1) continue;
-    if(pl.indexOf('M')!=-1)break;
+    if (pl.indexOf('G') != -1) continue;
+    if (pl.indexOf('M') != -1) break;
     console.log(pl);
 }
 for (const el of player1.entries()) {
     console.log(`index ${el[0]}: value ${el[1]}`);
 }
 //using destructuring
-for (const [i,el] of player1.entries()) {
-    console.log(i+1,el);
+for (const [i, el] of player1.entries()) {
+    console.log(i + 1, el);
 }
 
 // enhanced object literals
-const locationAlex={
-    city:'Simferopol',
-    street:'Tambovska',
-    house:7,
+const locationAlex = {
+    city: 'Simferopol',
+    street: 'Tambovska',
+    house: 7,
 }
-const alex7={
-    name:'alex',
-    age:45,
+const alex7 = {
+    name: 'alex',
+    age: 45,
     //ES6 enhanced object literals
     locationAlex,
     //ES6 enhance object key by calculating it
-    [`count week training ${7-4}`]:3,
-    [`${2}-d son in family`]:true,
+    [`count week training ${7 - 4}`]: 3,
+    [`${2}-d son in family`]: true,
 }
 console.log(alex7);
+
+//optional chaining ES2020
+console.log(restaurant.age?.some.name);
+const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+for (const day of days) {
+    console.log(`restaurant on ${day} ${restaurant.openingHours[day] ? 'work' : 'close'} ${restaurant.openingHours[day]?.open != undefined ? 'at ' + restaurant.openingHours[day].open : ''}`)
+}
+//methods
+const notMethod = 'method doesn`t exist';
+console.log(restaurant.order?.(0, 1) ?? notMethod);
+console.log(restaurant.getAge?.() ?? notMethod);
+
+// arrays
+const users = [
+    {name: 'bob'},
+    {name: 'tom'},
+];
+const notEx = 'not exist';
+console.log(users[0]?.name ?? notEx);
+console.log(users[4]?.name ?? notEx);
 
