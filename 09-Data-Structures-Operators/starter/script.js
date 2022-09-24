@@ -505,3 +505,16 @@ for (const [min, event] of gameEvents.entries()) {
     if (min <= 45) console.log(message);
     if (min > 45 && min <= 90) console.log(message);
 }
+
+
+//STRINGS
+
+const string='hello world and my country';
+const world=string.slice(string.indexOf('wor'),string.indexOf('and'));
+console.log(world.trim().length);
+const str00='For norland produce age wishing. To figure on it spring season up. Her provision acuteness had excellent two why intention. As called mr needed praise at. Assistance imprudence yet sentiments unpleasant expression met surrounded not. Be at talked ye though secure nearer.\n';
+console.log(str00)
+const figure=str00.slice(str00.indexOf('figure'),str00.indexOf('on it spring'));
+console.log(figure.trim())
+console.log(typeof new String('helle'));
+console.log('hello'.indexOf('h'));
