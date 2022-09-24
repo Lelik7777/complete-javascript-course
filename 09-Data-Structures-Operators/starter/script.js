@@ -431,11 +431,12 @@ console.log(man.get(array))
 console.log(man.get($h1))
 
 //create quiz app
-const arrayQuestions=[];
+const arrayQuestions = [];
+
 function getArray(lengthArr) {
-    const arr=[];
-    for (let i=1;i<=lengthArr;i++){
-        arr.push('question'+i);
+    const arr = [];
+    for (let i = 1; i <= lengthArr; i++) {
+        arr.push('question' + i);
     }
     return arr;
 }
@@ -457,12 +458,50 @@ console.log(quiz.get(question1));
 for (const [key, value] of quiz) {
     typeof key === 'number' && console.log(`${key}.${value}`);
 }
-let answer1 = +prompt('choose your answer as number');
+//let answer1 = +prompt('choose your answer as number');
+let answer1 = 3;
 if (answer1 < 0 || answer1 > 4) {
     console.log('you must enter number from 1 to 3');
     answer1 = +prompt('choose your answer as number');
 }
-if(answer1===quiz.get(correct)) console.log('you guessed');
+if (answer1 === quiz.get(correct)) console.log('you guessed');
 else console.log('answer is not correct');
 
 console.log([...quiz.keys()])
+
+//challenge #3;
+const gameEvents = new Map([
+    [17, '⚽️ GOAL'],
+    [36, '🔁 Substitution'],
+    [47, '⚽️ GOAL'],
+    [61, '🔁 Substitution'],
+    [64, '🔶 Yellow card'],
+    [69, '🔴 Red card'],
+    [70, '🔁 Substitution'],
+    [72, '🔁 Substitution'],
+    [76, '⚽️ GOAL'],
+    [80, '⚽️ GOAL'],
+    [92, '🔶 Yellow card'],
+]);
+
+//1
+
+const events=[...new Set(gameEvents.values())]
+console.log(events);
+//2
+gameEvents.delete(64);
+console.log(gameEvents.keys());
+//3
+console.log(`an event happened,on  `);
+
+//4
+function getMessage(bool) {
+    return `${bool?'first':'second'} half`;
+    return bool ? '[first half]' : '[second half]';
+}
+
+for (const [min, event] of gameEvents.entries()) {
+    const message = `${getMessage(min <= 45)} ${min}: ${event}`;
+    if (min <= 45) console.log(message);
+    if (min > 45 && min <= 90) console.log(message);
+}
