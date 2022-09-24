@@ -393,6 +393,39 @@ game.scored.forEach(x => {
 
 // collection  Set
 
-const arrNumbers=[3,4,5,4,5,2,5,3,4,2,1];
+const arrNumbers = [3, 4, 5, 4, 5, 2, 5, 3, 4, 2, 1];
 console.log([...new Set(arrNumbers)]);
 console.log(Array.from(new Set(arrNumbers)));
+
+
+//Maps
+const man = new Map();
+const array=[4,5,6];
+const $h1=document.querySelector('h1');
+man
+    .set('name', 'bob')
+    .set('age', 44)
+    .set('location', {
+        city: 'Moscow', street: 'Red Square', dom: {
+            number: 34,
+        }
+    })
+    .set('friends', ['ann', 'nick', 'sam'])
+    .set(true, 'work in the office')
+    .set(false, 'at home')
+    .set('work', 8)
+    .set('home', 18)
+    // .set([4,5,6],'test')
+    //better do so
+    .set(array,'test')
+    // .set(document.querySelector('h1'),'Heading')
+    //better do so
+    .set($h1,'Header')
+console.log(man);
+const randomTime = () => {
+  return Math.floor(Math.random()*23);
+}
+const time=randomTime();
+console.log(man.get(time > man.get('work') && time < man.get('home')));
+console.log(man.get(array))
+console.log(man.get($h1))
