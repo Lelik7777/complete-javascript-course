@@ -400,8 +400,8 @@ console.log(Array.from(new Set(arrNumbers)));
 
 //Maps
 const man = new Map();
-const array=[4,5,6];
-const $h1=document.querySelector('h1');
+const array = [4, 5, 6];
+const $h1 = document.querySelector('h1');
 man
     .set('name', 'bob')
     .set('age', 44)
@@ -417,15 +417,52 @@ man
     .set('home', 18)
     // .set([4,5,6],'test')
     //better do so
-    .set(array,'test')
+    .set(array, 'test')
     // .set(document.querySelector('h1'),'Heading')
     //better do so
-    .set($h1,'Header')
+    .set($h1, 'Header')
 console.log(man);
 const randomTime = () => {
-  return Math.floor(Math.random()*23);
+    return Math.floor(Math.random() * 23);
 }
-const time=randomTime();
+const time = randomTime();
 console.log(man.get(time > man.get('work') && time < man.get('home')));
 console.log(man.get(array))
 console.log(man.get($h1))
+
+//create quiz app
+const arrayQuestions=[];
+function getArray(lengthArr) {
+    const arr=[];
+    for (let i=1;i<=lengthArr;i++){
+        arr.push('question'+i);
+    }
+    return arr;
+}
+
+console.log(getArray(10));
+const question1 = 'question1';
+const correct = 'correct';
+const notCorrect = 'not correct';
+const quiz = new Map([
+    [question1, 'what is the best programming language?'],
+    [1, 'C'],
+    [2, 'Java'],
+    [3, 'Js'],
+    [correct, 3],
+    [true, correct],
+    [false, notCorrect],
+]);
+console.log(quiz.get(question1));
+for (const [key, value] of quiz) {
+    typeof key === 'number' && console.log(`${key}.${value}`);
+}
+let answer1 = +prompt('choose your answer as number');
+if (answer1 < 0 || answer1 > 4) {
+    console.log('you must enter number from 1 to 3');
+    answer1 = +prompt('choose your answer as number');
+}
+if(answer1===quiz.get(correct)) console.log('you guessed');
+else console.log('answer is not correct');
+
+console.log([...quiz.keys()])
