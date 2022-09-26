@@ -486,7 +486,7 @@ const gameEvents = new Map([
 
 //1
 
-const events=[...new Set(gameEvents.values())]
+const events = [...new Set(gameEvents.values())]
 console.log(events);
 //2
 gameEvents.delete(64);
@@ -496,7 +496,7 @@ console.log(`an event happened,on  `);
 
 //4
 function getMessage(bool) {
-    return `${bool?'first':'second'} half`;
+    return `${bool ? 'first' : 'second'} half`;
     return bool ? '[first half]' : '[second half]';
 }
 
@@ -509,12 +509,66 @@ for (const [min, event] of gameEvents.entries()) {
 
 //STRINGS
 
-const string='hello world and my country';
-const world=string.slice(string.indexOf('wor'),string.indexOf('and'));
+const string = 'hello world and my country';
+const world = string.slice(string.indexOf('wor'), string.indexOf('and'));
 console.log(world.trim().length);
-const str00='For norland produce age wishing. To figure on it spring season up. Her provision acuteness had excellent two why intention. As called mr needed praise at. Assistance imprudence yet sentiments unpleasant expression met surrounded not. Be at talked ye though secure nearer.\n';
+const str00 = 'For norland produce age wishing. To figure on it spring season up. Her provision acuteness had excellent two why intention. As called mr needed praise at. Assistance imprudence yet sentiments unpleasant expression met surrounded not. Be at talked ye though secure nearer.\n';
 console.log(str00)
-const figure=str00.slice(str00.indexOf('figure'),str00.indexOf('on it spring'));
+const figure = str00.slice(str00.indexOf('figure'), str00.indexOf('on it spring'));
 console.log(figure.trim())
 console.log(typeof new String('helle'));
 console.log('hello'.indexOf('h'));
+
+
+let passenger = 'jOnAs';
+passenger = passenger.toLowerCase();
+passenger = passenger[0].toUpperCase() + passenger.slice(1);
+console.log(passenger);
+const priceGB = '339,33€';
+const priceUS = priceGB.replace('€', '$').replace(',', '.');
+console.log(priceUS);
+// string.includes('substring'); => true false
+// string.startWith('substring') => true false
+//string.endsWith('substring') => true false
+
+//string 3
+// method .split();
+//using destructuring and split
+const [fistName, lastName] = 'Alex Kvachkov'.split(' ');
+console.log(fistName, lastName);
+//method .join()
+console.log(['Mr.', fistName, lastName.toUpperCase()].join(' '));
+
+function capitalize(string) {
+    //using method replace() is more fine
+    return string.split(' ').map(x => x.replace(x[0], x[0].toUpperCase())).join(' ');
+    //using method slice()
+    return string.split(' ').map(x => x[0].toUpperCase() + x.slice(1)).join(' ');
+}
+
+console.log(capitalize('jessica ann smith davis'));
+
+//padding a string
+let stringSome = '44';
+const newSrt = stringSome.padStart(4, '21');
+console.log(newSrt);
+console.log(stringSome);
+//app to mask first digits of number
+const maskCreditCard = (num) => {
+    const str = num.toString();
+    const length = str.length;
+    return str.slice(length - 4).padStart(length, '*');
+}
+console.log(maskCreditCard(33434332311));
+//also exist padEnd
+console.log(stringSome.padEnd(stringSome.length + 2, '0'));
+
+//method repeat()
+const someText = 'hello,world';
+console.log(someText.repeat(4));
+
+const planesInLine = (num) => {
+    return `There are ${num}  planes in line ${'✈'.repeat(num)}`;
+}
+console.log(planesInLine(6));
+
