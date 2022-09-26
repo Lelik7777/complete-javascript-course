@@ -51,3 +51,34 @@ const greet = greeting => name => console.log(`${greeting}, ${name}`);
 greet('hi')('bob');
 
 
+// this call(), bind(),apply()
+
+const user1={
+    name:'bob',
+    yearnBorn:1988,
+    job:'developer',
+    getAge(){
+        return new Date().getFullYear()-this.yearnBorn;
+    },
+    data:[],
+    setData(location,hobby){
+        this.data.push({location,hobby});
+    }
+}
+const age=user1.getAge;
+const data=user1.setData;
+
+const user2={
+    name:'tom',
+    yearnBorn:1978,
+    job:'admin',
+    data:[]
+}
+console.log(age.call(user1));
+data.call(user1,'simf','gym');
+console.log(user1);
+console.log(age.call(user2));
+data.call(user2,...['moscow','chess']);
+console.log(user2);
+data.apply(user1,['simf2','gym2']);
+console.log(user1)
