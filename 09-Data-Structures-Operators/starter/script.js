@@ -572,3 +572,63 @@ const planesInLine = (num) => {
 }
 console.log(planesInLine(6));
 
+//challenge #4
+//1 convert app
+const arrVariablesNames = ['user_name_number', 'first_name', 'second_name'];
+const createEl = (elem) => {
+    return document.createElement(elem);
+};
+const setStyleEl = (elem, styleEl, value) => elem.style[styleEl] = value;
+const appendEl = (element, ...el) => {
+    return element === 'body' ? document[element].append(...el) : element.append(...el);
+};
+
+function convertToCamelCase(string) {
+
+    return string
+        // get array new string
+        .split('\n')
+        .map((x, i) => x
+            //get array from two word
+            .split('_')
+            //change first letter second word to upper case
+            .map((y, i) => i > 0 ? y.replace(y[0], y[0].toUpperCase()).trim() : y.trim())
+            //get one word from two ones
+            .join('').padEnd(21, ' ') + `✅`.repeat(i + 1)
+        ).join('\n')
+
+};
+const $textarea = createEl('textarea');
+const $button = createEl('button');
+const $btnClear = createEl('button');
+const $div = createEl('div');
+const $p = createEl('p');
+
+
+setStyleEl($button, 'width', 'auto');
+setStyleEl($textarea, 'fontSize', '20px');
+setStyleEl($textarea, 'width', '450px');
+setStyleEl($textarea, 'height', '150px');
+
+$button.textContent = 'convert';
+
+$button.classList.add('convert');
+$btnClear.textContent = 'clear';
+$btnClear.classList.add('clear');
+
+appendEl('body', $div);
+appendEl($div, $textarea, $button, $btnClear)
+
+document.body.addEventListener('click', (ev) => {
+    const target = string => ev.target.classList.contains(string);
+    if (target('convert')) {
+        const convertedValue = $textarea.value && convertToCamelCase($textarea.value);
+        $textarea.value = convertedValue;
+    }
+    if (target('clear')) $textarea.value = '';
+});
+
+//console.log(convertToCamelCase(arrVariablesNames));
+
+
+
