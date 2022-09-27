@@ -83,6 +83,7 @@ console.log(user2);
 data.apply(user1, ['simf2', 'gym2']);
 console.log(user1);
 
+
 //bind()
 //могу частично указать аргументы, могу вообще не указывать
 //const dataUser2=data.bind(user2);
@@ -155,4 +156,36 @@ const get20percents = getTax(.2);
 get20percents(100);
 get20percents(300);
 
-//
+//challenge #1 pol application
+const poll = {
+    name: 'poll',
+    question: 'What is your favourite programming language?',
+    options: ['0: JavaScript', '1: Python', '2: Rust', '3: C++'],
+    // This generates [0, 0, 0, 0]. More in the next section 😃
+    answers: new Array(4).fill(0),
+    registerNewAnswer() {
+        const answer = +prompt(`${this.question}\n${this.options.join('\n')} \n(Write option number)`);
+        if (typeof answer === 'number' && answer >= 0 && answer < this.options.length) {
+            this.answers[answer]++;
+        } else {
+            alert('you enter wrong value');
+        }
+        this.displayResults();
+        this.displayResults('string');
+    },
+    displayResults(type = 'array') {
+        if (type === 'array') console.log(this.answers)
+        else if (typeof type === 'string') {
+            console.log(`${this.name} results are ${this.answers.join(',')}`);
+        }
+    }
+}
+const $btnAnswerPoll = document.querySelector('.poll');
+$btnAnswerPoll.addEventListener('click', poll.registerNewAnswer.bind(poll));
+
+const displayArr = function (arr) {
+    return poll.displayResults.bind({answers: arr, name: 'obj'}, 'string');
+}
+
+displayArr([5, 2, 4])();
+displayArr([1, 5, 3, 9, 6, 1])();
