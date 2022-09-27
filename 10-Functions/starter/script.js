@@ -197,3 +197,56 @@ displayArr([1, 5, 3, 9, 6, 1])();
 //variant with arrow function
 (() => console.log('this function is invoked only one'))();
 
+//closures
+
+const secureBooking = () => {
+    let passengersCount = 0;
+    return function () {
+        passengersCount++;
+
+        console.log(`${passengersCount} passengers`);
+    }
+}
+const booker = secureBooking();
+booker();
+booker();
+booker();
+console.dir(booker);
+console.dir(secureBooking);
+
+//closure examples
+//1
+let f;
+const fun00 = () => {
+    const a = 3;
+    f = () => console.log(a * 3);
+}
+const fun11 = () => {
+    const b = 5;
+    f = () => console.log(b * 3);
+}
+fun00();
+//fun00 отработала и ее уже нет в call stack,но ф-ция f имеет доступ к variable environment of context execution of function fun00
+f();
+fun11();
+//произошло переназначение f и теперь у нее доступ к другой variable environment
+f();
+//вновь переназначение и f вновь поменяла доступ и получила к прежней variable environment
+fun00();
+f();
+
+//2
+const boardPassengers = function (n, wait) {
+    const perGroup = n / 3;
+// callback from setTimeout получает доступ к переменным boardPassengers function из замыкания,поскольку она запустится тогда,когда boardPassengers уже давно отработает
+    setTimeout(function () {
+        console.log(`We are now boarding all ${n} passengers`);
+        console.log(`There are 3 groups, each with ${perGroup} passengers`);
+    }, wait * 1000);
+
+    console.log(`Will start boarding in ${wait} seconds`);
+};
+
+const perGroup = 1000;
+boardPassengers(180, 3);
+
