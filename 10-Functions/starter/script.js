@@ -250,3 +250,17 @@ const boardPassengers = function (n, wait) {
 const perGroup = 1000;
 boardPassengers(180, 3);
 
+
+//challenge #2
+(function () {
+    const header=document.querySelector('h1');
+    header.style.color='red';
+    let toggle=true;
+    console.log(toggle);
+    document.querySelector('body').addEventListener('click',function () {
+        if(toggle) header.style.color='blue';
+        else header.style.color='red';
+        toggle=!toggle;
+        console.log(toggle);
+    })
+})();
