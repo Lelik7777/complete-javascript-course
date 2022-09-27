@@ -53,32 +53,106 @@ greet('hi')('bob');
 
 // this call(), bind(),apply()
 
-const user1={
-    name:'bob',
-    yearnBorn:1988,
-    job:'developer',
-    getAge(){
-        return new Date().getFullYear()-this.yearnBorn;
+const user1 = {
+    name: 'bob',
+    yearnBorn: 1988,
+    job: 'developer',
+    getAge() {
+        return new Date().getFullYear() - this.yearnBorn;
     },
-    data:[],
-    setData(location,hobby){
-        this.data.push({location,hobby});
+    data: [],
+    setData(location, hobby) {
+        this.data.push({location, hobby});
     }
 }
-const age=user1.getAge;
-const data=user1.setData;
+const age = user1.getAge;
+const data = user1.setData;
 
-const user2={
-    name:'tom',
-    yearnBorn:1978,
-    job:'admin',
-    data:[]
+const user2 = {
+    name: 'tom',
+    yearnBorn: 1978,
+    job: 'admin',
+    data: []
 }
 console.log(age.call(user1));
-data.call(user1,'simf','gym');
+data.call(user1, 'simf', 'gym');
 console.log(user1);
 console.log(age.call(user2));
-data.call(user2,...['moscow','chess']);
+data.call(user2, ...['moscow', 'chess']);
 console.log(user2);
-data.apply(user1,['simf2','gym2']);
-console.log(user1)
+data.apply(user1, ['simf2', 'gym2']);
+console.log(user1);
+
+//bind()
+//могу частично указать аргументы, могу вообще не указывать
+//const dataUser2=data.bind(user2);
+//я могу создать любое количество разных ф-ций
+const dataUser2Simf = data.bind(user2, 'simf');
+const dataUser2Moscow = data.bind(user2, 'moscow');
+dataUser2Simf('gym');
+dataUser2Simf('sea');
+dataUser2Moscow('chess');
+//интересно,что я могу повторять и в объекте создаются одинаковые свойства
+dataUser2Moscow('chess');
+console.log(user2);//{location: 'moscow', hobby: 'chess'}{location: 'simf', hobby: 'gym'}{location: 'simf', hobby: 'sea'}{location: 'moscow', hobby: 'chess'}{location: 'moscow', hobby: 'chess'}
+
+//with event listeners
+const lufthansa = {
+    airline: 'Lufthansa',
+    iataCode: 'LH',
+    bookings: [],
+
+    book(flightNum, name) {
+        console.log(
+            `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+        );
+        this.bookings.push({flight: `${this.iataCode}${flightNum}`, name});
+    },
+};
+const eurowings = {
+    airline: 'Eurowings',
+    iataCode: 'EW',
+    bookings: [],
+};
+const swiss = {
+    airline: 'Swiss Air Lines',
+    iataCode: 'LX',
+    bookings: [],
+    planes: 200,
+};
+lufthansa.planes = 300;
+lufthansa.buyPlane = function () {
+    console.log(this);
+    this.planes++;
+}
+const buy = lufthansa.buyPlane;
+lufthansa.buyPlane();
+console.log(lufthansa);
+const $btnBuy = document.querySelector('.buy');
+//$btnBuy.addEventListener('click',lufthansa.buyPlane.bind(lufthansa));
+$btnBuy.addEventListener('click', buy.bind(lufthansa));
+console.log(lufthansa);
+
+//partial application
+const addTax = (rate, value) => {
+    return value + rate * value;
+}
+console.log(addTax(.10, 100));
+//если мы хотим захардкодить какой-то параметр,то используем bind()
+const addNDS = addTax.bind(null, .25);
+//таким образом мы получили ф-цию с фиксированным налогом,поэтому при ее вызове мы указываем лишь значение(один аргумент)
+console.log(addNDS(200));
+//the arrow function
+const setTax = rate => value => value + rate * value;
+//the same but by function declaration
+const getTax = (rate) => {
+    return function (value) {
+        console.log(value + value * rate);
+        return value + value * rate;
+    }
+}
+const get20percents = getTax(.2);
+get20percents(100);
+get20percents(300);
+
+//
