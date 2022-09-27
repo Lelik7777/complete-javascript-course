@@ -189,3 +189,11 @@ const displayArr = function (arr) {
 
 displayArr([5, 2, 4])();
 displayArr([1, 5, 3, 9, 6, 1])();
+
+// immediately invoked function expressions
+(function () {
+    console.log('this function is invoked only one');
+})();
+//variant with arrow function
+(() => console.log('this function is invoked only one'))();
+
