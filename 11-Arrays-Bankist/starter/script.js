@@ -123,3 +123,24 @@ movements00.forEach((x, i, ar) => {
     //console.log(i);
 });
 console.log(movements00);
+
+// challenge #1
+// TEST DATA 1: Julia's data [3, 5, 2, 12, 7], Kate's data [4, 1, 15, 8, 3]
+// TEST DATA 2: Julia's data [9, 16, 6, 8, 3], Kate's data [10, 5, 6, 1, 4]
+const arrJul1 = [3, 5, 2, 12, 7];
+const arrKate1 = [4, 1, 15, 8, 3];
+const arrJul2 = [9, 16, 6, 8, 3];
+const arrKate2 = [10, 5, 6, 1, 4];
+
+const checkDogs = (arr1, arr2) => {
+    const copy1 = [...arr1];
+    copy1.splice(-2)
+    copy1.splice(0, 1);
+    const arrGen = [...copy1, ...arr2];
+    arrGen.forEach((ageDog, i) => {
+        console.log(`Dog number ${i + 1} is ${ageDog >= 3 ? `an adult,and is ${ageDog} years old` : `still a puppy 🐶`}`);
+    })
+}
+checkDogs(arrJul1, arrKate1);
+console.log('--------------------')
+checkDogs(arrJul2,arrKate2);
