@@ -83,6 +83,18 @@ const displayMovements = (movements) => {
 // [200, 450, -400, 3000, -650, -130, 70, 1300],
 displayMovements(account1.movements);
 
+const user = 'Steven Thomas Williams';
+
+const convertUser = user => user.owner.split(' ').map(x => x[0].toLowerCase()).join('');
+//принимаем массив объектов,пробегаемся по нему forEach и создаем новое свойстов каждому объекту и заполняем его
+const createUserNames = (accs) => {
+    accs.forEach(acc => {
+        // acc.username=acc.owner.split(' ').map(x => x[0].toLowerCase()).join('');
+        acc.username = convertUser(acc);
+    })
+}
+console.log(createUserNames(accounts));
+console.log(accounts);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -143,4 +155,9 @@ const checkDogs = (arr1, arr2) => {
 }
 checkDogs(arrJul1, arrKate1);
 console.log('--------------------')
-checkDogs(arrJul2,arrKate2);
+checkDogs(arrJul2, arrKate2);
+
+// map
+const movements11 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const eurToUsd = movements11.map(x => `${Math.trunc(x * 1.1)}💲`);
+console.log(eurToUsd);
