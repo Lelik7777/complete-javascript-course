@@ -231,4 +231,23 @@ const totalDepositsInUSD = movements
         log(i, arr);
         return acc + cur;
     });
-console.log(totalDepositsInUSD)
+console.log(totalDepositsInUSD);
+
+//challenge #3
+// const calcAverageHumanAge = (ages) => {
+//     const toHumanAge = ages.map(age => age <= 2 ? age * 2 : age * 4 + 16);
+//     console.log(toHumanAge);
+//     const oldDogs = toHumanAge.filter(age => age >= 18);
+//     console.log(oldDogs);
+//     const averageAge = oldDogs.reduce((acc, cur) => acc + cur) / oldDogs.length;
+//     console.log(averageAge);
+// }
+// calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+const calcAverageHumanAgeArrow = ages => ages
+    .map(age => age <= 2 ? age * 2 : age * 4 + 16)
+    .filter(age => age > 18)
+    .reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+
+console.log(calcAverageHumanAgeArrow([5, 2, 4, 1, 15, 8, 3]));
+console.log(calcAverageHumanAgeArrow([16, 6, 10, 5, 6, 1, 4]));
