@@ -190,5 +190,19 @@ movements.reduce(function (acc, cur) {
 }, 0)
 console.log(max);
 
+//challenge #2
 
+// TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+// TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+const calcAverageHumanAge = (ages) => {
+    const toHumanAge = ages.map(age => age <= 2 ? age * 2 : age * 4 + 16);
+    console.log(toHumanAge);
+    const oldDogs = toHumanAge.filter(age => age >= 18);
+    console.log(oldDogs);
+    const averageAge = oldDogs.reduce((acc, cur) => acc + cur) / oldDogs.length;
+    console.log(averageAge);
+}
+calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
+//chain
