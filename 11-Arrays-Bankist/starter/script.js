@@ -64,6 +64,12 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 //switch app
 document.querySelector('.app').style.opacity = '100';
+
+const calcPrintBalance = (movements) => {
+    const balance = movements.reduce((acc, cur) => acc + cur, 0);
+    labelBalance.textContent = `${balance}€`;
+}
+
 const displayMovements = (movements) => {
     //вначале обнуляем содержимое контейнера containerMovements
     containerMovements.innerHTML = '';
@@ -82,19 +88,7 @@ const displayMovements = (movements) => {
 }
 // [200, 450, -400, 3000, -650, -130, 70, 1300],
 displayMovements(account1.movements);
-
-const user = 'Steven Thomas Williams';
-
-const convertUser = user => user.owner.split(' ').map(x => x[0].toLowerCase()).join('');
-//принимаем массив объектов,пробегаемся по нему forEach и создаем новое свойстов каждому объекту и заполняем его
-const createUserNames = (accs) => {
-    accs.forEach(acc => {
-        // acc.username=acc.owner.split(' ').map(x => x[0].toLowerCase()).join('');
-        acc.username = convertUser(acc);
-    })
-}
-console.log(createUserNames(accounts));
-console.log(accounts);
+calcPrintBalance(account1.movements);
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -161,3 +155,40 @@ checkDogs(arrJul2, arrKate2);
 const movements11 = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const eurToUsd = movements11.map(x => `${Math.trunc(x * 1.1)}💲`);
 console.log(eurToUsd);
+
+// using map()
+const user = 'Steven Thomas Williams';
+
+const convertUser = user => user.owner.split(' ').map(x => x[0].toLowerCase()).join('');
+//принимаем массив объектов,пробегаемся по нему forEach и создаем новое свойстов каждому объекту и заполняем его
+const createUserNames = (accs) => {
+    accs.forEach(acc => {
+        // acc.username=acc.owner.split(' ').map(x => x[0].toLowerCase()).join('');
+        acc.username = convertUser(acc);
+    })
+}
+console.log(createUserNames(accounts));
+console.log(accounts);
+
+//filter()
+console.log(movements)
+const deposits = movements.filter(x => x > 0);
+console.log(deposits);
+
+//reduce()
+console.log(movements);
+const totalSum = movements.reduce((acc, cur) => acc + cur);
+console.log(totalSum);
+for (var i = 0, sum = 0; i < movements.length; i++) sum += movements[i];
+console.log(sum);
+
+//find max value
+const max = movements.reduce((acc, cur) => acc > cur ? acc : cur, 0);
+movements.reduce(function (acc, cur) {
+    console.log(acc);
+    return acc > cur ? acc : cur;
+}, 0)
+console.log(max);
+
+
+
