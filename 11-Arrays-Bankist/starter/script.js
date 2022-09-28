@@ -61,6 +61,29 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+
+//switch app
+document.querySelector('.app').style.opacity = '100';
+const displayMovements = (movements) => {
+    //вначале обнуляем содержимое контейнера containerMovements
+    containerMovements.innerHTML = '';
+    movements.forEach((mov, i) => {
+        const type = mov > 0 ? 'deposit' : 'withdrawal';
+        //create html with data from array account.movements
+        const html = `
+    <div class="movements__row">
+     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
+     <div class="movements__value">${mov}€</div>
+    </div>`;
+// add to beginning container element html
+        containerMovements.insertAdjacentHTML('afterbegin', html);
+    });
+
+}
+// [200, 450, -400, 3000, -650, -130, 70, 1300],
+displayMovements(account1.movements);
+
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -70,7 +93,9 @@ const currencies = new Map([
     ['EUR', 'Euro'],
     ['GBP', 'Pound sterling'],
 ]);
-
+currencies.forEach((value, key, map) => {
+    console.log(`${key}:${value}`);
+})
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
@@ -87,5 +112,14 @@ console.log(arrayLetters);
 
 //.at() return string
 //get last element
-console.log( arrayLetters.at(-1));
+console.log(arrayLetters.at(-1));
 console.log('hello'.at(-1));
+
+// array.forEach()
+const movements00 = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
+movements00.forEach((x, i, ar) => {
+    ar[i] = x + 10;
+    //console.log(i);
+});
+console.log(movements00);
