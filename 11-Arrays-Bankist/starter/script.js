@@ -69,7 +69,18 @@ const calcPrintBalance = (movements) => {
     const balance = movements.reduce((acc, cur) => acc + cur, 0);
     labelBalance.textContent = `${balance}€`;
 }
-
+const getInOrOut = (arr, on = true) => {
+    return Math.abs(arr.filter(x => on ? x > 0 : x < 0).reduce((acc, cur) => acc + cur));
+}
+const calcDisplaySummery = (movements) => {
+    const res = value => `${value}€`;
+    const incomes = getInOrOut(movements);
+    const outs = getInOrOut(movements, false);
+    const interest = getInOrOut(movements) * .012;
+    labelSumIn.textContent = res(incomes);
+    labelSumOut.textContent = res(outs);
+    labelSumInterest.textContent = res(interest);
+}
 const displayMovements = (movements) => {
     //вначале обнуляем содержимое контейнера containerMovements
     containerMovements.innerHTML = '';
@@ -89,7 +100,7 @@ const displayMovements = (movements) => {
 // [200, 450, -400, 3000, -650, -130, 70, 1300],
 displayMovements(account1.movements);
 calcPrintBalance(account1.movements);
-
+calcDisplaySummery(account1.movements);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -205,4 +216,19 @@ const calcAverageHumanAge = (ages) => {
 calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
 
-//chain
+//chain methods with checking results
+const log = (i, arr) => i == arr.length - 1 && console.log(arr);
+const totalDepositsInUSD = movements
+    .filter((x, i, arr) => {
+        log(i, arr);
+        return x > 0;
+    })
+    .map((x, i, arr) => {
+        log(i, arr);
+        return Math.trunc(x * 1.1);
+    })
+    .reduce((acc, cur, i, arr) => {
+        log(i, arr);
+        return acc + cur;
+    });
+console.log(totalDepositsInUSD)
