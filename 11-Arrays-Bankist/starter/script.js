@@ -251,3 +251,11 @@ const calcAverageHumanAgeArrow = ages => ages
 
 console.log(calcAverageHumanAgeArrow([5, 2, 4, 1, 15, 8, 3]));
 console.log(calcAverageHumanAgeArrow([16, 6, 10, 5, 6, 1, 4]));
+//find()
+const account=accounts.find(acc=>acc.owner==='Jessica Davis');
+console.log(account);
+let accountJes;
+for (const acc of accounts) {
+    if(acc.owner==='Jessica Davis')  accountJes=acc;
+}
+console.log(accountJes);
