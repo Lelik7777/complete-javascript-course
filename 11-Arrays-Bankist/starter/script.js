@@ -52,7 +52,6 @@ const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
-
 const inputLoginUsername = document.querySelector('.login__input--user');
 const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
@@ -122,7 +121,7 @@ const updateUI = (acc) => {
     //display movements
     displayMovements(acc.movements);
 }
-//work with navigation
+//work with navigation - логинизация
 let currAcc;
 btnLogin.addEventListener('click', function (e) {
     //prevent overload page pressing submit button
@@ -145,8 +144,17 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginPin.blur();
 });
 
-//const inputTransferTo = document.querySelector('.form__input--to');
-// const inputTransferAmount = document.querySelector('.form__input--amount');
+//work with loan
+btnLoan.addEventListener('click', function (e) {
+    e.preventDefault();
+    const amount = +inputLoanAmount.value;
+    if (amount > 0 && currAcc.movements.some(mov => mov >= amount / 10)) {
+        currAcc.movements.push(amount);
+        updateUI(currAcc);
+    }
+    inputLoanAmount.value = '';
+})
+
 // manipulation with transfer
 btnTransfer.addEventListener('click', function (e) {
     e.preventDefault();
@@ -177,7 +185,7 @@ btnClose.addEventListener('click', function (e) {
     }
     inputClosePin.value = inputCloseUsername.value = '';
     inputClosePin.blur();
-    containerApp.style.opacity=0;
+    containerApp.style.opacity = 0;
 })
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
