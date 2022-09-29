@@ -61,26 +61,44 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+//добавляем по новому свойству username в каждый из объектов account
+//принимаем массив объектов,пробегаемся по нему forEach и создаем новое свойстов каждому объекту и заполняем его
+const createUserNames = (accs) => {
+    const convertUser = user => user.owner.split(' ').map(x => x[0].toLowerCase()).join('');
+    accs.forEach(acc => {
+        acc.username = convertUser(acc);
+    })
+}
+createUserNames(accounts);
 
 //switch app
-document.querySelector('.app').style.opacity = '100';
+//document.querySelector('.app').style.opacity = '100';
 
-const calcPrintBalance = (movements) => {
-    const balance = movements.reduce((acc, cur) => acc + cur, 0);
-    labelBalance.textContent = `${balance}€`;
+//заполняем данные в блоке balance
+const calcPrintBalance = (acc) => {
+    //create new property balance and set value in one
+    acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
+    labelBalance.textContent = `${acc.balance}€`;
 }
-const getInOrOut = (arr, on = true) => {
-    return Math.abs(arr.filter(x => on ? x > 0 : x < 0).reduce((acc, cur) => acc + cur));
-}
-const calcDisplaySummery = (movements) => {
+
+//заполняем данные в блоке summery
+const calcDisplaySummery = (acc) => {
+
+    const getInOrOut = (arr, on = true) => {
+        return Math.abs(arr.filter(x => on ? x > 0 : x < 0).reduce((acc, cur) => acc + cur));
+    }
+
     const res = value => `${value}€`;
-    const incomes = getInOrOut(movements);
-    const outs = getInOrOut(movements, false);
-    const interest = getInOrOut(movements) * .012;
+
+    const incomes = getInOrOut(acc.movements);
+    const outs = getInOrOut(acc.movements, false);
+    const interest = getInOrOut(acc.movements) * acc.interestRate / 100;
     labelSumIn.textContent = res(incomes);
     labelSumOut.textContent = res(outs);
     labelSumInterest.textContent = res(interest);
 }
+
+//заполняем блок movements
 const displayMovements = (movements) => {
     //вначале обнуляем содержимое контейнера containerMovements
     containerMovements.innerHTML = '';
@@ -95,12 +113,72 @@ const displayMovements = (movements) => {
 // add to beginning container element html
         containerMovements.insertAdjacentHTML('afterbegin', html);
     });
-
 }
-// [200, 450, -400, 3000, -650, -130, 70, 1300],
-displayMovements(account1.movements);
-calcPrintBalance(account1.movements);
-calcDisplaySummery(account1.movements);
+const updateUI = (acc) => {
+//display balance
+    calcPrintBalance(acc);
+    //display summary
+    calcDisplaySummery(acc);
+    //display movements
+    displayMovements(acc.movements);
+}
+//work with navigation
+let currAcc;
+btnLogin.addEventListener('click', function (e) {
+    //prevent overload page pressing submit button
+    e.preventDefault();
+    // get current account according value from user input
+    //only if correct value  else now don`t observe
+    currAcc = accounts.find(acc => acc.username === inputLoginUsername.value);
+    if (currAcc?.pin === +inputLoginPin.value) {
+        //display UI
+        containerApp.style.opacity = '100';
+// display message
+        labelWelcome.textContent = `Welcome back, ${currAcc.owner.split(' ')[0]}`;
+
+        //update balance,movements,summery
+        updateUI(currAcc);
+    }
+
+//delete focus from input and delete value in inputs
+    inputLoginPin.value = inputLoginUsername.value = '';
+    inputLoginPin.blur();
+});
+
+//const inputTransferTo = document.querySelector('.form__input--to');
+// const inputTransferAmount = document.querySelector('.form__input--amount');
+// manipulation with transfer
+btnTransfer.addEventListener('click', function (e) {
+    e.preventDefault();
+    //get account from input transfer to
+    const transTo = accounts.find(acc => acc.username === inputTransferTo.value);
+    //get number for transfer
+    const amount = +inputTransferAmount.value;
+    if (transTo && transTo.username != currAcc.username
+        && amount > 0 && amount <= currAcc.balance) {
+        // снятие суммы с текущего счета и зачисление суммы адресату
+        currAcc.movements.push(-amount);
+        transTo.movements.push(amount);
+        updateUI(currAcc);
+    }
+    //clear value after transferring
+    inputTransferAmount.value = inputTransferTo.value = '';
+    inputTransferAmount.blur();
+});
+
+btnClose.addEventListener('click', function (e) {
+    e.preventDefault();
+
+    if (currAcc.username === inputCloseUsername.value
+        && currAcc.pin === +inputClosePin.value) {
+        const index = accounts.findIndex(acc => acc.username === currAcc.username);
+        accounts.splice(index, 1);
+        console.log(accounts);
+    }
+    inputClosePin.value = inputCloseUsername.value = '';
+    inputClosePin.blur();
+    containerApp.style.opacity=0;
+})
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -169,17 +247,6 @@ console.log(eurToUsd);
 
 // using map()
 const user = 'Steven Thomas Williams';
-
-const convertUser = user => user.owner.split(' ').map(x => x[0].toLowerCase()).join('');
-//принимаем массив объектов,пробегаемся по нему forEach и создаем новое свойстов каждому объекту и заполняем его
-const createUserNames = (accs) => {
-    accs.forEach(acc => {
-        // acc.username=acc.owner.split(' ').map(x => x[0].toLowerCase()).join('');
-        acc.username = convertUser(acc);
-    })
-}
-console.log(createUserNames(accounts));
-console.log(accounts);
 
 //filter()
 console.log(movements)
@@ -252,10 +319,10 @@ const calcAverageHumanAgeArrow = ages => ages
 console.log(calcAverageHumanAgeArrow([5, 2, 4, 1, 15, 8, 3]));
 console.log(calcAverageHumanAgeArrow([16, 6, 10, 5, 6, 1, 4]));
 //find()
-const account=accounts.find(acc=>acc.owner==='Jessica Davis');
+const account = accounts.find(acc => acc.owner === 'Jessica Davis');
 console.log(account);
 let accountJes;
 for (const acc of accounts) {
-    if(acc.owner==='Jessica Davis')  accountJes=acc;
+    if (acc.owner === 'Jessica Davis') accountJes = acc;
 }
 console.log(accountJes);
