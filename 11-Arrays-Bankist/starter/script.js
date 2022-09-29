@@ -98,10 +98,12 @@ const calcDisplaySummery = (acc) => {
 }
 
 //заполняем блок movements
-const displayMovements = (movements) => {
+const displayMovements = (movements, sort = false) => {
     //вначале обнуляем содержимое контейнера containerMovements
     containerMovements.innerHTML = '';
-    movements.forEach((mov, i) => {
+    //сортируем массив по возрастанию, если второй параметр true
+    (sort ? movements.slice().sort((a, b) => a - b)
+        : movements).forEach((mov, i) => {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
         //create html with data from array account.movements
         const html = `
@@ -186,6 +188,13 @@ btnClose.addEventListener('click', function (e) {
     inputClosePin.value = inputCloseUsername.value = '';
     inputClosePin.blur();
     containerApp.style.opacity = 0;
+});
+// button sort
+let sorting = false;
+btnSort.addEventListener('click', function (e) {
+    e.preventDefault();
+    displayMovements(currAcc.movements, !sorting);
+    sorting = !sorting;
 })
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -334,3 +343,11 @@ for (const acc of accounts) {
     if (acc.owner === 'Jessica Davis') accountJes = acc;
 }
 console.log(accountJes);
+
+
+// .sort()
+//a - current value and b - next value
+const copy = [...movements];
+copy.sort((a, b) => {
+
+})
