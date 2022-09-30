@@ -350,4 +350,62 @@ console.log(accountJes);
 const copy = [...movements];
 copy.sort((a, b) => {
 
-})
+});
+
+// способы автоматического заполнения массива
+//create empty array which has length 7
+const arr = new Array(5);
+// exist only one method to fill elements in this array
+arr.fill(1);
+console.log(arr);//[1,1,1,1,1];
+// .fill() get some parameters
+//first variant automatically fills an array
+arr.fill(0, 1, 3);
+console.log(arr);//[1, 0, 0, 1, 1]
+
+//second variant
+//Array.from() - it`s a function Array  and then on this function object we call the from() method
+
+//here we create array which fills 1
+const arr2 = Array.from({length: 4}, () => 1);
+console.log(arr2);//[1, 1, 1, 1]
+
+//create array are filled ascending values
+
+const arr3 = Array.from({length: 4}, (_, i) => i === 0 ? _ = i + 1 : i + 1);
+console.log(arr3);//[1, 2, 3, 4]
+
+//create array with random values number by 10
+
+const randomValue = () => Math.trunc(Math.random() * 10) + 1;//return from 1 to 10;
+const getArrayRandomValues = numValues => Array.from(new Set(Array.from({length: numValues}, () => randomValue())));
+console.log(getArrayRandomValues(10));
+
+//я могу получить через querySelectedAll() get NodeList and transfer it into array
+
+labelBalance.addEventListener('click', () => {
+    const movementsFromIU = document.querySelectorAll('.movements__value');
+    // transfer to array and by map get values
+    console.log(Array.from(movementsFromIU).map(el => +el.textContent.replace('€', '')));
+    // the same
+    console.log(Array.from(movementsFromIU, (_, i) => +_.textContent.replace('€', '')));
+});
+//1
+const bankDepositSum = accounts.map((acc, i, arr) => {
+
+    i === arr.length - 1 && console.log(arr);
+    return acc.movements;
+}).flat().filter(val => val > 0).reduce((acc, cur) => acc + cur);
+console.log(bankDepositSum);
+//2.
+const depositMore1000 = accounts.map(acc => acc.movements).flat()
+    .filter(x => x >= 1000).length;
+const depositMore1000Red = accounts.map(acc => acc.movements).flat().reduce((acc, cur, i) => {
+    if (cur >=1000) acc.push(cur);
+    return acc;
+}, []).length;
+const depositMore1000Red2 = accounts.map(acc => acc.movements).flat()
+    .reduce((count, cur) => cur >= 1000 ? count +1 : count, 0)
+console.log(depositMore1000);
+console.log(depositMore1000Red);
+console.log(depositMore1000Red2);
