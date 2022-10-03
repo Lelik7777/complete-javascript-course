@@ -390,22 +390,73 @@ labelBalance.addEventListener('click', () => {
     // the same
     console.log(Array.from(movementsFromIU, (_, i) => +_.textContent.replace('€', '')));
 });
-//1
+//1 из массива с объектами выделяем массивы,которые сливаем в один общий массив,фильтруем его, а затем суммируем содержимое
 const bankDepositSum = accounts.map((acc, i, arr) => {
 
     i === arr.length - 1 && console.log(arr);
     return acc.movements;
 }).flat().filter(val => val > 0).reduce((acc, cur) => acc + cur);
 console.log(bankDepositSum);
-//2.
+//2.снова получаем общий массив,который фильтруем и получаем количество нужных элементов
 const depositMore1000 = accounts.map(acc => acc.movements).flat()
     .filter(x => x >= 1000).length;
 const depositMore1000Red = accounts.map(acc => acc.movements).flat().reduce((acc, cur, i) => {
-    if (cur >=1000) acc.push(cur);
+    if (cur >= 1000) acc.push(cur);
     return acc;
 }, []).length;
 const depositMore1000Red2 = accounts.map(acc => acc.movements).flat()
-    .reduce((count, cur) => cur >= 1000 ? count +1 : count, 0)
+    .reduce((count, cur) => cur >= 1000 ? ++count : count, 0);
 console.log(depositMore1000);
 console.log(depositMore1000Red);
 console.log(depositMore1000Red2);
+
+//3.  get object which properties as arrays contains deposits and withdrawals
+
+const objectDepAndWithdraw = accounts.map(acc => acc.movements).flat().reduce((acc, cur, i, arr) => {
+    cur > 0 ? acc.deposits.push(cur) : acc.withdrawals.push(cur);
+    return acc;
+}, {deposits: [], withdrawals: []});
+console.log(objectDepAndWithdraw);
+//get object with sums of deposits and withdrawals
+//use flatMap and  just destructuring getting object
+const {deposits: deposits0, withdrawals} = accounts.flatMap(acc => acc.movements)
+    .reduce((sum, cur) => {
+        //cur > 0 ? sum.deposits += cur : sum.withdrawals += cur;
+        sum[cur > 0 ? 'deposits' : 'withdrawals'] += cur;
+        return sum;
+    }, {deposits: 0, withdrawals: 0})
+
+console.log('deposits =', deposits0, ' ', 'withdrawals=', withdrawals);
+//use only reduce();
+console.log(accounts)
+const sum2 = accounts.reduce((acc, cur) => {
+    cur.movements.forEach(mov => {
+        acc[mov > 0 ? 'deposits' : 'withdrawals'] += mov;
+    });
+    return acc;
+}, {deposits: 0, withdrawals: 0});
+console.log(sum2)
+//get average value
+const values = [3, 6, 42];
+console.log(values.reduce((sum, cur, i, arr) => {
+    sum += cur;
+    if (i === arr.length - 1) return sum / arr.length;
+    else return sum;
+}));
+
+//4 get string and return a title case
+const toTitleCase = (str) => {
+    const exceptions = ['a', 'an', 'but', 'with', 'or', 'and', 'in'];
+    // если слово начинается на исключение,то его нужно писать с большой буквы,поэтому отдельно нужно создать ф-цию для капитализации
+    const capitalize = (word) => word.replace(word[0], word[0].toUpperCase());
+
+    const titleCase = str.toLowerCase().split(' ')
+        .map(word => exceptions
+            .includes(word) ? word : capitalize(word))
+        .join(' ');
+    return capitalize(titleCase);
+}
+console.log(toTitleCase('this is a nice title'));
+console.log(toTitleCase('this is a nice title but is not too long'))
+console.log(toTitleCase('and here is another STring and we see it'));
+
