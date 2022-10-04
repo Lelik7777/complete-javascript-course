@@ -260,8 +260,14 @@ console.log(isNaN('33'));//false
 console.log(Number.isNaN('33'));
 console.log(Number.isNaN('33' / '3n'));
 console.log(Number.isNaN(3 / 0));
-
+console.log('-------------------------------------');
 console.log(Number.isFinite(3 / 3));
+// Checking if value is number
+console.log(Number.isFinite(20));
+console.log(Number.isFinite('20'));
+console.log(Number.isFinite(+'20X'));
+console.log(Number.isFinite(23 / 0));
+console.log('-------------------------------------');
 
 console.log(8 ** (1 / 3));
 
@@ -295,3 +301,24 @@ console.log(Math.floor(-23.3));
 
 //
 console.log((344).toFixed(2))
+
+//get even or odd numbers
+const arrNumber00 = [3, 4, 5, 6, 7, 323, 22, 11, 45];
+const getEvenOrOdd = (arr, even = true) => {
+    return even ? arr.filter(x => x % 2 === 0) : arr.filter(x => x % 2 !== 0);
+}
+console.log(getEvenOrOdd(arrNumber00, false));
+
+  // numeric separator
+console.log(30_000);
+const priceCents=345_45;
+console.log(priceCents);
+
+console.log(Number('230_000'));
+console.log(parseInt('230_000'));
+
+console.log(2**52);
+console.log(2**52-1);
+console.log(BigInt(3453453));
+
+console.log(12n+10);
