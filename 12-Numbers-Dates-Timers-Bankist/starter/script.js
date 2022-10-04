@@ -81,19 +81,20 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = '';
 
-    const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+    const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
     movs.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
-
+        const dateMove = getDate(new Date(acc.movementsDates[i]));
         const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
             i + 1
         } ${type}</div>
+        <div class="movements__date">${dateMove}</div>
         <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
@@ -142,7 +143,7 @@ createUsernames(accounts);
 
 const updateUI = function (acc) {
     // Display movements
-    displayMovements(acc.movements);
+    displayMovements(acc);
 
     // Display balance
     calcDisplayBalance(acc);
@@ -151,9 +152,21 @@ const updateUI = function (acc) {
     calcDisplaySummary(acc);
 };
 
+function getDate(date) {
+    const addZero = value => String(value).padStart(2, 0);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    return `${addZero(day)}/${addZero(month)}/${year} ${addZero(hour)}:${addZero(minute)}`;
+}
+
 ///////////////////////////////////////
 // Event handlers
+//Fake always logged in
 let currentAccount;
+
 
 btnLogin.addEventListener('click', function (e) {
     // Prevent form from submitting
@@ -175,6 +188,9 @@ btnLogin.addEventListener('click', function (e) {
         inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
 
+        //add date
+        const date = new Date();
+        labelDate.textContent = getDate(date);
         // Update UI
         updateUI(currentAccount);
     }
@@ -197,6 +213,9 @@ btnTransfer.addEventListener('click', function (e) {
         // Doing the transfer
         currentAccount.movements.push(-amount);
         receiverAcc.movements.push(amount);
+        //add date
+        currentAccount.movementsDates.push(getDate(new Date()));
+        receiverAcc.movementsDates.push(getDate(new Date()));
 
         // Update UI
         updateUI(currentAccount);
@@ -212,6 +231,9 @@ btnLoan.addEventListener('click', function (e) {
         // Add movement
         currentAccount.movements.push(amount);
 
+        // add date
+
+        currentAccount.movementsDates.push(getDate(new Date()));
         // Update UI
         updateUI(currentAccount);
     }
@@ -244,7 +266,7 @@ btnClose.addEventListener('click', function (e) {
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
     e.preventDefault();
-    displayMovements(currentAccount.movements, !sorted);
+    displayMovements(currentAccount, !sorted);
     sorted = !sorted;
 });
 
@@ -309,16 +331,31 @@ const getEvenOrOdd = (arr, even = true) => {
 }
 console.log(getEvenOrOdd(arrNumber00, false));
 
-  // numeric separator
+// numeric separator
 console.log(30_000);
-const priceCents=345_45;
+const priceCents = 345_45;
 console.log(priceCents);
 
 console.log(Number('230_000'));
 console.log(parseInt('230_000'));
 
-console.log(2**52);
-console.log(2**52-1);
+console.log(2 ** 52);
+console.log(2 ** 52 - 1);
 console.log(BigInt(3453453));
 
-console.log(12n+10);
+console.log(12n + BigInt(10));
+
+//create date
+const now = new Date();
+console.log(now);
+
+console.log(account1.movementsDates[0]);
+console.log(new Date(2022, 11, 25, 4, 5, 5));
+console.log(account1.movementsDates[0]);
+console.log(new Date(account1.movementsDates[0]));
+console.log(new Date(account1.movementsDates[0]).toISOString())
+const arrDates = [];
+for (let i = 0; i < 5; i++) {
+    arrDates.push(new Date().toISOString());
+}
+console.log(new Date(arrDates[0]).getFullYear())
