@@ -220,11 +220,32 @@ const updateUI = function (acc) {
     calcDisplaySummary(acc);
 };
 
+const setLogOut = () => {
+    //set time
+    let time = 20;
+    //get minutes and seconds in needed format
 
+    timer = setInterval(() => {
+        let minute = String(Math.trunc(time / 60)).padStart(2, 0);
+        let second = String(time % 60).padStart(2, 0);
+        //pass into app
+        labelTimer.textContent = `${minute}:${second}`;
+
+        if (time <= 0)
+        {
+            clearInterval(timer)
+            containerApp.style.opacity = '0';
+            labelWelcome.textContent = 'Log in to get started';
+        }
+        time--;
+    }, 1000);
+
+    return timer;
+}
 ///////////////////////////////////////
 // Event handlers
 //Fake always logged in
-let currentAccount;
+let currentAccount, timer;
 
 
 btnLogin.addEventListener('click', function (e) {
@@ -252,6 +273,12 @@ btnLogin.addEventListener('click', function (e) {
         labelDate.textContent = formatDateAuto(date, currentAccount.locale, false);
         // Update UI
         updateUI(currentAccount);
+
+    //проверка на существование setInterval и если он есть,то его удаление
+        if (timer) clearInterval(timer);
+        // setLogOut();
+        timer = setLogOut();
+
     }
 });
 
@@ -279,6 +306,9 @@ btnTransfer.addEventListener('click', function (e) {
         // Update UI
         updateUI(currentAccount);
     }
+    //reset timer
+    clearInterval(timer);
+    timer=setLogOut();
 });
 
 btnLoan.addEventListener('click', function (e) {
@@ -289,7 +319,7 @@ btnLoan.addEventListener('click', function (e) {
     if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
 
         //add setTimeout for delay on 3 second
-        setTimeout(()=>{
+        setTimeout(() => {
             // Add movement
 
             currentAccount.movements.push(amount);
@@ -298,10 +328,13 @@ btnLoan.addEventListener('click', function (e) {
             currentAccount.movementsDates.push(new Date().toISOString());
             // Update UI
             updateUI(currentAccount);
-        },3000)
+        }, 3000)
 
     }
     inputLoanAmount.value = '';
+    //reset timer
+    clearInterval(timer);
+    timer=setLogOut();
 });
 
 btnClose.addEventListener('click', function (e) {
@@ -485,7 +518,7 @@ console.log(new Intl.NumberFormat(account2.locale, {style: 'currency', currency:
 
 //setTimeout
 
-const int=setInterval(() => {
+const int = setInterval(() => {
     const date = new Date();
     const time = new Intl.DateTimeFormat(navigator.language, {
         minute: 'numeric',
