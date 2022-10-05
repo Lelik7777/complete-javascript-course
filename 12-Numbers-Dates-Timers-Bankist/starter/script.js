@@ -80,7 +80,37 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 /////////////////////////////////////////////////
 // Functions
+// using constructor new Intl for create format for date to display
+const formatDateAuto = (date, locale, movem = true) => {
+    //получение разницы дней между текущей датой и датой события
+    const daysRange = (date1, date2) => {
+        //    debugger
+        const range = date1 - date2;
+        return Math.floor(Math.abs(range / (1000 * 60 * 60 * 24)));
+    }
+    const time = daysRange(new Date(), date);
+    const options = {
+        minute: 'numeric',
+        hour: 'numeric',
+        day: 'numeric',
+        month: 'numeric',//can 'long'
+        year: 'numeric',
+        weekday: 'short'//can 'long' or 'numeric' or 'narrow'
+    }
+    //for display movements
+    if (movem) {
+        if (time === 0) return 'today';
+        if (time === 1) return 'yesterday';
+        if (time <= 7) return `${time} days ago`;
+        return new Intl.DateTimeFormat(locale, options).format(date)
+//for display date current balance
+    } else {
+        return new Intl.DateTimeFormat(locale, options).format(date);
+    }
 
+}
+
+//manually create format for date
 function formatDate(date, move = true) {
     const daysRange = (date1, date2) => {
         //    debugger
@@ -109,12 +139,11 @@ function formatDate(date, move = true) {
 
 const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = '';
-debugger
     const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
     movs.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
-        const dateMove = formatDate(new Date(acc.movementsDates[i]));
+        const dateMove = formatDateAuto(new Date(acc.movementsDates[i]), acc.locale);
         const html = `
       <div class="movements__row">
       
@@ -208,7 +237,7 @@ btnLogin.addEventListener('click', function (e) {
 
         //add date under current balance
         const date = new Date();
-        labelDate.textContent = formatDate(date, false);
+        labelDate.textContent = formatDateAuto(date, currentAccount.locale, false);
         // Update UI
         updateUI(currentAccount);
     }
@@ -400,4 +429,35 @@ console.log(timeNow);
 console.log(timeAcc1);
 console.log(timeNow - timeAcc1);
 console.log(Math.floor((timeNow - timeAcc1) / (1000 * 60 * 60 * 24)));
-console.log(daysRange(timeNow, timeAcc1))
+console.log(daysRange(timeNow, timeAcc1));
+
+const num = 3884764.23;
+
+const options = {
+    style: 'currency',
+    unit: 'celsius',
+    currency: 'EUR',
+    // useGrouping: false,
+};
+
+console.log('US:      ', new Intl.NumberFormat('en-US', options).format(num));
+console.log('Germany: ', new Intl.NumberFormat('de-DE', options).format(num));
+console.log('Syria:   ', new Intl.NumberFormat('ar-SY', options).format(num));
+console.log(
+    navigator.language,
+    new Intl.NumberFormat(navigator.language, options).format(num)
+);
+//using constructor  new Intl
+const count = 26254.39;
+const date = new Date("2012-05-24");
+
+function log(locale) {
+    console.log(
+        `${new Intl.DateTimeFormat(locale).format(date)} ${new Intl.NumberFormat(locale).format(count)}`
+    );
+}
+
+log("en-US");
+// expected output: 5/24/2012 26,254.39
+
+log("de-DE");
