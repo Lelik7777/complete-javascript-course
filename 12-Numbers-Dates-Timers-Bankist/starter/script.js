@@ -97,7 +97,11 @@ const formatDateAuto = (date, locale, movem = true) => {
         year: 'numeric',
         weekday: 'short'//can 'long' or 'numeric' or 'narrow'
     }
+    //i can get local from browser
+    //locale=navigator.language;
+
     //for display movements
+
     if (movem) {
         if (time === 0) return 'today';
         if (time === 1) return 'yesterday';
@@ -108,6 +112,14 @@ const formatDateAuto = (date, locale, movem = true) => {
         return new Intl.DateTimeFormat(locale, options).format(date);
     }
 
+}
+// function for formatting currency
+const formatCurrency = (value, locale, currency) => {
+    const options = {
+        style: 'currency',
+        currency
+    };
+    return new Intl.NumberFormat(locale, options).format(value)
 }
 
 //manually create format for date
@@ -151,7 +163,7 @@ const displayMovements = function (acc, sort = false) {
             i + 1
         } ${type}</div>
         <div class="movements__date">${dateMove}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formatCurrency(mov, acc.locale, acc.currency)}</div>
       </div>
     `;
 
@@ -161,19 +173,19 @@ const displayMovements = function (acc, sort = false) {
 
 const calcDisplayBalance = function (acc) {
     acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-    labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+    labelBalance.textContent = formatCurrency(acc.balance, acc.locale, acc.currency);
 };
 
 const calcDisplaySummary = function (acc) {
     const incomes = acc.movements
         .filter(mov => mov > 0)
         .reduce((acc, mov) => acc + mov, 0);
-    labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+    labelSumIn.textContent = formatCurrency(incomes, acc.locale, acc.currency);
 
     const out = acc.movements
         .filter(mov => mov < 0)
         .reduce((acc, mov) => acc + mov, 0);
-    labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+    labelSumOut.textContent = formatCurrency(Math.abs(out), acc.locale, acc.currency);
 
     const interest = acc.movements
         .filter(mov => mov > 0)
@@ -183,7 +195,7 @@ const calcDisplaySummary = function (acc) {
             return int >= 1;
         })
         .reduce((acc, int) => acc + int, 0);
-    labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+    labelSumInterest.textContent = formatCurrency(interest, acc.locale, acc.currency);
 };
 
 const createUsernames = function (accs) {
@@ -461,3 +473,6 @@ log("en-US");
 // expected output: 5/24/2012 26,254.39
 
 log("de-DE");
+
+const number = 344242;
+console.log(new Intl.NumberFormat(account2.locale, {style: 'currency', currency: account2.currency}).format(number))
