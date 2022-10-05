@@ -222,7 +222,7 @@ const updateUI = function (acc) {
 
 const setLogOut = () => {
     //set time
-    let time = 20;
+    let time = 120;
     //get minutes and seconds in needed format
 
     timer = setInterval(() => {
