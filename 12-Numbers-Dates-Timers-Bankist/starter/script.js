@@ -287,13 +287,19 @@ btnLoan.addEventListener('click', function (e) {
     const amount = Math.floor(inputLoanAmount.value);
 
     if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-        // Add movement
-        currentAccount.movements.push(amount);
 
-        // add date
-        currentAccount.movementsDates.push(new Date().toISOString());
-        // Update UI
-        updateUI(currentAccount);
+        //add setTimeout for delay on 3 second
+        setTimeout(()=>{
+            // Add movement
+
+            currentAccount.movements.push(amount);
+
+            // add date
+            currentAccount.movementsDates.push(new Date().toISOString());
+            // Update UI
+            updateUI(currentAccount);
+        },3000)
+
     }
     inputLoanAmount.value = '';
 });
@@ -475,4 +481,16 @@ log("en-US");
 log("de-DE");
 
 const number = 344242;
-console.log(new Intl.NumberFormat(account2.locale, {style: 'currency', currency: account2.currency}).format(number))
+console.log(new Intl.NumberFormat(account2.locale, {style: 'currency', currency: account2.currency}).format(number));
+
+//setTimeout
+
+const int=setInterval(() => {
+    const date = new Date();
+    const time = new Intl.DateTimeFormat(navigator.language, {
+        minute: 'numeric',
+        hour: 'numeric',
+        second: 'numeric'
+    }).format(date);
+}, 1000);
+clearInterval(int);
