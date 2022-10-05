@@ -22,8 +22,8 @@ const account1 = {
         '2020-04-01T10:17:24.185Z',
         '2020-05-08T14:11:59.604Z',
         '2020-05-27T17:01:17.194Z',
-        '2020-07-11T23:36:17.929Z',
-        '2020-07-12T10:51:36.790Z',
+        '2022-10-03T10:36:17.929Z',
+        '2022-10-02T10:51:36.790Z',
     ],
     currency: 'EUR',
     locale: 'pt-PT', // de-DE
@@ -41,9 +41,9 @@ const account2 = {
         '2019-12-25T06:04:23.907Z',
         '2020-01-25T14:18:46.235Z',
         '2020-02-05T16:33:06.386Z',
-        '2020-04-10T14:43:26.374Z',
-        '2020-06-25T18:49:59.371Z',
-        '2020-07-26T12:01:20.894Z',
+        '2022-04-10T14:43:26.374Z',
+        '2022-06-25T18:49:59.371Z',
+        '2022-07-26T12:01:20.894Z',
     ],
     currency: 'USD',
     locale: 'en-US',
@@ -81,16 +81,43 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
+function formatDate(date, move = true) {
+    const daysRange = (date1, date2) => {
+        //    debugger
+        const range = date1 - date2;
+        return Math.floor(Math.abs(range / (1000 * 60 * 60 * 24)));
+    }
+    const time = daysRange(new Date(), date);
+    console.log(time)
+    const addZero = value => String(value).padStart(2, 0);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    if (move) {
+        if (time === 0) return 'today';
+        if (time === 1) return 'yesterday';
+        if (time <= 7) return `${time} days ago`;
+        return `${addZero(day)}/${addZero(month)}/${year} ${addZero(hour)}:${addZero(minute)}`;
+
+    } else {
+        return `${addZero(day)}/${addZero(month)}/${year} ${addZero(hour)}:${addZero(minute)}`;
+    }
+
+}
+
 const displayMovements = function (acc, sort = false) {
     containerMovements.innerHTML = '';
-
+debugger
     const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
 
     movs.forEach(function (mov, i) {
         const type = mov > 0 ? 'deposit' : 'withdrawal';
-        const dateMove = getDate(new Date(acc.movementsDates[i]));
+        const dateMove = formatDate(new Date(acc.movementsDates[i]));
         const html = `
       <div class="movements__row">
+      
         <div class="movements__type movements__type--${type}">${
             i + 1
         } ${type}</div>
@@ -152,15 +179,6 @@ const updateUI = function (acc) {
     calcDisplaySummary(acc);
 };
 
-function getDate(date) {
-    const addZero = value => String(value).padStart(2, 0);
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    return `${addZero(day)}/${addZero(month)}/${year} ${addZero(hour)}:${addZero(minute)}`;
-}
 
 ///////////////////////////////////////
 // Event handlers
@@ -188,9 +206,9 @@ btnLogin.addEventListener('click', function (e) {
         inputLoginUsername.value = inputLoginPin.value = '';
         inputLoginPin.blur();
 
-        //add date
+        //add date under current balance
         const date = new Date();
-        labelDate.textContent = getDate(date);
+        labelDate.textContent = formatDate(date, false);
         // Update UI
         updateUI(currentAccount);
     }
@@ -214,8 +232,8 @@ btnTransfer.addEventListener('click', function (e) {
         currentAccount.movements.push(-amount);
         receiverAcc.movements.push(amount);
         //add date
-        currentAccount.movementsDates.push(getDate(new Date()));
-        receiverAcc.movementsDates.push(getDate(new Date()));
+        currentAccount.movementsDates.push(new Date().toISOString());
+        receiverAcc.movementsDates.push(new Date().toISOString());
 
         // Update UI
         updateUI(currentAccount);
@@ -232,8 +250,7 @@ btnLoan.addEventListener('click', function (e) {
         currentAccount.movements.push(amount);
 
         // add date
-
-        currentAccount.movementsDates.push(getDate(new Date()));
+        currentAccount.movementsDates.push(new Date().toISOString());
         // Update UI
         updateUI(currentAccount);
     }
@@ -358,4 +375,29 @@ const arrDates = [];
 for (let i = 0; i < 5; i++) {
     arrDates.push(new Date().toISOString());
 }
-console.log(new Date(arrDates[0]).getFullYear())
+console.log(new Date(arrDates[0]).getFullYear());
+//get timestamp
+const timestamp = new Date().getTime();
+console.log(timestamp);
+//use this timestamp that get a date object from new Date(timestamp)
+const date1 = new Date(timestamp);
+console.log(date1);//Tue Oct 04 2022 22:13:14 GMT+0300 (Moscow Standard Time)
+//я могу снову объект превратить в число через + or Number()
+console.log(+date1);//1664910812319
+console.log(Number(date1));//1664910812319
+//ф-ция вазвращающая разницу в днях между двумя датами
+const daysRange = (date1, date2) => {
+    const range = date1 - date2;
+    console.log(range)
+    return Math.floor(range / (1000 * 60 * 60 * 24));
+}
+console.log(daysRange(new Date(), new Date(2022, 9, 1)));
+console.log(new Date() - new Date(account1.movementsDates[7]))
+
+const timeNow = new Date();
+const timeAcc1 = new Date(account1.movementsDates[7]);
+console.log(timeNow);
+console.log(timeAcc1);
+console.log(timeNow - timeAcc1);
+console.log(Math.floor((timeNow - timeAcc1) / (1000 * 60 * 60 * 24)));
+console.log(daysRange(timeNow, timeAcc1))
