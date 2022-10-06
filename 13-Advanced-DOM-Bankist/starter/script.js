@@ -42,4 +42,31 @@ message.classList.add('cookie-message');
 document.querySelector('.header').append(message);
 document.querySelector('.btn--close--cookie').addEventListener('click', () => {
     message.remove();
-})
+});
+
+//
+console.log(getComputedStyle(message).height);
+console.log(getComputedStyle(message).width);
+console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message).background);
+
+//scrolling
+const $btnScrollTo = document.querySelector('.btn--scroll-to');
+const $section1 = document.querySelector('#section--1');
+$btnScrollTo.addEventListener('click', function () {
+    const s1coord = $section1.getBoundingClientRect();
+    // top section1 - это расстояние от верхнего края view port до элемента
+    console.log('top section1',s1coord.top);
+    // это текущее значение скрола
+    console.log('current position pageYOffset',window.pageYOffset);
+// поскольку возможен скрол страницы,то top section1 может изменяться,поэтому необходимо использовать выражение,где суммируем top section1 и текущее положение скрола (это нужно делать как по горизонтали,так и по вертикали)
+    console.log('real position element on page',s1coord.top+window.pageYOffset);
+//old school method
+//     window.scrollTo({
+//         left:s1coord.left+window.pageXOffset,
+//         top:s1coord.top+window.pageYOffset,
+//         behavior:'smooth',
+//     });
+    //modern method
+$section1.scrollIntoView({behavior:'smooth'})
+});
