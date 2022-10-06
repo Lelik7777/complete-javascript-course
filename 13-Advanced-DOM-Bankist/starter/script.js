@@ -30,6 +30,23 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
+//building tabbed component
+const $tabContainer = document.querySelector('.operations__tab-container');
+const $operationsTab = document.querySelectorAll('.operations__tab');
+const $operationsContent = document.querySelectorAll('.operations__content');
+$tabContainer.addEventListener('click', function (e) {
+    const click = e.target.closest('.operations__tab');
+    // guard   clause
+    if (!click) return;
+    //remove activity for tab and content
+    $operationsTab.forEach(t => t.classList.remove('operations__tab--active'));
+    console.log($operationsContent[0])
+    $operationsContent.forEach(c => c.classList.remove('operations__content--active'));
+    //add activity
+    console.log(`.operations__tab--${click.dataset.tab}`);
+    document.querySelector(`.operations__tab--${click.dataset.tab}`).classList.add('operations__tab--active');
+    document.querySelector(`.operations__content--${click.dataset.tab}`).classList.add('operations__content--active');
+});
 
 //learning
 //
@@ -122,3 +139,34 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
         document.querySelector(id).scrollIntoView({behavior: 'smooth'});
     }
 })
+
+
+//  DOM Traversing
+// const h1 = document.querySelector('h1');
+//
+// // Going downwards: child
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.childNodes);
+// console.log(h1.children);
+// h1.firstElementChild.style.color = 'white';
+// h1.lastElementChild.style.color = 'orangered';
+//
+// // Going upwards: parents
+// console.log(h1.parentNode);
+// console.log(h1.parentElement);
+//
+// h1.closest('.header').style.background = 'var(--gradient-secondary)';
+//
+// h1.closest('h1').style.background = 'var(--gradient-primary)';
+//
+// // Going sideways: siblings
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+//
+// console.log(h1.previousSibling);
+// console.log(h1.nextSibling);
+//
+// console.log(h1.parentElement.children);
+// [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) el.style.transform = 'scale(0.5)';
+// });
