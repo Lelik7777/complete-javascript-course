@@ -30,6 +30,8 @@ document.addEventListener('keydown', function (e) {
     }
 });
 
+
+//learning
 //
 console.log(document.documentElement);
 console.log(document.head);
@@ -102,7 +104,21 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 //слушаем следующий родительский элемент
 document.querySelector('.nav').addEventListener('click', function (e) {
     console.log('nav ', e.target, e.currentTarget);
-    e.stopPropagation();
-    this.style.backgroundColor=randomColor(0,255);
-}, true)
-console.log(randomColor(0, 255))
+    // e.stopPropagation();
+    ///this.style.backgroundColor = randomColor(0, 255);
+    // const id=e.target.getAttribute('href');
+    // console.log(e.target.href)
+    // document.querySelector(id).scrollIntoView({behavior:'smooth'});
+    // e.preventDefault();
+
+}, false);
+
+//event delegation
+//get parent element and add event handler
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+    e.preventDefault();
+    if (e.target.classList.contains('nav__link')) {
+        const id = e.target.getAttribute('href');
+        document.querySelector(id).scrollIntoView({behavior: 'smooth'});
+    }
+})
