@@ -15,6 +15,11 @@ const $operationsTab = document.querySelectorAll('.operations__tab');
 const $operationsContent = document.querySelectorAll('.operations__content');
 // navigation
 const $nav = document.querySelector('.nav');
+//for scrolling
+const $btnScrollTo = document.querySelector('.btn--scroll-to');
+const $section1 = document.querySelector('#section--1');
+//for sticky navigation
+const $header = document.querySelector('.header');
 
 
 /////////////////////////////////////////////////////////////////
@@ -64,14 +69,17 @@ $tabContainer.addEventListener('click', function (e) {
 /////////////////////////////////////////////////////////////////
 
 //change opacity on links for navigation
+const navCl = '.nav';
+const navLinkCl = '.nav__link';
+
 function handleForOpacity(e) {
     //проверка нажали ли на ссылку или нет
     if (e.target.classList.contains('nav__link')) {
         const link = e.target;
-        const siblings = link.closest('.nav').querySelectorAll('.nav__link');
-        const logo = e.target.closest('.nav').querySelector('img');
+        const siblings = link.closest(navCl).querySelectorAll(navLinkCl);
+        const logo = link.closest(navCl).querySelector('img');
         siblings.forEach(sib => {
-            if (sib!==link) {
+            if (sib !== link) {
                 //this здесь это то,что принимает в качестве одного лишь "аргумента" bind()
                 sib.style.opacity = this;
             }
@@ -82,6 +90,37 @@ function handleForOpacity(e) {
 
 $nav.addEventListener('mouseover', handleForOpacity.bind(0.5));
 $nav.addEventListener('mouseout', handleForOpacity.bind(1));
+
+/////////////////////////////////////////////////
+
+//to set up sticky navigation by scrolling
+//1. bad effect on performance
+// const topSec1 = $section1.getBoundingClientRect().top;
+// window.addEventListener('scroll', function () {
+//     if (window.pageYOffset>topSec1) $nav.classList.add('sticky');
+//     else $nav.classList.remove('sticky');
+// })
+
+//2.  more effective method- using intersection Observer API
+
+//example how work observer
+// const observer = new IntersectionObserver((entries, observer) => {
+//     entries.forEach(entry => console.log(entry));
+// }, {root: null, threshold: [0, .2]});
+// observer.observe($section1);
+
+//make sticky nav
+const stickyNav = (entries) => {
+    const [entry] = entries;
+    if (!entry.isIntersecting) $nav.classList.add('sticky')
+    else $nav.classList.remove('sticky')
+}
+const observer = new IntersectionObserver(stickyNav, {
+    root: null,
+    threshold: [0, .1],
+    rootMargin: `-${$nav.getBoundingClientRect().height}px`
+});
+observer.observe($header);
 //////////////////////////////////////////////////////////////////
 //learning
 
@@ -107,8 +146,7 @@ console.log(getComputedStyle(message).background);
 ///////////////////////
 
 //scrolling
-const $btnScrollTo = document.querySelector('.btn--scroll-to');
-const $section1 = document.querySelector('#section--1');
+
 $btnScrollTo.addEventListener('click', function () {
     const s1coord = $section1.getBoundingClientRect();
     // top section1 - это расстояние от верхнего края view port до элемента
