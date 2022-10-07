@@ -2,12 +2,23 @@
 
 ///////////////////////////////////////
 // Modal window
-
+////////////////////////////////////////////////////////////////
+//variables
+//for modal
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
+//for tabbed component
+const $tabContainer = document.querySelector('.operations__tab-container');
+const $operationsTab = document.querySelectorAll('.operations__tab');
+const $operationsContent = document.querySelectorAll('.operations__content');
+// navigation
+const $nav = document.querySelector('.nav');
 
+
+/////////////////////////////////////////////////////////////////
+//functions modal
 const openModal = function (e) {
     e.preventDefault();
     modal.classList.remove('hidden');
@@ -29,26 +40,51 @@ document.addEventListener('keydown', function (e) {
         closeModal();
     }
 });
-
+//////////////////////////////////////////////////////////////////
 //building tabbed component
-const $tabContainer = document.querySelector('.operations__tab-container');
-const $operationsTab = document.querySelectorAll('.operations__tab');
-const $operationsContent = document.querySelectorAll('.operations__content');
+
 $tabContainer.addEventListener('click', function (e) {
     const click = e.target.closest('.operations__tab');
     // guard   clause
     if (!click) return;
+
     //remove activity for tab and content
-    $operationsTab.forEach(t => t.classList.remove('operations__tab--active'));
-    console.log($operationsContent[0])
-    $operationsContent.forEach(c => c.classList.remove('operations__content--active'));
+    $operationsTab
+        .forEach(t => t.classList.remove('operations__tab--active'));
+    $operationsContent
+        .forEach(c => c.classList.remove('operations__content--active'));
+
     //add activity
-    console.log(`.operations__tab--${click.dataset.tab}`);
-    document.querySelector(`.operations__tab--${click.dataset.tab}`).classList.add('operations__tab--active');
-    document.querySelector(`.operations__content--${click.dataset.tab}`).classList.add('operations__content--active');
+    click.classList.add('operations__tab--active');
+    document
+        .querySelector(`.operations__content--${click.dataset.tab}`)
+        .classList.add('operations__content--active');
 });
 
+/////////////////////////////////////////////////////////////////
+
+//change opacity on links for navigation
+function handleForOpacity(e) {
+    //проверка нажали ли на ссылку или нет
+    if (e.target.classList.contains('nav__link')) {
+        const link = e.target;
+        const siblings = link.closest('.nav').querySelectorAll('.nav__link');
+        const logo = e.target.closest('.nav').querySelector('img');
+        siblings.forEach(sib => {
+            if (sib!==link) {
+                //this здесь это то,что принимает в качестве одного лишь "аргумента" bind()
+                sib.style.opacity = this;
+            }
+            logo.style.opacity = this;
+        })
+    }
+}
+
+$nav.addEventListener('mouseover', handleForOpacity.bind(0.5));
+$nav.addEventListener('mouseout', handleForOpacity.bind(1));
+//////////////////////////////////////////////////////////////////
 //learning
+
 //
 console.log(document.documentElement);
 console.log(document.head);
@@ -68,6 +104,7 @@ console.log(getComputedStyle(message).height);
 console.log(getComputedStyle(message).width);
 console.log(getComputedStyle(message).color);
 console.log(getComputedStyle(message).background);
+///////////////////////
 
 //scrolling
 const $btnScrollTo = document.querySelector('.btn--scroll-to');
@@ -100,7 +137,7 @@ $h1.addEventListener('click', function () {
 $h1.onclick = function () {
     console.log('you click on h1 by second method');
 };
-
+//////////////////////
 // event propagation
 
 const randomColor = function (min, max) {
@@ -140,33 +177,51 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
     }
 })
 
-
+////////////////////
 //  DOM Traversing
-// const h1 = document.querySelector('h1');
+let h1 = document.querySelector('h1');
 //
 // // Going downwards: child
-// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.querySelectorAll('.highlight'));//!!!!!!
+// h1.querySelectorAll('.highlight').forEach(x => console.log(x));
 // console.log(h1.childNodes);
-// console.log(h1.children);
-// h1.firstElementChild.style.color = 'white';
-// h1.lastElementChild.style.color = 'orangered';
+// console.log(h1.children);//!!!!!!!
+// console.log([...h1.children]);
+// h1.firstElementChild.style.color = 'white';//!!!!!!!
+// h1.lastElementChild.style.color = 'orangered';//!!!!!!!
 //
 // // Going upwards: parents
 // console.log(h1.parentNode);
-// console.log(h1.parentElement);
+// console.log(h1.parentElement);//!!!!!!!!!
 //
 // h1.closest('.header').style.background = 'var(--gradient-secondary)';
-//
+// //!!!!!!!!!
 // h1.closest('h1').style.background = 'var(--gradient-primary)';
 //
 // // Going sideways: siblings
-// console.log(h1.previousElementSibling);
-// console.log(h1.nextElementSibling);
+// console.log(h1.previousElementSibling);//!!!!!!!
+// console.log(h1.nextElementSibling);//!!!!!!!!!!!!!
 //
 // console.log(h1.previousSibling);
 // console.log(h1.nextSibling);
 //
-// console.log(h1.parentElement.children);
+// //life hack
+// console.log(typeof h1.parentElement.children);
 // [...h1.parentElement.children].forEach(function (el) {
-//   if (el !== h1) el.style.transform = 'scale(0.5)';
+//     if (el !== h1) el.style.transform = 'scale(0.5)';
 // });
+// //show all siblings after h1
+// while (h1) {
+//     console.log(h1.nextElementSibling ?? 'that`s all');
+//     h1 = h1.nextElementSibling;
+// }
+
+//passing 'argument' into handler
+function f(e) {
+    console.log('this', this);
+    console.log('e', e.target)
+    //e.target.style.color=this[0];
+    //e.target.style.backgroundColor=this[1];
+}
+
+h1.addEventListener('click', f.bind(['red', 'yellow']));
