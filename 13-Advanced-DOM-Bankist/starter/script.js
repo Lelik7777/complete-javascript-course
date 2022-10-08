@@ -20,6 +20,8 @@ const $btnScrollTo = document.querySelector('.btn--scroll-to');
 const $section1 = document.querySelector('#section--1');
 //for sticky navigation
 const $header = document.querySelector('.header');
+//reveal sections
+const $sections = document.querySelectorAll('.section');
 
 
 /////////////////////////////////////////////////////////////////
@@ -110,17 +112,39 @@ $nav.addEventListener('mouseout', handleForOpacity.bind(1));
 // observer.observe($section1);
 
 //make sticky nav
+//in array entries залетает все значения из threshold
 const stickyNav = (entries) => {
     const [entry] = entries;
+
     if (!entry.isIntersecting) $nav.classList.add('sticky')
-    else $nav.classList.remove('sticky')
+    else $nav.classList.remove('sticky');
+    // console.log(entry);
+
 }
 const observer = new IntersectionObserver(stickyNav, {
     root: null,
-    threshold: [0, .1],
+    threshold: 0,
     rootMargin: `-${$nav.getBoundingClientRect().height}px`
 });
 observer.observe($header);
+
+// reveal sections
+const revealSection = (entries, observer) => {
+    const [entry] = entries;
+    //console.log(entry)
+    if(!entry.isIntersecting) return;
+    entry.target.classList.remove('section--hidden');
+    //получается, что нам нужно лишь один раз осуществить наблюдение за элементом и после мы можем удалить наблюдателя,чтобы улучшить производительность
+    observer.unobserve(entry.target);
+}
+const observerSec = new IntersectionObserver(revealSection, {
+    root: null,
+    threshold: .14,
+});
+$sections.forEach(section => {
+    observerSec.observe(section);
+    section.classList.add('section--hidden');
+})
 //////////////////////////////////////////////////////////////////
 //learning
 
