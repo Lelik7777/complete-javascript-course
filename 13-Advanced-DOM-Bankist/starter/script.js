@@ -22,6 +22,8 @@ const $section1 = document.querySelector('#section--1');
 const $header = document.querySelector('.header');
 //reveal sections
 const $sections = document.querySelectorAll('.section');
+//lazy loading images
+const $lazyImages = document.querySelectorAll('img[data-src]');
 
 
 /////////////////////////////////////////////////////////////////
@@ -132,7 +134,7 @@ observer.observe($header);
 const revealSection = (entries, observer) => {
     const [entry] = entries;
     //console.log(entry)
-    if(!entry.isIntersecting) return;
+    if (!entry.isIntersecting) return;
     entry.target.classList.remove('section--hidden');
     //получается, что нам нужно лишь один раз осуществить наблюдение за элементом и после мы можем удалить наблюдателя,чтобы улучшить производительность
     observer.unobserve(entry.target);
@@ -144,7 +146,27 @@ const observerSec = new IntersectionObserver(revealSection, {
 $sections.forEach(section => {
     observerSec.observe(section);
     section.classList.add('section--hidden');
-})
+});
+
+//lazy loading images
+const toLazyImage = (entries, observer) => {
+    const [entry] = entries;
+    //guard clause
+    if (!entry.isIntersecting) return;
+    entry.target.src = entry.target.dataset.src;
+    //чтобы эффект замены картинок с плохим качеством на картинки с хорошим не был заметен, то снимаем размытость только после загрузки картинки с хорошим качеством!
+    entry.target.addEventListener('load',()=>entry.target.classList.remove('lazy-img'));
+    //remove observer
+    observer.unobserve(entry.target);
+}
+const observerLazyImg = new IntersectionObserver(toLazyImage, {
+    root: null,
+    threshold: 0,
+    //чтобы ускорить немного загрузку картинок с хорошим качеством
+    rootMargin:`200px`,
+});
+$lazyImages.forEach(img => observerLazyImg.observe(img));
+
 //////////////////////////////////////////////////////////////////
 //learning
 
