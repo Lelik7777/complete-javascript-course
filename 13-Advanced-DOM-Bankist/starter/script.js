@@ -24,7 +24,12 @@ const $header = document.querySelector('.header');
 const $sections = document.querySelectorAll('.section');
 //lazy loading images
 const $lazyImages = document.querySelectorAll('img[data-src]');
-
+//slider
+const $slides = document.querySelectorAll('.slide');
+const $slider = document.querySelector('.slider');
+const $btnRightSlide = document.querySelector('.slider__btn--right');
+const $btnLeftSlide = document.querySelector('.slider__btn--left');
+const $dots = document.querySelector('.dots');
 
 /////////////////////////////////////////////////////////////////
 //functions modal
@@ -145,7 +150,7 @@ const observerSec = new IntersectionObserver(revealSection, {
 });
 $sections.forEach(section => {
     observerSec.observe(section);
-    section.classList.add('section--hidden');
+    // section.classList.add('section--hidden');
 });
 
 //lazy loading images
@@ -155,7 +160,7 @@ const toLazyImage = (entries, observer) => {
     if (!entry.isIntersecting) return;
     entry.target.src = entry.target.dataset.src;
     //чтобы эффект замены картинок с плохим качеством на картинки с хорошим не был заметен, то снимаем размытость только после загрузки картинки с хорошим качеством!
-    entry.target.addEventListener('load',()=>entry.target.classList.remove('lazy-img'));
+    entry.target.addEventListener('load', () => entry.target.classList.remove('lazy-img'));
     //remove observer
     observer.unobserve(entry.target);
 }
@@ -163,10 +168,63 @@ const observerLazyImg = new IntersectionObserver(toLazyImage, {
     root: null,
     threshold: 0,
     //чтобы ускорить немного загрузку картинок с хорошим качеством
-    rootMargin:`200px`,
+    rootMargin: `200px`,
 });
 $lazyImages.forEach(img => observerLazyImg.observe(img));
 
+//slider
+
+let currSlide = 0;
+const maxSlide = $slides.length - 1;
+//locate slides one by one
+//functions
+const goToSlide = (slide) => {
+    //для каждого слайда устанавливается свое значение in translateX() in %
+    $slides
+        .forEach((s, i) => s.style.transform = `translateX(${(i - slide) * 100}%)`);
+}
+//create dots for navigation
+const createDots = () => {
+    $slides.forEach((_, i) => {
+        $dots.insertAdjacentHTML('beforeend', `<button class="dots__dot" data-slide="${i}"></button>`)
+    })
+}
+const activeDot = (slide) => {
+    document.querySelectorAll('.dots__dot')
+        .forEach(dot => dot.classList.remove('dots__dot--active'));
+    document.querySelector(`.dots__dot[data-slide='${slide}']`).classList.add('dots__dot--active');
+}
+const init = () => {
+    goToSlide(0);
+    createDots();
+    activeDot(0);
+}
+
+const nextSlide = () => {
+    if (currSlide === maxSlide) currSlide = 0;
+    else currSlide++;
+    goToSlide(currSlide);
+    activeDot(currSlide)
+}
+const prevSlide = () => {
+    if (currSlide === 0) currSlide = maxSlide;
+    else currSlide--;
+    goToSlide(currSlide);
+    activeDot(currSlide);
+}
+init();
+$btnRightSlide.addEventListener('click', nextSlide);
+$btnLeftSlide.addEventListener('click', prevSlide);
+//перелистование при помощи клавиш
+document.addEventListener('keydown', function (e) {
+    e.key === 'ArrowLeft' && prevSlide();
+    e.key === 'ArrowRight' && nextSlide();
+});
+$dots.addEventListener('click', function (e) {
+    const {slide} = e.target.dataset;
+    goToSlide(slide);
+    activeDot(slide);
+});
 //////////////////////////////////////////////////////////////////
 //learning
 
