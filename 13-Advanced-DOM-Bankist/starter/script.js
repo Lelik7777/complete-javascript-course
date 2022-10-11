@@ -367,3 +367,25 @@ function f(e) {
 }
 
 h1.addEventListener('click', f.bind(['red', 'yellow']));
+
+// events DOMContentLoaded and window.load
+
+// временная метка
+let timeStart=Date.now();
+//срабатывает,когда HTML is parsed and js has executed
+document.addEventListener('DOMContentLoaded',function (e) {
+    console.log(e);
+    console.log('time is ',Date.now()-timeStart);
+})
+//срабатывает,когда полностью вся страница загрузилась, включая и сторонние файлы,типа css
+window.addEventListener('load',function (e) {
+    console.log(e);
+    console.log('time is ',Date.now()-timeStart)
+});
+//срабатывает,когда юзер покидает страницу
+// window.addEventListener('beforeunload',function (e) {
+//     e.preventDefault();
+//     console.log(e);
+//     //это нужно,чтобы появилась pop-up с уточнениями
+//     e.returnValue='';
+// })
