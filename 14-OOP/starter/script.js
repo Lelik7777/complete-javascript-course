@@ -189,23 +189,55 @@ class PersonNew {
     get fullName() {
         return this._fullName;
     }
-    static hey(){
+
+    static hey() {
         console.log('hey! i am static method in class');
     }
 }
-const anna=new PersonNew('Ann',23);
-const annaBiroff=new PersonNew('Anna Biroff',33);
+
+const anna = new PersonNew('Ann', 23);
+const annaBiroff = new PersonNew('Anna Biroff', 33);
 console.log(annaBiroff.fullName);
 
 //STATIC METHOD - статический метод прикреплен к конструктору и только к нему и не находится в prototype, поэтому не наследуюется экземплярами
 //создание статического метода для ф-ции конструктора
-Person.hey=function () {
+Person.hey = function () {
     console.log('hey! i am a static method');
 }
 Person.hey();
 //создание станического метода в классе
 PersonNew.hey();
 
+//challenge #2
+class CarCl {
+    constructor(make, speed) {
+        this.make = make;
+        this.speed = speed;
+    }
 
+    accelerate() {
+        this.speed += 10;
+        console.log(`${this.make} is going  at ${this.speed} km/h`);
+    }
+
+    brake() {
+        this.speed -= 5;
+        console.log(`${this.make} is going  at ${this.speed} km/h`);
+    }
+
+    get speedUS() {
+        return this.speed / 1.6;
+    }
+
+    set speedUS(speed) {
+        this.speed = speed * 1.6;
+    }
+
+}
+
+const ford = new CarCl('Ford', 120);
+console.log(ford.speedUS);
+ford.accelerate();
+console.log(ford.speedUS);
 
 
