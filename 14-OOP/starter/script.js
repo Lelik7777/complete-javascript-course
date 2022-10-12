@@ -85,3 +85,30 @@ console.log(array.unique())
 //prototype chain html elements
 const h1 = document.querySelector('h1');
 console.dir(h1);
+
+//challenge #1
+function Car(make, speed) {
+    this.make = make;
+    this.speed = speed;
+}
+
+Car.prototype.accelerate = function () {
+    this.speed += 10;
+    console.log(`${this.make} is going  at ${this.speed} km/h`);
+}
+Car.prototype.brake = function () {
+    this.speed -= 5;
+    console.log(`${this.make} is going  at ${this.speed} km/h`);
+}
+console.log('Car', Car.prototype);
+const bmw = new Car('BMW', 120);
+const mercedes = new Car('Mercedes', 95);
+bmw.accelerate();
+bmw.brake();
+bmw.brake();
+bmw.brake();
+bmw.accelerate();
+mercedes.brake();
+mercedes.accelerate();
+console.log(bmw);
+console.log(mercedes);
