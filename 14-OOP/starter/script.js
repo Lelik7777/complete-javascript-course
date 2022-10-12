@@ -189,10 +189,23 @@ class PersonNew {
     get fullName() {
         return this._fullName;
     }
+    static hey(){
+        console.log('hey! i am static method in class');
+    }
 }
 const anna=new PersonNew('Ann',23);
 const annaBiroff=new PersonNew('Anna Biroff',33);
 console.log(annaBiroff.fullName);
+
+//STATIC METHOD - статический метод прикреплен к конструктору и только к нему и не находится в prototype, поэтому не наследуюется экземплярами
+//создание статического метода для ф-ции конструктора
+Person.hey=function () {
+    console.log('hey! i am a static method');
+}
+Person.hey();
+//создание станического метода в классе
+PersonNew.hey();
+
 
 
 
