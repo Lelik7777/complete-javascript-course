@@ -112,3 +112,40 @@ mercedes.brake();
 mercedes.accelerate();
 console.log(bmw);
 console.log(mercedes);
+
+//ES6 classes
+//expression
+// const PersonCl = class {
+//     constructor(name, age) {
+//         this.name = name;
+//         this.age = age;
+//     }
+// // save in prototype
+//     getAge() {
+//         console.log(`${this.name} is ${this.age}`);
+//     }
+// }
+//the same but declaration
+class PersonCl {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+
+// save in prototype
+    getAge() {
+        console.log(`${this.name} is ${this.age} years ago`);
+    }
+}
+const jessica=new PersonCl('Jessica',19);
+jessica.getAge();
+//we also can add method by using prototype property
+PersonCl.prototype.getName=function () {
+    console.log(this.name);
+}
+console.log(jessica);
+jessica.getName();
+
+//1. classes are NOT hoisted
+//2. Classes are first-class citizens - we can pass them into functions and return from ones
+//3. classes are executed in strict mode always
