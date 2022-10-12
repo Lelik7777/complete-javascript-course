@@ -113,7 +113,7 @@ mercedes.accelerate();
 console.log(bmw);
 console.log(mercedes);
 
-//ES6 classes
+//ES6 CLASSES
 //expression
 // const PersonCl = class {
 //     constructor(name, age) {
@@ -137,10 +137,11 @@ class PersonCl {
         console.log(`${this.name} is ${this.age} years ago`);
     }
 }
-const jessica=new PersonCl('Jessica',19);
+
+const jessica = new PersonCl('Jessica', 19);
 jessica.getAge();
 //we also can add method by using prototype property
-PersonCl.prototype.getName=function () {
+PersonCl.prototype.getName = function () {
     console.log(this.name);
 }
 console.log(jessica);
@@ -149,3 +150,49 @@ jessica.getName();
 //1. classes are NOT hoisted
 //2. Classes are first-class citizens - we can pass them into functions and return from ones
 //3. classes are executed in strict mode always
+
+//SETTERS AND GETTERS - we call these special properties assessor properties
+console.log([3, 4].slice(-1).pop())
+//remember that they are properties!!
+const account = {
+    owner: 'Bob',
+    movements: [300, 200, 100],
+    //use get keyword
+    get latest() {
+        return this.movements.slice(-1).pop();
+    },
+    set latest(mov) {
+        this.movements.push(mov);
+    }
+}
+//using as getting
+console.log(account.latest);
+//using as setting
+account.latest = 500;
+console.log(account.movements);
+//and again as getting
+console.log(account.latest);
+
+//если мы используем set для переопределения уже существующего свойства,то нужно создавать новое свойство с подобным именем через нижнее подчеркивание
+// к примеру, используем set для проверки правильности введенного имени
+class PersonNew {
+    constructor(fullName, age) {
+        this.fullName = fullName;
+        this.age = age;
+    }
+
+    set fullName(name) {
+        if (name.includes(' ')) this._fullName = name;
+        else console.log('not correct name');
+    }
+
+    get fullName() {
+        return this._fullName;
+    }
+}
+const anna=new PersonNew('Ann',23);
+const annaBiroff=new PersonNew('Anna Biroff',33);
+console.log(annaBiroff.fullName);
+
+
+
