@@ -352,8 +352,45 @@ tesla.brake();
 tesla.chargeBattery(90);
 tesla.accelerate();
 
+//Inheritance between classes ES6
 
+// class PersonNew {
+//     constructor(fullName, age) {
+//         this.fullName = fullName;
+//         this.age = age;
+//     }
+//
+//     set fullName(name) {
+//         if (name.includes(' ')) this._fullName = name;
+//         else console.log('not correct name');
+//     }
+//
+//     get fullName() {
+//         return this._fullName;
+//     }
+//
+//     static hey() {
+//         console.log('hey! i am static method in class');
+//     }
+// }
 
+// inheritance from class PersonNew
+class StudentNew extends PersonNew {
+    constructor(fullName, age, course) {
+        //это по сути вызов родительского класса,после чего происходит привязка this
+        super(fullName, age);
+        this.course = course;
+    }
 
+    introduce() {
+        console.log(`I am ${this.fullName} and study ${this.course} `);
 
+    }
+}
+
+const
+    masha = new StudentNew('Masha Beregnaya', 21, 'computer science');
+console
+    .log(masha)
+masha.introduce()
 
