@@ -263,6 +263,7 @@ console.log(nick);
 console.log(nick.fullName);
 
 //INHERITANCE BETWEEN 'CLASSES'
+//parent function constructor
 function Human(firstName, birthYear) {
     this.firstName = firstName;
     this.birthYear = birthYear;
@@ -275,19 +276,22 @@ const bobby = new Human('Bobby', 1999);
 console.log(bobby);
 console.log(bobby.calcAge());
 
+//child function constructor
 function Student(firstName, birthYear, course) {
     Human.call(this, firstName, birthYear);
     this.course = course;
 }
 
+//!!!!!!!!!!!!
 //здесь мы осуществляем привязку Student prototype to Human prototype making prototype chain
 Student.prototype = Object.create(Human.prototype);
 
 //здесь мы возращаем названию конструктора Student его прежнее имя Student вместо Human
-Student.prototype.constructor=Student;
+Student.prototype.constructor = Student;
 
 const mike = new Student('Mike', 2000, 5);
 console.log(mike);
+
 //этого метода нет in Student prototype,поэтому движок ищет его по цепочке прототипов и находит в Human prototype
 console.log(mike.calcAge());
 //add method in Student prototype
@@ -298,7 +302,55 @@ console.log(mike.__proto__);
 console.log(mike.__proto__.__proto__);
 console.log(mike instanceof Student);//true
 console.log(mike instanceof Human);//true
-console.log(mike)
+console.log(mike);
+
+// challenge #3
+function CarNew(make, speed) {
+    this.make = make;
+    this.speed = speed;
+}
+
+CarNew.prototype.accelerate = function () {
+    this.speed += 10;
+    console.log(`${this.make} is going  at ${this.speed} km/h`);
+}
+CarNew.prototype.brake = function () {
+    this.speed -= 5;
+    console.log(`${this.make} is going  at ${this.speed} km/h`);
+}
+
+function EV(make, speed, charge) {
+    //здесь мы по сути используем CarNew в качестве конструктора
+    CarNew.call(this, make, speed);
+    this.charge = charge;
+}
+
+//включаем CarNew prototype in prototype chain of Ev prototype
+//link EV prototype to inherit CarNew prototype
+EV.prototype = Object.create(CarNew.prototype);
+
+//возвращаем название конструктору Ev
+EV.prototype.constructor = EV;
+
+EV.prototype.chargeBattery = function (chargeTo) {
+    this.charge = chargeTo;
+}
+
+//здесь мы реализуем паттерн полиморфизма, перезаписывая родительский метод!!!!
+EV.prototype.accelerate = function () {
+    this.speed += 20;
+    this.charge -= 1;
+    console.log(`${this.make} going at ${this.speed}, with a charge of ${this.charge}%`)
+}
+
+const tesla = new EV('Tesla', 120, 23);
+tesla.chargeBattery(35);
+console.log('tesla', tesla);
+tesla.accelerate();
+tesla.brake();
+tesla.brake();
+tesla.chargeBattery(90);
+tesla.accelerate();
 
 
 
