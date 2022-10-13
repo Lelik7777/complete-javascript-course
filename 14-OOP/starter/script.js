@@ -240,4 +240,28 @@ console.log(ford.speedUS);
 ford.accelerate();
 console.log(ford.speedUS);
 
+//OBJECT.CREATE()
+const objProto = {
+    set fullName(name) {
+        if (name.includes(' ')) this._fullName = name;
+        else console.log('not correct full name');
+    },
+
+    get fullName() {
+        return this._fullName;
+    },
+    //этот метод по сути имитирует конструктор класса и инициализирует начальные значения
+    init(fullName, age) {
+        this.fullName = fullName;
+        this.age = age;
+    }
+}
+const nick = Object.create(objProto);
+console.log(nick);
+nick.init('Nick Walevski', 33);
+console.log(nick);
+console.log(nick.fullName);
+
+
+
 
