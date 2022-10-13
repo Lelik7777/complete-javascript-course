@@ -396,6 +396,7 @@ masha.introduce();
 
 
 //Inheritance between classes using Object.create()
+//first level
 const personProto = {
     init(fullName, birthYear) {
         this.fullName = fullName;
@@ -406,8 +407,11 @@ const personProto = {
     }
 }
 //связали one prototype with another - personProto -parent and student - child
+//second level
 const studentProto = Object.create(personProto);
 console.log(studentProto);
+
+//переопределяю родительский метод!!!
 studentProto.init = function (fullName, bithYear, course) {
     personProto.init.call(this, fullName, bithYear);
     this.course = course;
@@ -418,9 +422,48 @@ studentProto.introduce = function () {
 //studentProto.init('Bob Smith', 2000, 'frontend');
 //studentProto.introduce();
 console.log(studentProto);
+
+//third level
 const bobStudent = Object.create(studentProto);
+
 console.log(bobStudent);
 bobStudent.init('bob', 1998, 'course by js');
 console.log(bobStudent);
 bobStudent.introduce();
 console.log(bobStudent.getAge());
+
+//example with class
+class Account {
+    constructor(owner, currency, pin) {
+        this.owner = owner;
+        this.pin = pin;
+        this.currency = currency;
+        this.locale = navigator.language;
+        this.movements = [];
+    }
+
+    deposit(val) {
+        this.movements.push(val);
+    }
+
+    withdraw(val) {
+        this.deposit(-val);
+    }
+
+    approveLoan(val) {
+        return true;
+    }
+
+    requestLoan(val) {
+        if (this.approveLoan(val)) {
+            this.deposit(val);
+            console.log(`your loan approve`);
+        }
+    }
+}
+
+const acc1 =new Account('Jonas','EUR',1111);
+acc1.deposit(100);
+acc1.withdraw(50);
+acc1.requestLoan(1000);
+console.log(acc1);
