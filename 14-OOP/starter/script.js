@@ -262,6 +262,46 @@ nick.init('Nick Walevski', 33);
 console.log(nick);
 console.log(nick.fullName);
 
+//INHERITANCE BETWEEN 'CLASSES'
+function Human(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+}
+
+Human.prototype.calcAge = function () {
+    return new Date().getFullYear() - this.birthYear;
+}
+const bobby = new Human('Bobby', 1999);
+console.log(bobby);
+console.log(bobby.calcAge());
+
+function Student(firstName, birthYear, course) {
+    Human.call(this, firstName, birthYear);
+    this.course = course;
+}
+
+//здесь мы осуществляем привязку Student prototype to Human prototype making prototype chain
+Student.prototype = Object.create(Human.prototype);
+
+//здесь мы возращаем названию конструктора Student его прежнее имя Student вместо Human
+Student.prototype.constructor=Student;
+
+const mike = new Student('Mike', 2000, 5);
+console.log(mike);
+//этого метода нет in Student prototype,поэтому движок ищет его по цепочке прототипов и находит в Human prototype
+console.log(mike.calcAge());
+//add method in Student prototype
+Student.prototype.introduce = function () {
+    console.log(`I am ${this.firstName} and study ${this.course} `);
+}
+console.log(mike.__proto__);
+console.log(mike.__proto__.__proto__);
+console.log(mike instanceof Student);//true
+console.log(mike instanceof Human);//true
+console.log(mike)
+
+
+
 
 
 
