@@ -392,5 +392,35 @@ const
     masha = new StudentNew('Masha Beregnaya', 21, 'computer science');
 console
     .log(masha)
-masha.introduce()
+masha.introduce();
 
+
+//Inheritance between classes using Object.create()
+const personProto = {
+    init(fullName, birthYear) {
+        this.fullName = fullName;
+        this.birthYear = birthYear;
+    },
+    getAge() {
+        return new Date().getFullYear() - this.birthYear;
+    }
+}
+//связали one prototype with another - personProto -parent and student - child
+const studentProto = Object.create(personProto);
+console.log(studentProto);
+studentProto.init = function (fullName, bithYear, course) {
+    personProto.init.call(this, fullName, bithYear);
+    this.course = course;
+}
+studentProto.introduce = function () {
+    console.log(`I am ${this.fullName} and study ${this.course} `);
+}
+//studentProto.init('Bob Smith', 2000, 'frontend');
+//studentProto.introduce();
+console.log(studentProto);
+const bobStudent = Object.create(studentProto);
+console.log(bobStudent);
+bobStudent.init('bob', 1998, 'course by js');
+console.log(bobStudent);
+bobStudent.introduce();
+console.log(bobStudent.getAge());
