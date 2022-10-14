@@ -36,6 +36,7 @@ console.log(Person.prototype.isPrototypeOf(Person));//false
 console.log(Person.prototype.isPrototypeOf(user));
 console.log(Array.prototype.isPrototypeOf(user));
 console.log(Array.prototype.isPrototypeOf(arr));
+
 //так лучше не делать!!!! поскольку этот метод появляется в общем prototype всех объектов созданных с помощью new Person()
 tom.__proto__.hello = function () {
     console.log(`hello,${this.name}`);
@@ -218,11 +219,13 @@ class CarCl {
     accelerate() {
         this.speed += 10;
         console.log(`${this.make} is going  at ${this.speed} km/h`);
+        return this;
     }
 
     brake() {
         this.speed -= 5;
         console.log(`${this.make} is going  at ${this.speed} km/h`);
+        return this;
     }
 
     get speedUS() {
@@ -262,6 +265,7 @@ nick.init('Nick Walevski', 33);
 console.log(nick);
 console.log(nick.fullName);
 
+//1
 //INHERITANCE BETWEEN 'CLASSES' using function constructors
 //parent function constructor
 function Human(firstName, birthYear) {
@@ -352,6 +356,7 @@ tesla.brake();
 tesla.chargeBattery(90);
 tesla.accelerate();
 
+//2
 //Inheritance between classes ES6
 
 // class PersonNew {
@@ -394,7 +399,7 @@ console
     .log(masha)
 masha.introduce();
 
-
+//3
 //Inheritance between classes using Object.create()
 //first level
 const personProto = {
@@ -432,7 +437,14 @@ console.log('bobStudent', bobStudent);
 bobStudent.introduce();
 console.log(bobStudent.getAge());
 
+// Encapsulation: Protected Properties and Methods
+// Encapsulation: Private Class Fields and Methods
 
+// 1) Public fields
+// 2) Private fields
+// 3) Public methods
+// 4) Private methods
+// (there is also the static version)
 //example with class
 class Account {
     //в виде полей в классе указываются те свойства,которые не задаются через конструктор и одинаковые для всех инстансов
@@ -440,10 +452,12 @@ class Account {
     locale = navigator.language;
     //private fields
     #pin;
+    #owner;
     #movements = [];
+    static ownName = 'Account';
 
     constructor(owner, currency, pin) {
-        this.owner = owner;
+        this.#owner = owner;
         this.currency = currency;
         //private properties
         this.#pin = pin;
@@ -452,6 +466,7 @@ class Account {
 //public interface
     deposit(val) {
         this.#movements.push(val);
+
         //благодаря этому мы можем использовать вызов этого метода в цепачке!!!
         return this;
     }
@@ -469,6 +484,14 @@ class Account {
         }
     }
 
+    get owner() {
+        return this.#owner ?? 'not owner';
+    }
+
+    set owner(name) {
+        this.#owner = name;
+    }
+
     getMovements() {
         return this.#movements;
     }
@@ -478,17 +501,86 @@ class Account {
         return true;
     }
 
+//static
+    static helper() {
+        console.log('helper');
+    }
 }
 
+//create new instance
 const acc1 = new Account('Jonas', 'EUR', 1111);
+
+//using setter and getter
+acc1.owner = 'Nick';
+console.log(acc1.owner)
+
 acc1.deposit(100);
 acc1.withdraw(50);
 acc1.requestLoan(1000);
 console.log(acc1);
 console.log(acc1.getMovements());
+
+// call static method
+Account.helper();//helper
+// get static property
+console.log(Account.ownName);
+
 //методы объекта acc1 можно вызывать цепочкой
 acc1.deposit(300).deposit(400).requestLoan(1000).withdraw(200).deposit(100).withdraw(300);
 console.log(acc1.getMovements());
 
 
+//challenge #4
 
+// class CarCl {
+//     constructor(make, speed) {
+//         this.make = make;
+//         this.speed = speed;
+//     }
+//
+//     accelerate() {
+//         this.speed += 10;
+//         console.log(`${this.make} is going  at ${this.speed} km/h`);
+//     }
+//
+//     brake() {
+//         this.speed -= 5;
+//         console.log(`${this.make} is going  at ${this.speed} km/h`);
+//     }
+//
+//     get speedUS() {
+//         return this.speed / 1.6;
+//     }
+//
+//     set speedUS(speed) {
+//         this.speed = speed * 1.6;
+//     }
+//
+// }
+
+//1
+class EVCl extends CarCl {
+    #charge;
+
+    constructor(make, speed, charge) {
+        super(make, speed);
+        this.#charge = charge;
+    }
+
+    accelerate() {
+        this.speed += 20;
+        this.#charge -= 1;
+        console.log(`${this.make} going at ${this.speed}, with a charge of ${this.#charge}%`);
+        return this;
+    }
+
+    chargeBattery(chargeTo) {
+        this.#charge = chargeTo;
+        return this;
+    }
+}
+
+const rivian = new EVCl('Rivian', 120, 23);
+
+rivian.accelerate().chargeBattery(90).brake().brake().accelerate();
+console.log(rivian.speedUS);
