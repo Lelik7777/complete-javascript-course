@@ -409,7 +409,7 @@ const personProto = {
 //связали one prototype with another - personProto -parent and student - child
 //second level
 const studentProto = Object.create(personProto);
-console.log('studentProto',studentProto);
+console.log('studentProto', studentProto);
 
 //переопределяю родительский метод!!!
 studentProto.init = function (fullName, bithYear, course) {
@@ -421,14 +421,14 @@ studentProto.introduce = function () {
 }
 //studentProto.init('Bob Smith', 2000, 'frontend');
 //studentProto.introduce();
-console.log('studentProto',studentProto);
+console.log('studentProto', studentProto);
 
 //third level
 const bobStudent = Object.create(studentProto);
 
-console.log('bobStudent',bobStudent);
+console.log('bobStudent', bobStudent);
 bobStudent.init('bob', 1998, 'course by js');
-console.log('bobStudent',bobStudent);
+console.log('bobStudent', bobStudent);
 bobStudent.introduce();
 console.log(bobStudent.getAge());
 
@@ -437,10 +437,10 @@ console.log(bobStudent.getAge());
 class Account {
     //в виде полей в классе указываются те свойства,которые не задаются через конструктор и одинаковые для всех инстансов
     //public fields
-    locale=navigator.language;
-   //private fields
+    locale = navigator.language;
+    //private fields
     #pin;
-    #movements=[];
+    #movements = [];
 
     constructor(owner, currency, pin) {
         this.owner = owner;
@@ -452,17 +452,25 @@ class Account {
 //public interface
     deposit(val) {
         this.#movements.push(val);
+        //благодаря этому мы можем использовать вызов этого метода в цепачке!!!
+        return this;
     }
 
     withdraw(val) {
         this.deposit(-val);
+        return this;
     }
 
     requestLoan(val) {
         if (this.#approveLoan(val)) {
             this.deposit(val);
             console.log(`your loan approve`);
+            return this;
         }
+    }
+
+    getMovements() {
+        return this.#movements;
     }
 
 //private method
@@ -476,7 +484,11 @@ const acc1 = new Account('Jonas', 'EUR', 1111);
 acc1.deposit(100);
 acc1.withdraw(50);
 acc1.requestLoan(1000);
-console.log(acc1)
+console.log(acc1);
+console.log(acc1.getMovements());
+//методы объекта acc1 можно вызывать цепочкой
+acc1.deposit(300).deposit(400).requestLoan(1000).withdraw(200).deposit(100).withdraw(300);
+console.log(acc1.getMovements());
 
 
 
