@@ -262,7 +262,7 @@ nick.init('Nick Walevski', 33);
 console.log(nick);
 console.log(nick.fullName);
 
-//INHERITANCE BETWEEN 'CLASSES'
+//INHERITANCE BETWEEN 'CLASSES' using function constructors
 //parent function constructor
 function Human(firstName, birthYear) {
     this.firstName = firstName;
@@ -409,7 +409,7 @@ const personProto = {
 //связали one prototype with another - personProto -parent and student - child
 //second level
 const studentProto = Object.create(personProto);
-console.log(studentProto);
+console.log('studentProto',studentProto);
 
 //переопределяю родительский метод!!!
 studentProto.init = function (fullName, bithYear, course) {
@@ -421,49 +421,62 @@ studentProto.introduce = function () {
 }
 //studentProto.init('Bob Smith', 2000, 'frontend');
 //studentProto.introduce();
-console.log(studentProto);
+console.log('studentProto',studentProto);
 
 //third level
 const bobStudent = Object.create(studentProto);
 
-console.log(bobStudent);
+console.log('bobStudent',bobStudent);
 bobStudent.init('bob', 1998, 'course by js');
-console.log(bobStudent);
+console.log('bobStudent',bobStudent);
 bobStudent.introduce();
 console.log(bobStudent.getAge());
 
+
 //example with class
 class Account {
+    //в виде полей в классе указываются те свойства,которые не задаются через конструктор и одинаковые для всех инстансов
+    //public fields
+    locale=navigator.language;
+   //private fields
+    #pin;
+    #movements=[];
+
     constructor(owner, currency, pin) {
         this.owner = owner;
-        this.pin = pin;
         this.currency = currency;
-        this.locale = navigator.language;
-        this.movements = [];
+        //private properties
+        this.#pin = pin;
     }
 
+//public interface
     deposit(val) {
-        this.movements.push(val);
+        this.#movements.push(val);
     }
 
     withdraw(val) {
         this.deposit(-val);
     }
 
-    approveLoan(val) {
-        return true;
-    }
-
     requestLoan(val) {
-        if (this.approveLoan(val)) {
+        if (this.#approveLoan(val)) {
             this.deposit(val);
             console.log(`your loan approve`);
         }
     }
+
+//private method
+    #approveLoan(val) {
+        return true;
+    }
+
 }
 
-const acc1 =new Account('Jonas','EUR',1111);
+const acc1 = new Account('Jonas', 'EUR', 1111);
 acc1.deposit(100);
 acc1.withdraw(50);
 acc1.requestLoan(1000);
-console.log(acc1);
+console.log(acc1)
+
+
+
