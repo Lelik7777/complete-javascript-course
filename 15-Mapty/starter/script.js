@@ -16,20 +16,33 @@ const $inputElevation = document.querySelector('.form__input--elevation');
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function (position) {
         const {latitude, longitude} = position.coords;
-        const coords=[latitude,longitude];
+        const coords = [latitude, longitude];
         const map = L.map('map').setView(coords, 13);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        L.marker(coords).addTo(map)
-            .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-            .openPopup();
-        console.log(`https://www.google.pl/maps/@${latitude},${longitude},6z`)
+
+        map.on('click', function (eventMap) {
+            const {lat, lng} = eventMap.latlng;
+            L.marker([lat, lng], {
+                opacity: 0.9,
+            }).addTo(map)
+                .bindPopup(L.popup({
+                    maxWidth: 250,
+                    minWidth: 100,
+                    autoClose: false,
+                    closeOnClick: false,
+                    className: 'running-popup'
+                }))
+                .setPopupContent('workout')
+                .openPopup();
+        })
+
     }, function () {
-        console.log('could not get your position')
+        console.log('could not get your position');
     })
 }
-
-console.log(globalVar)
+//get data from another script
+console.log(globalVar);
