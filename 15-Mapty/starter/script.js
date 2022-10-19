@@ -13,8 +13,49 @@ const $inputElevation = document.querySelector('.form__input--elevation');
 
 // get global variables
 //let map, eventMap;
+class Workout {
+    //public fields - general for all instances
+    date = new Date();
+    id = (Date.now() + '').slice(-10);
 
-//create architecture by making class App
+    constructor(coords, distance, duration,) {
+        this.coords = coords;//[lat,lng]
+        this.distance = distance;//in km
+        this.duration = duration;//in min
+    }
+}
+
+//create child classes
+class Cycling extends Workout {
+    constructor(coords, distance, duration, elevationGain) {
+        super(coords, distance, duration);
+        this.elevationGain = elevationGain;
+        this.calcSpeed();
+    }
+
+//km/h
+    calcSpeed() {
+        return this.speed = this.distance / (this.duration / 60);
+    }
+}
+
+class Running extends Workout {
+    constructor(coords, distance, duration, cadence) {
+        super(coords, distance, duration);
+        this.cadence = cadence;
+        this.calcPace();
+    }
+
+//min/km
+    calcPace() {
+        return this.pace = this.duration / this.distance;
+    }
+}
+
+console.log(new Cycling([33, 44], 2, 40, 100))
+console.log(new Running([39,-12],1,20,178))
+////////////////////////////////////////
+//create class App - application
 class App {
     #map;
     #eventMap;
@@ -23,7 +64,7 @@ class App {
         this.#getPosition();
         $form.addEventListener('submit', this.#newWorkout.bind(this));
 //realize toggle in input type
-        $inputType.addEventListener('change',this.#toggleElevationField);
+        $inputType.addEventListener('change', this.#toggleElevationField);
     }
 
     #getPosition() {
@@ -86,6 +127,7 @@ class App {
     }
 
 }
+
 
 const app = new App();
 
