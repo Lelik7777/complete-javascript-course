@@ -2,7 +2,7 @@
 
 
 const $form = document.querySelector('.form');
-const containerWorkouts = document.querySelector('.workouts');
+const $containerWorkouts = document.querySelector('.workouts');
 const $inputType = document.querySelector('.form__input--type');
 const $inputDistance = document.querySelector('.form__input--distance');
 const $inputDuration = document.querySelector('.form__input--duration');
@@ -17,6 +17,7 @@ class Workout {
     //public fields - general for all instances
     date = new Date();
     id = (Date.now() + '').slice(-10);
+    click = 0;
 
 
     constructor(coords, distance, duration,) {
@@ -25,10 +26,15 @@ class Workout {
         this.duration = duration;//in min
     }
 
+//этот метод испоьльзуется исключительно у потомков
     _setDescription() {
         // prettier-ignore
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         this.description = `${this.type.replace(this.type[0], this.type[0].toUpperCase())} on ${months[this.date.getMonth()]} ${this.date.getDate()}`;
+    }
+
+    setClick() {
+        this.click++;
     }
 }
 
@@ -36,7 +42,6 @@ class Workout {
 //create child classes
 class Cycling extends Workout {
     type = 'cycling';
-    description;
 
     constructor(coords, distance, duration, elevationGain) {
         super(coords, distance, duration);
@@ -53,13 +58,13 @@ class Cycling extends Workout {
 
 class Running extends Workout {
     type = 'running';
-    description;
 
     constructor(coords, distance, duration, cadence) {
         super(coords, distance, duration);
         this.cadence = cadence;
         this.calcPace();
         this._setDescription();
+
     }
 
 //min/km
@@ -73,14 +78,23 @@ class Running extends Workout {
 //create class App - application
 class App {
     #map;
+    #mapZoomLevel = 13;
     #eventMap;
-    #workout = [];
+    #workouts = [];
 
     constructor() {
+        // get position
         this.#getPosition();
+
+        //get data to localStorage
+        this.#getLocalStorage();
+        // handle events
         $form.addEventListener('submit', this.#newWorkout.bind(this));
 //realize toggle in input type
         $inputType.addEventListener('change', this.#toggleElevationField);
+        //move to marker on map
+        $containerWorkouts.addEventListener('click', this.#moveToPopup.bind(this));
+
     }
 
     #getPosition() {
@@ -95,14 +109,18 @@ class App {
         const {latitude, longitude} = position.coords;
         const coords = [latitude, longitude];
         // using library  leaflet
-        this.#map = L.map('map').setView(coords, 13);
+        this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(this.#map);
 
 //вешаю на map обработчкие события из коробки leaflet
-        this.#map.on('click', this.#showForm.bind(this))
+        this.#map.on('click', this.#showForm.bind(this));
+
+        //render popups from
+        this.#workouts.forEach(work => this.#renderMarkerWorkout(work));
+
     }
 
     #showForm(eventM) {
@@ -117,8 +135,10 @@ class App {
     #hideForm() {
         //empty inputs
         $inputCadence.value = $inputDuration.value = $inputDistance.value = $inputElevation.value = '';
+        //убираю форму - это исключительно для реализации визуального приема
         $form.style.display = 'none';
         $form.classList.add('hidden');
+        //через секунду она снова появляется
         setTimeout(() => ($form.style.display = 'grid'), 1000);
     }
 
@@ -161,7 +181,7 @@ class App {
             workout = new Running([lat, lng], distance, duration, cadence);
         }
         //add creating object to workout array
-        this.#workout.push(workout);
+        this.#workouts.push(workout);
         //render marker workout on map
         this.#renderMarkerWorkout(workout);
         //render list of workouts
@@ -169,12 +189,12 @@ class App {
         //hide form and clear inputs
         this.#hideForm();
 
-
+//set workout to localStorage
+        this.#setLocalStorage();
     }
 
     #renderMarkerWorkout(workout) {
-        const {lat, lng} = this.#eventMap.latlng;
-        L.marker([lat, lng], {
+        L.marker(workout.coords, {
             opacity: 0.9,
         }).addTo(this.#map)
             // меняю поведение маркера при клике на карте
@@ -185,10 +205,7 @@ class App {
                 closeOnClick: false,
                 className: `${workout.type}-popup`
             }))
-            .setPopupContent(`${workout.type === 'running' ? '🏃' : '🚴'} ${(workout.type)} on ${new Intl.DateTimeFormat(navigator.language, {
-                month: 'long',
-                day: 'numeric'
-            }).format(workout.date)}`)
+            .setPopupContent(`${workout.type === 'running' ? iconRun : iconCycle} ${(workout.type)} on ${workout.description} `)
             .openPopup();
     }
 
@@ -239,11 +256,46 @@ class App {
         }
         $form.insertAdjacentHTML('afterend', html);
     }
+
+    #moveToPopup(e) {
+        const workoutEl = e.target.closest('.workout');
+        //защита
+        if (!workoutEl) return;
+        //find in workout array element by id from workoutEl
+        const workout = this.#workouts.find(work => work.id === workoutEl.dataset.id);
+        this.#map.setView(workout.coords, this.#mapZoomLevel, {
+            animate: true,
+            pan: {
+                duration: 1
+            }
+        });
+        //interact with using interface
+        // workout.setClick();
+    }
+
+    #setLocalStorage() {
+        localStorage.setItem('workouts', JSON.stringify(this.#workouts));
+    }
+
+    #getLocalStorage() {
+        //get data from localStorage
+        const data = JSON.parse(localStorage.getItem('workouts'));
+        if (!data) return;
+
+        //set data from localStorage to array of workouts
+        this.#workouts = data;
+        //render workouts list in sidebar
+        this.#workouts.forEach(d => this.#renderWorkout(d));
+    }
+
+    reset() {
+      localStorage.removeItem('workouts');
+      location.reload();
+    }
 }
 
 
 const app = new App();
-
 //get local position from google map
 // я скопировал ссылку гугл мэп и вставил в нее свои данные из геолокации
 
