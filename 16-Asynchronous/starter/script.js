@@ -39,5 +39,12 @@ const getCountry = (country) => {
 //getCountry('usa');
 //getCountry('france');
 
+////////////////////////////////////
+//using promise and fetch API
+function getCountryByPromise(country) {
+    fetch(url(country)).then(res => res.json())
+        .then(data =>renderCountry(data[0]))
+}
 
+getCountryByPromise('russia');
 
