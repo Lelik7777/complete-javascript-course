@@ -9,6 +9,7 @@ const $inputDuration = document.querySelector('.form__input--duration');
 const $inputCadence = document.querySelector('.form__input--cadence');
 const $inputElevation = document.querySelector('.form__input--elevation');
 
+
 const iconRun = '🏃';
 const iconCycle = '🚴';
 
@@ -88,12 +89,15 @@ class App {
 
         //get data to localStorage
         this.#getLocalStorage();
+
         // handle events
         $form.addEventListener('submit', this.#newWorkout.bind(this));
 //realize toggle in input type
         $inputType.addEventListener('change', this.#toggleElevationField);
         //move to marker on map
         $containerWorkouts.addEventListener('click', this.#moveToPopup.bind(this));
+        //additional
+        $containerWorkouts.addEventListener('dblclick', this.#editWorkout.bind(this));
 
     }
 
@@ -213,6 +217,7 @@ class App {
         let html = `
 <li class="workout workout--running" data-id="${workout.id}">
           <h2 class="workout__title">${workout.description}</h2>
+          
           <div class="workout__details">
             <span class="workout__icon">${workout.type === 'running' ? iconRun : iconCycle}</span>
             <span class="workout__value">${workout.distance}</span>
@@ -292,6 +297,10 @@ class App {
       localStorage.removeItem('workouts');
       location.reload();
     }
+    #editWorkout(){
+        this.#showForm()
+    }
+
 }
 
 
