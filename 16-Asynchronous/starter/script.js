@@ -20,8 +20,17 @@ const renderCountry = (data, className = '') => {
         </article>
         `;
     countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
+    //add this into block finally
+    //countriesContainer.style.opacity = 1;
 }
+const urlCode = (code) => `https://restcountries.com/v3.1/alpha/${code}`
+const renderErr = (msg) => {
+    countriesContainer.insertAdjacentText('beforeend', msg);
+    //add this into block finally
+    // countriesContainer.style.opacity=1;
+}
+
+//using new XMLHttpRequest()
 const getCountry = (country) => {
 
     const request = new XMLHttpRequest();
@@ -40,7 +49,7 @@ const getCountry = (country) => {
 //getCountry('france');
 
 ////////////////////////////////////
-const urlCode = (code) => `https://restcountries.com/v3.1/alpha/${code}`
+
 
 //using promise and fetch API
 function getCountryByPromise(country) {
@@ -54,8 +63,15 @@ function getCountryByPromise(country) {
             return fetch(urlCode(neighbour));
         })
         .then(res => res.json())
-        .then(data => renderCountry(data[0],'neighbour'))
+        .then(data => renderCountry(data[0], 'neighbour'))
+        .catch(err => renderErr(`Something went wrong: ${err.message}. Try again`))
+        //add to block finally switch opacity!!
+        .finally(() => countriesContainer.style.opacity = 1);
 }
 
-getCountryByPromise('germany');
+//add button
+btn.addEventListener('click', function () {
+    getCountryByPromise('germany');
+})
+
 
