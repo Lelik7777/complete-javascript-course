@@ -6,9 +6,9 @@ const countriesContainer = document.querySelector('.countries');
 ///////////////////////////////////////
 console.log('asynchronous');
 const url = country => `https://restcountries.com/v3.1/name/${country}`;
-const renderCountry = (data) => {
+const renderCountry = (data, className = '') => {
     const html = `
-         <article class="country">
+         <article class="country ${className}">
           <img class="country__img" src="${data.flags.png}" />
           <div class="country__data">
             <h3 class="country__name">${data.altSpellings[1]}</h3>
@@ -40,11 +40,22 @@ const getCountry = (country) => {
 //getCountry('france');
 
 ////////////////////////////////////
+const urlCode = (code) => `https://restcountries.com/v3.1/alpha/${code}`
+
 //using promise and fetch API
 function getCountryByPromise(country) {
-    fetch(url(country)).then(res => res.json())
-        .then(data =>renderCountry(data[0]))
+    //get country 1
+    fetch(url(country))
+        .then(res => res.json())
+        .then(data => {
+            renderCountry(data[0]);
+            const neighbour = data[0]?.borders[0];
+            //get country 2
+            return fetch(urlCode(neighbour));
+        })
+        .then(res => res.json())
+        .then(data => renderCountry(data[0],'neighbour'))
 }
 
-getCountryByPromise('russia');
+getCountryByPromise('germany');
 
