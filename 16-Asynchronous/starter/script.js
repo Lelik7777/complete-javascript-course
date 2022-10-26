@@ -49,7 +49,7 @@ const getCountry = (country) => {
 //getCountry('france');
 
 ////////////////////////////////////
-const getJSON = (url,msg='Country no found') => {
+const getJSON = (url, msg = 'Country no found') => {
     return fetch(url).then(res => {
         if (!res.ok) throw new Error(`${msg} (${res.status})`);
         return res.json();
@@ -86,9 +86,9 @@ function getCountryByPromise(country) {
     //get country 1
 
     getJSON(url(country)).then(data => {
-       // console.log(Object.values(data[0].name)[0])
+        // console.log(Object.values(data[0].name)[0])
         renderCountry(data[0]);
-        if(!data[0].borders) throw new Error('no neighbour found');
+        if (!data[0].borders) throw new Error('no neighbour found');
         const neighbour = data[0].borders[0];
         console.log(data[0])
 
@@ -108,6 +108,31 @@ function getCountryByPromise(country) {
 btn.addEventListener('click', function () {
     getCountryByPromise('usa');
 })
-getCountryByPromise('australia');
+//getCountryByPromise('australia');
+
+//challenge #1
+//TEST COORDINATES 1: 52.508, 13.381 (Latitude, Longitude)
+// TEST COORDINATES 2: 19.037, 72.873
+// TEST COORDINATES 2: -33.933, 18.474
+function whereAmI(lat, lng) {
+
+    fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`).then(res => {
+        if (!res.ok) throw new Error(`something went wrong (${res.status})`);
+        return res.json();
+    })
+        .then(data=>{
+            console.log(`You are in ${data.city},${data.country}`);
+            if(!data.city) throw Error(`country not found`);
+            getCountryByPromise(data.country);
+        })
+        .catch(err => {
+            console.error(err.message)
+        })
+}
+
+whereAmI(52.508, 13.381);
+whereAmI(19.037, 72.873);
+whereAmI(-33.933, 18.474);
+
 
 
