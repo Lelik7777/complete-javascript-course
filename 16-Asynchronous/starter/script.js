@@ -11,7 +11,7 @@ const renderCountry = (data, className = '') => {
          <article class="country ${className}">
           <img class="country__img" src="${data.flags.png}" />
           <div class="country__data">
-            <h3 class="country__name">${data.altSpellings[1]}</h3>
+            <h3 class="country__name">${Object.values(data.name)[0]}</h3>
             <h4 class="country__region">${data.region}</h4>
             <p class="country__row"><span>👫</span>${data.population}</p>
             <p class="country__row"><span>🗣️</span>${Object.values(data.languages)[0]}</p>
@@ -49,29 +49,65 @@ const getCountry = (country) => {
 //getCountry('france');
 
 ////////////////////////////////////
-
-
+const getJSON = (url,msg='Country no found') => {
+    return fetch(url).then(res => {
+        if (!res.ok) throw new Error(`${msg} (${res.status})`);
+        return res.json();
+    });
+}
 //using promise and fetch API
+// function getCountryByPromise(country) {
+//     //get country 1
+//     fetch(url(country))
+//         .then(res => {
+//             if(!res.ok) throw new Error(`Country no found (${res.status})`);
+//             return res.json();
+//         })
+//         .then(data => {
+//             console.log(Object.values(data[0].name)[0])
+//             renderCountry(data[0]);
+//             console.log(data[0])
+//             const neighbour = data[0]?.borders[0];
+//             //get country 2
+//             return fetch(urlCode(neighbour));
+//         })
+//         .then(res => res.json())
+//         .then(data => renderCountry(data[0], 'neighbour'))
+//         .catch(err => {
+//             renderErr(`Something went wrong: ${err.message}. Try again`);
+//             console.log(err)
+//         })
+//         //add to block finally switch opacity!!
+//         .finally(() => countriesContainer.style.opacity = 1);
+// }
+
+//modify getCountryByPromise  by using function getJSON
 function getCountryByPromise(country) {
     //get country 1
-    fetch(url(country))
-        .then(res => res.json())
-        .then(data => {
-            renderCountry(data[0]);
-            const neighbour = data[0]?.borders[0];
-            //get country 2
-            return fetch(urlCode(neighbour));
+
+    getJSON(url(country)).then(data => {
+       // console.log(Object.values(data[0].name)[0])
+        renderCountry(data[0]);
+        if(!data[0].borders) throw new Error('no neighbour found');
+        const neighbour = data[0].borders[0];
+        console.log(data[0])
+
+        //const neighbour='asfd'
+        //get country 2
+        return getJSON(urlCode(neighbour))
+    }).then(data => renderCountry(data[0], 'neighbour'))
+        .catch(err => {
+            renderErr(`Something went wrong: ${err.message}. Try again`);
+            console.log(err)
         })
-        .then(res => res.json())
-        .then(data => renderCountry(data[0], 'neighbour'))
-        .catch(err => renderErr(`Something went wrong: ${err.message}. Try again`))
         //add to block finally switch opacity!!
         .finally(() => countriesContainer.style.opacity = 1);
 }
 
 //add button
 btn.addEventListener('click', function () {
-    getCountryByPromise('germany');
+    getCountryByPromise('usa');
 })
+getCountryByPromise('australia');
 
 
