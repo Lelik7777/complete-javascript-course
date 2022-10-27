@@ -163,12 +163,12 @@ wait(2)
 regularFun();
 
 //
-const getPosition = () => {
-    return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-    })
-}
-getPosition().then(res => console(res)).catch(er => console.log(er));
+// const getPosition = () => {
+//     return new Promise((resolve, reject) => {
+//         navigator.geolocation.getCurrentPosition(resolve, reject);
+//     })
+// }
+// getPosition().then(res => console(res)).catch(er => console.log(er));
 
 //промисификация whereAmI
 function whereAmIPromise() {
@@ -189,4 +189,49 @@ function whereAmIPromise() {
             console.error(err.message)
         })
 }
-btn.addEventListener('click',whereAmIPromise);
+
+//btn.addEventListener('click', whereAmIPromise);
+
+
+//challenge #2
+const $images = document.querySelector('.images');
+
+const createImage = (imgPath) => {
+    return new Promise((resolve, reject) => {
+        const img = document.createElement('img');
+        img.src = imgPath;
+        img.addEventListener('load', function () {
+            $images.insertAdjacentElement('afterbegin', this);
+            resolve(img);
+        });
+        img.addEventListener('error', function () {
+            reject(new Error(`Something went wrong: img scr=${img.src}`))
+        })
+    });
+}
+let imgG;
+createImage('img/img-1.jpg')
+    .then(img => {
+        imgG = img;
+        return wait(3);
+    })
+    .then(() => {
+        imgG.style.display = 'none';
+        return createImage('https://images.unsplash.com/photo-1666720192309-b6f2a1794444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60');
+    })
+    .then(img => {
+        imgG = img;
+        return wait(3);
+    })
+    .then(() => {
+        imgG.style.display = 'none';
+        return createImage('https://images.unsplash.com/photo-1666849077010-d7e979d6b38e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60');
+    }).catch(err => alert(err.message));
+// wait(1)
+//     .then(()=>{
+//        return  createImage('https://images.unsplash.com/photo-1666845524565-11c4f0f99f22?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60')
+//     })
+//     .then(img=>{
+//         img.style.display='none';
+//         return createImage('https://images.unsplash.com/photo-1666720192309-b6f2a1794444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60')
+//     })
