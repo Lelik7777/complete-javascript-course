@@ -105,9 +105,9 @@ function getCountryByPromise(country) {
 }
 
 //add button
-btn.addEventListener('click', function () {
-    getCountryByPromise('usa');
-})
+// btn.addEventListener('click', function () {
+//     getCountryByPromise('usa');
+// })
 //getCountryByPromise('australia');
 
 //challenge #1
@@ -120,9 +120,9 @@ function whereAmI(lat, lng) {
         if (!res.ok) throw new Error(`something went wrong (${res.status})`);
         return res.json();
     })
-        .then(data=>{
+        .then(data => {
             console.log(`You are in ${data.city},${data.country}`);
-            if(!data.city) throw Error(`country not found`);
+            if (!data.city) throw Error(`country not found`);
             getCountryByPromise(data.country);
         })
         .catch(err => {
@@ -130,9 +130,63 @@ function whereAmI(lat, lng) {
         })
 }
 
-whereAmI(52.508, 13.381);
-whereAmI(19.037, 72.873);
-whereAmI(-33.933, 18.474);
+console.log(whereAmI.name);
+//whereAmI(52.508, 13.381);
+//whereAmI(19.037, 72.873);
+//whereAmI(-33.933, 18.474);
 
 
+//Building a simple promise
+const lottery = new Promise((resolve, reject) => {
+    if (Math.random() >= .5) resolve('you are win');
+    else reject(new Error('you lose'));
+});
+lottery.then(res => console.log(res)).catch(er => console.log(er));
 
+//промисификация
+const regularFun = () => {
+    console.log('regular function');
+}
+//эта функция имеет дело с какой-то ассинхронщиной
+const wait = function (sec) {
+    return new Promise(res => setTimeout(res, sec * 1000, sec));
+}
+const showRes = (res) => {
+    console.log(`wait ${res} seconds`);
+}
+wait(2)
+    .then((res) => {
+        showRes(res);
+        return wait(3);
+    })
+    .then(res => showRes(res));
+regularFun();
+
+//
+const getPosition = () => {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    })
+}
+getPosition().then(res => console(res)).catch(er => console.log(er));
+
+//промисификация whereAmI
+function whereAmIPromise() {
+    getPosition().then(res => {
+        const {latitude: lat, longitude: lng} = res.coords;
+        return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
+        .then(res => {
+            if (!res.ok) throw new Error(`something went wrong (${res.status})`);
+            return res.json();
+        })
+        .then(data => {
+            console.log(`You are in ${data.city},${data.country}`);
+            if (!data.city) throw Error(`country not found`);
+            getCountryByPromise(data.country);
+        })
+        .catch(err => {
+            console.error(err.message)
+        })
+}
+btn.addEventListener('click',whereAmIPromise);
