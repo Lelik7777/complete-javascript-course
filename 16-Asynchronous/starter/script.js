@@ -122,7 +122,7 @@ function whereAmI(lat, lng) {
     })
         .then(data => {
             console.log(`You are in ${data.city},${data.country}`);
-            if (!data.city) throw Error(`country not found`);
+            if (!data.country) throw Error(`country not found`);
             getCountryByPromise(data.country);
         })
         .catch(err => {
@@ -163,12 +163,12 @@ wait(2)
 regularFun();
 
 //
-// const getPosition = () => {
-//     return new Promise((resolve, reject) => {
-//         navigator.geolocation.getCurrentPosition(resolve, reject);
-//     })
-// }
-// getPosition().then(res => console(res)).catch(er => console.log(er));
+const getPosition = () => {
+    return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    })
+}
+
 
 //промисификация whereAmI
 function whereAmIPromise() {
@@ -190,7 +190,7 @@ function whereAmIPromise() {
         })
 }
 
-//btn.addEventListener('click', whereAmIPromise);
+btn.addEventListener('click', whereAmIPromise);
 
 
 //challenge #2
@@ -235,3 +235,18 @@ createImage('img/img-1.jpg')
 //         img.style.display='none';
 //         return createImage('https://images.unsplash.com/photo-1666720192309-b6f2a1794444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60')
 //     })
+
+
+// async await
+//transform function whereAmIPromise
+async function whereAmIPromise() {
+    const resGeo = await getPosition();
+    const {latitude: lat, longitude: lng} = resGeo.coords;
+    const res = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    if (!res.ok) throw new Error(`something went wrong (${res.status})`);
+    const data = await res.json();
+    console.log(`You are in ${data.city},${data.country}`);
+    if (!data.country) throw Error(`country not found`);
+    getCountryByPromise(data.country);
+
+}
