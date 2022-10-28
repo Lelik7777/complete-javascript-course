@@ -249,13 +249,28 @@ async function whereAmIAsync() {
         console.log(`You are in ${data.city},${data.country}`);
         if (!data.country) throw Error(`country not found`);
         getCountryByPromise(data.country);
-
+        return `you are in ${data.country},${data.city}`;
     } catch (e) {
         console.log(e.message);
-        renderErr(`something went wrong ${e.message}`)
-    }finally {
+        renderErr(`something went wrong ${e.message}`);
+        //чтобы сработал блок catch снаружи
+        throw e;
+    } finally {
         countriesContainer.style.opacity = 1;
     }
+
 }
 
-whereAmIAsync();
+//whereAmIAsync();
+//чтобы обработать то,что возвращает асинхронная ф-ция, нам нужно использовать метод then and catch,поскольку async function always return promise
+//whereAmIAsync().then(res => console.log(res)).catch(err => console.error(err.message));
+//тоже самое можно сделать через async function
+(async function () {
+    try {
+        const res = await whereAmIAsync();
+        console.log(res);
+    } catch (e) {
+        console.error(e.message);
+    }
+
+})()
