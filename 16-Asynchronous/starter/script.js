@@ -239,14 +239,23 @@ createImage('img/img-1.jpg')
 
 // async await
 //transform function whereAmIPromise
-async function whereAmIPromise() {
-    const resGeo = await getPosition();
-    const {latitude: lat, longitude: lng} = resGeo.coords;
-    const res = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
-    if (!res.ok) throw new Error(`something went wrong (${res.status})`);
-    const data = await res.json();
-    console.log(`You are in ${data.city},${data.country}`);
-    if (!data.country) throw Error(`country not found`);
-    getCountryByPromise(data.country);
+async function whereAmIAsync() {
+    try {
+        const resGeo = await getPosition();
+        const {latitude: lat, longitude: lng} = resGeo.coords;
+        const res = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+        if (!res.ok) throw new Error(`something went wrong (${res.status})`);
+        const data = await res.json();
+        console.log(`You are in ${data.city},${data.country}`);
+        if (!data.country) throw Error(`country not found`);
+        getCountryByPromise(data.country);
 
+    } catch (e) {
+        console.log(e.message);
+        renderErr(`something went wrong ${e.message}`)
+    }finally {
+        countriesContainer.style.opacity = 1;
+    }
 }
+
+whereAmIAsync();
