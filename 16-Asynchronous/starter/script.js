@@ -267,7 +267,7 @@ async function whereAmIAsync() {
 //тоже самое можно сделать через async function
 (async function () {
     try {
-        const res = await whereAmIAsync();
+        // const res = await whereAmIAsync();
         console.log(res);
     } catch (e) {
         console.error(e.message);
@@ -288,4 +288,19 @@ const getCapitals = async (c1, c2, c3) => {
         console.error(e.message);
     }
 }
-getCapitals('usa', 'tanzania', 'canada');
+//getCapitals('usa', 'tanzania', 'canada');
+
+//using Promise.race() for abort long running request
+function timeout(sec) {
+    return new Promise((_, reject) => {
+        setTimeout(function () {
+            reject(new Error('too long request'));
+        }, sec * 1000);
+    });
+}
+
+const usa=url('usa');
+Promise.race([getJSON(usa), timeout(.5)])
+    .then(res => console.log(res))
+    .catch(err => console.error(err.message));
+//getJSON(url('usa')).then(res => console.log(res));
