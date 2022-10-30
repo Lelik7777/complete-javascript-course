@@ -273,4 +273,19 @@ async function whereAmIAsync() {
         console.error(e.message);
     }
 
-})()
+})();
+
+const getCapitals = async (c1, c2, c3) => {
+    try {
+        //разные запросы одновременно
+        // const [data1] = await getJSON(url(c1));
+        // const [data2] = await getJSON(url(c2));
+        // const [data3] = await getJSON(url(c3));
+        // console.log([data1.capital, data2.capital, data3.capital].flat());
+        const data = await Promise.all([getJSON(url(c1)), getJSON(url(c2)), getJSON(url(c3))]);
+        console.log(data.flat().map(d => d.capital).flat());
+    } catch (e) {
+        console.error(e.message);
+    }
+}
+getCapitals('usa', 'tanzania', 'canada');
