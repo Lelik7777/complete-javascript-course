@@ -210,23 +210,23 @@ const createImage = (imgPath) => {
     });
 }
 let imgG;
-createImage('img/img-1.jpg')
-    .then(img => {
-        imgG = img;
-        return wait(3);
-    })
-    .then(() => {
-        imgG.style.display = 'none';
-        return createImage('https://images.unsplash.com/photo-1666720192309-b6f2a1794444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60');
-    })
-    .then(img => {
-        imgG = img;
-        return wait(3);
-    })
-    .then(() => {
-        imgG.style.display = 'none';
-        return createImage('https://images.unsplash.com/photo-1666849077010-d7e979d6b38e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60');
-    }).catch(err => alert(err.message));
+// createImage('img/img-1.jpg')
+//     .then(img => {
+//         imgG = img;
+//         return wait(3);
+//     })
+//     .then(() => {
+//         imgG.style.display = 'none';
+//         return createImage('https://images.unsplash.com/photo-1666720192309-b6f2a1794444?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60');
+//     })
+//     .then(img => {
+//         imgG = img;
+//         return wait(3);
+//     })
+//     .then(() => {
+//         imgG.style.display = 'none';
+//         return createImage('https://images.unsplash.com/photo-1666849077010-d7e979d6b38e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxNHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60');
+//     }).catch(err => alert(err.message));
 // wait(1)
 //     .then(()=>{
 //        return  createImage('https://images.unsplash.com/photo-1666845524565-11c4f0f99f22?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw1fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60')
@@ -267,7 +267,7 @@ async function whereAmIAsync() {
 //тоже самое можно сделать через async function
 (async function () {
     try {
-        // const res = await whereAmIAsync();
+        const res = await whereAmIAsync();
         console.log(res);
     } catch (e) {
         console.error(e.message);
@@ -291,6 +291,7 @@ const getCapitals = async (c1, c2, c3) => {
 //getCapitals('usa', 'tanzania', 'canada');
 
 //using Promise.race() for abort long running request
+//если запрос слишком долгий, то сработает timeout,в котором мы устанавливаем нужную нам задержку запроса по времени
 function timeout(sec) {
     return new Promise((_, reject) => {
         setTimeout(function () {
@@ -299,8 +300,60 @@ function timeout(sec) {
     });
 }
 
-const usa=url('usa');
+const usa = url('usa');
 Promise.race([getJSON(usa), timeout(.5)])
     .then(res => console.log(res))
     .catch(err => console.error(err.message));
 //getJSON(url('usa')).then(res => console.log(res));
+
+// Promise.any
+Promise.any([
+    Promise.reject('Error'),
+    Promise.reject('Error2'),
+    Promise.resolve('Success'),
+])
+    .then(res => console.log(res))
+    .catch(err => console.error(err.message));
+
+
+//#challenge #3
+//part1
+const img1 = 'img/img-1.jpg';
+const img2 = 'img/img-2.jpg';
+const img3 = 'img/img-3.jpg';
+
+
+const loadPause = async (...imgs) => {
+    try {
+        for (let i = 0, time = 3; i < imgs.length; i++) {
+            console.log(imgs[i]);
+            const image = await createImage(imgs[i]);
+            await wait(time);
+            if (image)
+                image.style.display = 'none';
+        }
+
+    } catch (e) {
+        alert(e.message);
+    } finally {
+
+    }
+}
+
+//loadPause(img1, img2);
+//part 2
+const arrImgs = [img1, img2, img3];
+const loadAll = async (arr) => {
+    const imgs = arr.map( async el => await createImage(el));
+    console.log(imgs);
+    const res = await Promise.all(imgs);
+    //const res= await Promise.race(imgs);
+    console.log(res)
+    res.forEach(r => r.classList.add('parallel'))
+}
+wait(0)
+    .then(() => {
+        loadPause(img1, img2);
+        return wait(1);
+    })
+    .then(() => loadAll(arrImgs));
