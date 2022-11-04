@@ -11,6 +11,7 @@ import remove from './shoppingCart.js';
 //import all from module таким образом можно получить все,что экспортирует данный модуль - это похоже на создание объекта из класса
 import * as shoppingCart2 from "./shoppingCart2.js";
 
+
 addToCart('milk', 3);
 addToCart('bread', 4);
 remove('bread')
@@ -71,3 +72,26 @@ console.log(object);
 
 //for import
 //const{addToCart}=require('./shoppingCart.js');
+
+
+//здесь импортирую,прописывая относительный путь к той ф-ции из lodash ,которая мне нужна
+import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+const state={
+    cart:[
+        {product:'bread',quantity:3},
+        {product: 'milk',quantity: 2},
+    ],
+    user:{
+        loggedIn:true,
+    }
+};
+//copy object by Object.assign()
+const copyState=Object.assign({},state);
+//это поменяет данный в state,а это означает,что копия поверхностная
+copyState.user.loggedIn=false;
+console.log(state);
+//make deep clone by lodash cloneDeep
+const deepCopyState=cloneDeep(state);
+deepCopyState.user.loggedIn=true;
+console.log('deep copy',deepCopyState);
+console.log('state',state)
