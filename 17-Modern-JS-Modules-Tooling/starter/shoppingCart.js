@@ -3,9 +3,9 @@
 console.log('exporting module');
 console.log('start getting users')
 //blocking action - в импортируемом файле будет задержка,пока данные не загрузятся
-const res=await fetch('https://jsonplaceholder.typicode.com/users');
-const users=await res.json();
-console.log(users);
+//const res=await fetch('https://jsonplaceholder.typicode.com/users');
+//const users=await res.json();
+//console.log(users);
 console.log('finish getting users');
 const shoppingCost = 10;
  let cart = [];

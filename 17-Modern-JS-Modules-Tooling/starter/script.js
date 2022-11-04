@@ -24,9 +24,9 @@ console.log(shoppingCart2)
 shoppingCart2.addToCart('bread', 4);
 
 // using await in module without async function
-const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-const data = await res.json();
-console.log(data);
+//const res = await fetch('https://jsonplaceholder.typicode.com/posts');
+//const data = await res.json();
+//console.log(data);
 //выполнение этой консоли будет дожидаться загрузки данных и только после этого он сработает!!!
 console.log('something');
 
@@ -38,17 +38,17 @@ const getLastPost = async () => {
     return {title: data.at(-1).title, text: data.at(-1).body};
 }
 //using .then
-getLastPost().then(res=>res);
+getLastPost().then(res => res);
 
 //теперь же используя возможности модуля и await легко можно получить рузультат,который возвращает асинхронная ф-ция
-const lastPost = await getLastPost();
-console.log(lastPost);
+//const lastPost = await getLastPost();
+//console.log(lastPost);
 
 //module pattern
 //здесь,использую IIFE, я создаю через замыкание область видимости,к которой имею доступ через public API - это то,что возращает IIFE
 //до создания модулей этим паттерном пользовались для создания области с приватными данными, доступ к которым был черезе public API
-const object=(function () {
-    const cart=[];
+const object = (function () {
+    const cart = [];
     const addToCart = (product, quantity) => {
         cart.push({product, quality: quantity});
         console.log(`${quantity} ${product}  added to cart`);
@@ -56,10 +56,10 @@ const object=(function () {
 
     const totalPrice = 230;
     const totalQuantity = 30;
-    return{cart,addToCart,totalPrice}
+    return {cart, addToCart, totalPrice}
 })();
-object.addToCart('bread',3);
-object.addToCart('milk',1);
+object.addToCart('bread', 3);
+object.addToCart('milk', 1);
 console.log(object);
 
 // помимо module pattern  еще существуте CommonJs modules  - этот прием используется в node.js
@@ -75,23 +75,31 @@ console.log(object);
 
 
 //здесь импортирую,прописывая относительный путь к той ф-ции из lodash ,которая мне нужна
-import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
-const state={
-    cart:[
-        {product:'bread',quantity:3},
-        {product: 'milk',quantity: 2},
+//import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
+//поскольку мы используем parcel,то не нужно указывать полный относительный путь,так как parcel найдет lodash сам
+import cloneDeep from 'lodash-es/cloneDeep.js';
+
+const state = {
+    cart: [
+        {product: 'bread', quantity: 3},
+        {product: 'milk', quantity: 2},
     ],
-    user:{
-        loggedIn:true,
+    user: {
+        loggedIn: true,
     }
 };
 //copy object by Object.assign()
-const copyState=Object.assign({},state);
+const copyState = Object.assign({}, state);
 //это поменяет данный в state,а это означает,что копия поверхностная
-copyState.user.loggedIn=false;
+copyState.user.loggedIn = false;
 console.log(state);
 //make deep clone by lodash cloneDeep
-const deepCopyState=cloneDeep(state);
-deepCopyState.user.loggedIn=true;
-console.log('deep copy',deepCopyState);
-console.log('state',state)
+const deepCopyState = cloneDeep(state);
+deepCopyState.user.loggedIn = true;
+console.log('deep copy', deepCopyState);
+console.log('state', state);
+
+if (module.hot) {
+    module.hot.accept();
+}
+
