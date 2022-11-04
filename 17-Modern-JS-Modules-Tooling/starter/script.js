@@ -60,3 +60,14 @@ const object=(function () {
 object.addToCart('bread',3);
 object.addToCart('milk',1);
 console.log(object);
+
+// помимо module pattern  еще существуте CommonJs modules  - этот прием используется в node.js
+
+//for export in node.js use export object
+//export.addToCart = (product, quantity) => {
+//         cart.push({product, quality: quantity});
+//         console.log(`${quantity} ${product}  added to cart`);
+//     }
+
+//for import
+//const{addToCart}=require('./shoppingCart.js');
