@@ -9422,7 +9422,7 @@ var HASH_UNDEFINED = '__lodash_hash_undefined__';
  * Adds `value` to the array cache.
  *
  * @private
- * @name add
+ * @name addExpense
  * @memberOf SetCache
  * @alias push
  * @param {*} value The value to cache.
