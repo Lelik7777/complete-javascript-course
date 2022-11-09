@@ -1,4 +1,4 @@
-let budget = [
+let budget = Object.freeze([
     {value: 250, description: 'Sold old TV 📺', user: 'jonas'},
     {value: -45, description: 'Groceries 🥑', user: 'jonas'},
     {value: 3500, description: 'Monthly salary 👩‍💻', user: 'jonas'},
@@ -7,17 +7,17 @@ let budget = [
     {value: -20, description: 'Candy 🍭', user: 'matilda'},
     {value: -125, description: 'Toys 🚂', user: 'matilda'},
     {value: -1800, description: 'New Laptop 💻', user: 'jonas'},
-];
+]);
 
-const spendingLimits = {
+const spendingLimits = Object.freeze({
     jonas: 1500,
     matilda: 100,
-};
+});
 const getLimit = user => spendingLimits?.[user] ?? 0;
-const addExpense = function (value, description, user = 'jonas') {
+const addExpense = function (state, limit, value, description, user = 'jonas') {
     //using parameter by default
     //if (!user) user = 'jonas';
-    user = user.toLowerCase();
+    const cleanUser = user.toLowerCase();
 
     // let lim;
     // if (limits[user]) {
@@ -27,13 +27,16 @@ const addExpense = function (value, description, user = 'jonas') {
     // }
     //const limit = spendingLimits?.[user] ?? 0;
 
-    value <= getLimit(user) && budget.push({value: -value, description, user});
+    // value <= getLimit(cleanUser) && budget.push({value: -value, description, user:cleanUser});
+    //здесь мы реализуем принцип чистой ф-ции,которая не мутирует внешние данные,а работает с их копиями
+    //если условие неверно,то возвращаем старый state
+    return value <= getLimit(cleanUser) ? [...state, {value: -value, description, user: cleanUser}] : state;
 
 };
-addExpense(10, 'Pizza 🍕');
-addExpense(100, 'Going to movies 🍿', 'Matilda');
-addExpense(200, 'Stuff', 'Jay');
-console.log(budget);
+const budget1 = addExpense(budget, spendingLimits, 10, 'Pizza 🍕');
+const budget2 = addExpense(budget1, spendingLimits, 100, 'Going to movies 🍿', 'Matilda');
+const budget3 = addExpense(budget2, spendingLimits, 200, 'Stuff', 'Jay');
+console.log(budget2);
 
 const checkExpenses = function () {
     // for (let entry of budget) {
