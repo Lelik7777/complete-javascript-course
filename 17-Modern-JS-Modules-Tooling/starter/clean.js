@@ -61,9 +61,9 @@ const budget4 = checkExpenses(budget3, spendingLimits);
 console.log(budget4);
 
 const logBigExpenses = function (bigLimit,state) {
-    const bigExprneses= state.filter(entry=>entry.value<=-bigLimit)
+    const bigExpenses= state.filter(entry=>entry.value<=-bigLimit)
         .map(entry=>entry.description.slice(-2)).join(' / ');
-    console.log(bigExprneses);
+    console.log(bigExpenses);
     // let output = '';
     // for (const entry of budget) {
     //     // if (entry.value <= -bigLimit) {
