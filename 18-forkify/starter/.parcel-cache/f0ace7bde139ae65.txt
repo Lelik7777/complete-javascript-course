@@ -1,4 +1,4 @@
-4359
+4362
 136C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-what\lib\commonjs\index.d.ts.map133125468479680918 0
 106C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\semver133125468473308177 1
 98C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\.prettierrc133054005180417510 0
@@ -19,7 +19,7 @@
 148C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\keyboardevent-code.js133125468500115971 0
 128C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-select\lib\sort.d.ts.map133125468483729744 0
 114C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\immutable\dist133125469314137719 1
-91C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist133125471082694633 1
+91C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist133126330662418606 1
 136C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\dependencies\lz4\lib\lz4frame.c133125468485507739 0
 119C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\base-x\src\index.js133125468457130141 0
 131C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\regions\YE.js133125468506668263 0
@@ -50,26 +50,26 @@
 122C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\optimizer-svgo133125468470350056 1
 119C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\semver\CHANGELOG.md133125468471645229 0
 211C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\node-resolver-core\test\fixture\node_modules\.pnpm\source-pnpm@1.0.0\node_modules\source-pnpm\source.js133125468490189030 0
-97C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\index.html133054005180796661 0
+97C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\index.html133125477668783811 0
 108C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\chokidar133125469313427254 1
 149C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\link-rel-preconnect.js133125468500537906 0
 130C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\source-map-support\register.js133125468463088640 0
 113C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\yaml\index.js133125468478383759 0
 137C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-svg\lib\inline.js133125468466681588 0
 142C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\console-time.js133125468491770076 0
-99C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules133125471055605009 1
+99C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules133125475947520070 1
 116C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\domutils\LICENSE133125468456891080 0
 112C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\LICENSE133125468480867688 0
 116C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\src\txn.cpp133125468490858741 0
 116C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\core\src133125468493998293 1
-104C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\package-lock.json133125471055974943 0
+104C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\package-lock.json133125475947836083 0
 147C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-image\lib\validateConfig.js133125468473717404 0
 120C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\type-fest\index.d.ts133125468481733583 0
 143C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\csso\lib\restructure\4-restructShorthand.js133125468468377103 0
 119C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\yaml\types\pairs.js133125468482639316 0
 122C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\immutable\package.json133125469314117659 0
 149C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\dependencies\lmdb\libraries\liblmdb\Doxyfile133125468474631450 0
-99C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\package.json133125475431659275 0
+99C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\package.json133125475947846079 0
 117C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\svgo\lib\style.js133125468489637010 0
 204C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\node-resolver-core\test\fixture\node_modules\side-effects-package-redirect-down\foo\package.json133125468491898200 0
 122C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\msgpackr\node-index.js133125468477755450 0
@@ -85,7 +85,7 @@
 94C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\src\img133054005180826842 1
 133C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-tree\lib\syntax\pseudo\common133125468491788256 1
 143C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\readonly-attr.js133125468503128050 0
-93C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\src\js133054005180836548 1
+93C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\src\js133126330661358464 1
 145C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\document-policy.js133125468496328897 0
 112C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\read.js133125468492498348 0
 126C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\yaml\browser\types\omap.js133125468480907572 0
@@ -137,7 +137,7 @@
 132C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\yaml\dist\PlainValue-ec8e588e.js133125468484278892 0
 148C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@swc\helpers\src\_class_apply_descriptor_set.mjs133125468491289586 0
 115C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\src\sass\_searchResults.scss133054005180876434 0
-107C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\src\js\controller.js133054005180846628 0
+107C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\src\js\controller.js133126330661353087 0
 117C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\binary-extensions133125469313337462 1
 133C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\core\src\public\Bundle.js133125468486057725 0
 113C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\index.js133125468492187415 0
@@ -150,7 +150,7 @@
 104C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\.bin133125469315736988 1
 134C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\json.js133125468500036021 0
 117C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\yaml\package.json133125468487787358 0
-118C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\.package-lock.json133125471056091856 0
+118C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\.package-lock.json133125475947965763 0
 123C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\posthtml-parser\license133125468456930898 0
 136C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\watcher\src\watchman\BSER.cc133125468469349789 0
 109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\commander133125468476649079 1
@@ -172,7 +172,7 @@
 142C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\css3-tabsize.js133125468495695141 0
 106C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\base-x133125468463713817 1
 131C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\svgo\plugins\removeEmptyText.js133125468487467612 0
-117C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@msgpackr-extract133125471055605009 1
+117C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@msgpackr-extract133125475947520070 1
 106C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@lezer133125468444829964 1
 139C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-babel\lib\babel7.js133125468462756166 0
 117C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\tslib\SECURITY.md133125468477072399 0
@@ -180,10 +180,10 @@
 109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\svgo\dist133125468489788992 1
 150C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\dependencies\lmdb\libraries\liblmdb\COPYRIGHT133125468464242452 0
 138C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\packager-js\src\.eslintrc.json133125468483447905 0
-107C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel133125471050964878 1
+107C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel133125475947107317 1
 122C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\lmdb\dependencies\lmdb133125468461974336 1
 132C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-what\lib\commonjs\types.d.ts133125468484098784 0
-105C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@lmdb133125471055615000 1
+105C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@lmdb133125475947520070 1
 133C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\eme.js133125468496683445 0
 131C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\regions\SN.js133125468504111230 0
 109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@mischnic133125468444789051 1
@@ -1396,10 +1396,10 @@
 138C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\json-parse-even-better-errors\index.js133125468456900983 0
 118C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\source-map\LICENSE133125468461832869 0
 157C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\node-releases\data\release-schedule\release-schedule.json133125468467562379 0
-147C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\src\SassTransformer.js133125471055409898 0
+147C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\src\SassTransformer.js133125475947430310 0
 144C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\entities\lib\generated\decode-data-html.d.ts133125468483507738 0
 118C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\msgpackr\README.md133125468485797872 0
-112C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\favicon.8b2f57bf.png133125471080663788 0
+112C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\favicon.8b2f57bf.png133126269617717407 0
 120C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\source-map\README.md133125468459122796 0
 126C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\source-map\source-map.d.ts133125468481608170 0
 134C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\package-manager\index.d.ts133125468488397481 0
@@ -2404,7 +2404,7 @@
 123C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\bundler-default133125468474601357 1
 121C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\domutils\lib\index.js133125468464479833 0
 171C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\node-resolver-core\test\fixture\packages\source-alias\source.js133125468490269353 0
-110C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.f7626f62.css133125471080683751 0
+110C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.f7626f62.css133126269617727174 0
 128C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\domutils\lib\legacy.d.ts.map133125468480505961 0
 122C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\domutils\lib\legacy.js133125468467541691 0
 140C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-tree\lib\syntax\node\TypeSelector.js133125468492288769 0
@@ -2620,7 +2620,7 @@
 130C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@babel\code-frame\lib\index.js133125468461843169 0
 131C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\regions\SA.js133125468503467593 0
 137C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-tree\lib\syntax\pseudo\matches.js133125468490377956 0
-109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\logo.726d37a8.png133125471081754547 0
+109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\logo.726d37a8.png133126269617737139 0
 133C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-tree\lib\syntax\pseudo\not.js133125468490739072 0
 153C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\css-repeating-gradients.js133125468495015804 0
 144C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\css-tree\lib\syntax\pseudo\nth-last-child.js133125468490798918 0
@@ -3255,7 +3255,7 @@
 151C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\link-rel-dns-prefetch.js133125468500517823 0
 141C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\reporter-dev-server\src\templates133125468472528977 1
 154C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\core\test\fixtures\targets-default-distdir-one133125468494776213 1
-128C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\src133125471055389953 1
+128C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\src133125475947420349 1
 165C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\package-manager\test\fixtures\packages\peers-2.0\index.js133125468483139392 0
 147C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\link-rel-prefetch.js133125468500567762 0
 146C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\link-rel-preload.js133125468500587811 0
@@ -3322,7 +3322,7 @@
 152C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\package-manager\test\fixtures\packages\peers133125468487447540 1
 142C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\rel-noopener.js133125468503198058 0
 137C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\rellist.js133125468503238367 0
-115C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\starter.3464ddca.js.map133125471082465171 0
+115C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\starter.3464ddca.js.map133125475966384477 0
 133C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\rem.js133125468503258162 0
 151C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\requestanimationframe.js133125468503268143 0
 149C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\requestidlecallback.js133125468503278108 0
@@ -3362,7 +3362,7 @@
 141C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\textcontent.js133125468505031581 0
 141C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\textencoder.js133125468505051555 0
 136C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\tls1-1.js133125468505211122 0
-113C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.62406edb.js.map133125471082445156 0
+113C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.62406edb.js.map133125475966384477 0
 135C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\touch.js133125468505320830 0
 142C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\caniuse-lite\data\features\transforms2d.js133125468505380671 0
 132C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\graph\test\Graph.test.js133125468480658235 0
@@ -3642,13 +3642,13 @@
 131C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-postcss\src133125468478418733 1
 123C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-css133125468468490198 1
 124C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-html133125468477552326 1
-128C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\lib133125471055350050 1
+128C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\lib133125475947400934 1
 150C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\runtime-js\lib\helpers\node\wasm-loader.js133125468486027835 0
 125C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-image133125468476759397 1
 123C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-raw133125468464828655 1
 138C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-react-refresh-wrap133125468477134001 1
 185C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\node-resolver-core\test\fixture\node_modules\side-effects-package-redirect-up133125468492127574 1
-124C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass133125471055420118 1
+124C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass133125475947450258 1
 126C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\workers\index.d.ts133125468487148330 0
 119C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\workers\src133125468486681299 1
 132C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\workers\test\integration133125468478533664 1
@@ -3702,7 +3702,7 @@
 131C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\source-map\dist\node.js133125468478543628 0
 126C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\watcher\src\shared133125468482532391 1
 140C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\watcher\src\windows\win_utils.hh133125468484869126 0
-147C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\lib\SassTransformer.js133125471055370615 0
+147C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\lib\SassTransformer.js133125475947410370 0
 124C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\watcher\src\unix133125468479040741 1
 130C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\watcher\src\Watcher.cc133125468479710839 0
 129C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\types\lib\unsafe.d.ts133125468476708906 0
@@ -3788,9 +3788,9 @@
 145C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-svg\src\SVGTransformer.js133125468476659058 0
 145C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-svg\lib\SVGTransformer.js133125468474676737 0
 149C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\source-map\parcel_sourcemap_node\index.js133125468477314107 0
-132C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\LICENSE133125471055320138 0
+132C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\LICENSE133125475947380456 0
 198C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\node-resolver-core\test\fixture\node_modules\side-effects-package-redirect-up\package.json133125468492137875 0
-137C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\package.json133125471055425620 0
+137C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-sass\package.json133125475947460235 0
 173C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-react-refresh-wrap\src\ReactRefreshWrapTransformer.js133125468474259041 0
 127C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-raw\lib133125468459505128 1
 145C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\@parcel\transformer-raw\src\RawTransformer.js133125468463419534 0
@@ -4353,8 +4353,11 @@
 109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\.bin\svgo133125468511498953 0
 111C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\.bin\terser133125468511189207 0
 115C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\node_modules\.bin\terser.cmd133125468511189207 0
-110C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\icons.21bad73c.svg133125471081066482 0
-109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.62406edb.js133125471082385313 0
-114C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.f7626f62.css.map133125471080783464 0
-102C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.html133125471082694633 0
-111C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\starter.3464ddca.js133125471082385313 0
+110C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\icons.21bad73c.svg133126269617707226 0
+110C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\icons.dfd7a6db.svg133126326129474130 0
+109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.62406edb.js133125475966255155 0
+109C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.e37f48ea.js133126330662378823 0
+113C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.e37f48ea.js.map133126330662408637 0
+114C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.f7626f62.css.map133126269617795064 0
+102C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\index.html133126269617717407 0
+111C:\Users\Alex\Documents\React\projects02\complete-javascript-course\18-forkify\starter\dist\starter.3464ddca.js133125475966255155 0

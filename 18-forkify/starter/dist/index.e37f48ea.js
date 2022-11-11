@@ -532,6 +532,11 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"aenu9":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _esRegexpFlagsJs = require("core-js/modules/es.regexp.flags.js");
+var _webImmediateJs = require("core-js/modules/web.immediate.js");
+var _iconsSvg = require("url:../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
 const recipeContainer = document.querySelector(".recipe");
 const timeout = function(s) {
     return new Promise(function(_, reject) {
@@ -542,11 +547,30 @@ const timeout = function(s) {
 };
 // https://forkify-api.herokuapp.com/v2
 ///////////////////////////////////////
+const showSpinner = (parentEl)=>{
+    parentEl.innerHTML = "";
+    console.log((0, _iconsSvgDefault.default));
+    const markup = `
+      <div class="spinner">
+          <svg>
+            <use href="${(0, _iconsSvgDefault.default)}#icon-loader"></use>
+          </svg>
+        </div>
+      `;
+    parentEl.insertAdjacentHTML("afterbegin", markup);
+};
 const showRecipe = async ()=>{
+    //get data from API
     try {
-        const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bc886`);
-        if (!res.ok) throw new Error(`${res.url}(Status:${res.status})`);
-        let { data: { recipe  }  } = await res.json();
+        //get id without # from  url bar
+        const id = window.location.hash.slice(1);
+        //guard clause if id doesn`t exist
+        if (!id) return;
+        showSpinner(recipeContainer);
+        const res = await fetch(`https://forkify-api.herokuapp.com/api/v2/recipes/${id}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(`${data.message}(Status:${res.status})`);
+        let { recipe  } = data.data;
         recipe = {
             cooking_time: recipe.cooking_time,
             id: recipe.id,
@@ -557,12 +581,1389 @@ const showRecipe = async ()=>{
             source_url: recipe.source_url,
             title: recipe.title
         };
+        console.log(recipe);
+        //render data
+        const markup = `
+         <figure class="recipe__fig">
+          <img src="${recipe.image_url}" alt="${recipe.title}" class="recipe__img" />
+          <h1 class="recipe__title">
+            <span>${recipe.title}</span>
+          </h1>
+        </figure>
+
+        <div class="recipe__details">
+          <div class="recipe__info">
+            <svg class="recipe__info-icon">
+              <use href="${(0, _iconsSvgDefault.default)}#icon-clock"></use>
+            </svg>
+            <span class="recipe__info-data recipe__info-data--minutes">${recipe.cooking_time}</span>
+            <span class="recipe__info-text">minutes</span>
+          </div>
+          <div class="recipe__info">
+            <svg class="recipe__info-icon">
+              <use href="${(0, _iconsSvgDefault.default)}#icon-users"></use>
+            </svg>
+            <span class="recipe__info-data recipe__info-data--people">${recipe.servings}</span>
+            <span class="recipe__info-text">servings</span>
+
+            <div class="recipe__info-buttons">
+              <button class="btn--tiny btn--increase-servings">
+                <svg>
+                  <use href="${(0, _iconsSvgDefault.default)}#icon-minus-circle"></use>
+                </svg>
+              </button>
+              <button class="btn--tiny btn--increase-servings">
+                <svg>
+                  <use href="${(0, _iconsSvgDefault.default)}#icon-plus-circle"></use>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="recipe__user-generated">
+            <svg>
+              <use href="${(0, _iconsSvgDefault.default)}#icon-user"></use>
+            </svg>
+          </div>
+          <button class="btn--round">
+            <svg class="">
+              <use href="${(0, _iconsSvgDefault.default)}#icon-bookmark-fill"></use>
+            </svg>
+          </button>
+        </div>
+
+        <div class="recipe__ingredients">
+          <h2 class="heading--2">Recipe ingredients</h2>
+          <ul class="recipe__ingredient-list">
+          ${recipe.ingredients.map((ing)=>{
+            return `
+                <li class="recipe__ingredient">
+              <svg class="recipe__icon">
+                <use href="src/img/icons.svg#icon-check"></use>
+              </svg>
+              <div class="recipe__quantity">${ing.quantity}</div>
+              <div class="recipe__description">
+                <span class="recipe__unit">${ing.unit}</span>
+                ${ing.description}
+              </div>
+            </li> 
+              `;
+        }).join("")}
+   
+          </ul>
+        </div>
+
+        <div class="recipe__directions">
+          <h2 class="heading--2">How to cook it</h2>
+          <p class="recipe__directions-text">
+            This recipe was carefully designed and tested by
+            <span class="recipe__publisher">${recipe.publisher}</span>. Please check out
+            directions at their website.
+          </p>
+          <a
+            class="btn--small recipe__btn"
+            href="${recipe.source_url}"
+            target="_blank"
+          >
+            <span>Directions</span>
+            <svg class="search__icon">
+              <use href="${(0, _iconsSvgDefault.default)}#icon-arrow-right"></use>
+            </svg>
+          </a>
+        </div>
+        `;
+        //сначала обнуляем контейнер
+        recipeContainer.innerHTML = "";
+        recipeContainer.insertAdjacentHTML("afterbegin", markup);
     } catch (e) {
         alert(e);
     }
 };
-showRecipe();
+//showRecipe();
+//
+//window.addEventListener('hashchange',showRecipe);
+//when page loaded
+//window.addEventListener('load',showRecipe);
+//there is duplicate code that why we use array of events
+[
+    "hashchange",
+    "load"
+].forEach((ev)=>window.addEventListener(ev, showRecipe));
 
-},{}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","url:../img/icons.svg":"loVOp","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"loVOp":[function(require,module,exports) {
+module.exports = require("./helpers/bundle-url").getBundleURL("hWUTQ") + "icons.dfd7a6db.svg" + "?" + Date.now();
+
+},{"./helpers/bundle-url":"lgJ39"}],"lgJ39":[function(require,module,exports) {
+"use strict";
+var bundleURL = {};
+function getBundleURLCached(id) {
+    var value = bundleURL[id];
+    if (!value) {
+        value = getBundleURL();
+        bundleURL[id] = value;
+    }
+    return value;
+}
+function getBundleURL() {
+    try {
+        throw new Error();
+    } catch (err) {
+        var matches = ("" + err.stack).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^)\n]+/g);
+        if (matches) // The first two stack frames will be this function and getBundleURLCached.
+        // Use the 3rd one, which will be a runtime in the original bundle.
+        return getBaseURL(matches[2]);
+    }
+    return "/";
+}
+function getBaseURL(url) {
+    return ("" + url).replace(/^((?:https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/.+)\/[^/]+$/, "$1") + "/";
+} // TODO: Replace uses with `new URL(url).origin` when ie11 is no longer supported.
+function getOrigin(url) {
+    var matches = ("" + url).match(/(https?|file|ftp|(chrome|moz|safari-web)-extension):\/\/[^/]+/);
+    if (!matches) throw new Error("Origin not found");
+    return matches[0];
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+exports.getOrigin = getOrigin;
+
+},{}],"gSXXb":[function(require,module,exports) {
+var global = require("../internals/global");
+var DESCRIPTORS = require("../internals/descriptors");
+var defineBuiltInAccessor = require("../internals/define-built-in-accessor");
+var regExpFlags = require("../internals/regexp-flags");
+var fails = require("../internals/fails");
+// babel-minify and Closure Compiler transpiles RegExp('.', 'd') -> /./d and it causes SyntaxError
+var RegExp = global.RegExp;
+var RegExpPrototype = RegExp.prototype;
+var FORCED = DESCRIPTORS && fails(function() {
+    var INDICES_SUPPORT = true;
+    try {
+        RegExp(".", "d");
+    } catch (error) {
+        INDICES_SUPPORT = false;
+    }
+    var O = {};
+    // modern V8 bug
+    var calls = "";
+    var expected = INDICES_SUPPORT ? "dgimsy" : "gimsy";
+    var addGetter = function(key, chr) {
+        // eslint-disable-next-line es/no-object-defineproperty -- safe
+        Object.defineProperty(O, key, {
+            get: function() {
+                calls += chr;
+                return true;
+            }
+        });
+    };
+    var pairs = {
+        dotAll: "s",
+        global: "g",
+        ignoreCase: "i",
+        multiline: "m",
+        sticky: "y"
+    };
+    if (INDICES_SUPPORT) pairs.hasIndices = "d";
+    for(var key in pairs)addGetter(key, pairs[key]);
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    var result = Object.getOwnPropertyDescriptor(RegExpPrototype, "flags").get.call(O);
+    return result !== expected || calls !== expected;
+});
+// `RegExp.prototype.flags` getter
+// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
+if (FORCED) defineBuiltInAccessor(RegExpPrototype, "flags", {
+    configurable: true,
+    get: regExpFlags
+});
+
+},{"../internals/global":"i8HOC","../internals/descriptors":"92ZIi","../internals/define-built-in-accessor":"592rH","../internals/regexp-flags":"9bz1x","../internals/fails":"hL6D2"}],"i8HOC":[function(require,module,exports) {
+var global = arguments[3];
+var check = function(it) {
+    return it && it.Math == Math && it;
+};
+// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+module.exports = // eslint-disable-next-line es/no-global-this -- safe
+check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || // eslint-disable-next-line no-restricted-globals -- safe
+check(typeof self == "object" && self) || check(typeof global == "object" && global) || // eslint-disable-next-line no-new-func -- fallback
+function() {
+    return this;
+}() || Function("return this")();
+
+},{}],"92ZIi":[function(require,module,exports) {
+var fails = require("../internals/fails");
+// Detect IE8's incomplete defineProperty implementation
+module.exports = !fails(function() {
+    // eslint-disable-next-line es/no-object-defineproperty -- required for testing
+    return Object.defineProperty({}, 1, {
+        get: function() {
+            return 7;
+        }
+    })[1] != 7;
+});
+
+},{"../internals/fails":"hL6D2"}],"hL6D2":[function(require,module,exports) {
+module.exports = function(exec) {
+    try {
+        return !!exec();
+    } catch (error) {
+        return true;
+    }
+};
+
+},{}],"592rH":[function(require,module,exports) {
+var makeBuiltIn = require("../internals/make-built-in");
+var defineProperty = require("../internals/object-define-property");
+module.exports = function(target, name, descriptor) {
+    if (descriptor.get) makeBuiltIn(descriptor.get, name, {
+        getter: true
+    });
+    if (descriptor.set) makeBuiltIn(descriptor.set, name, {
+        setter: true
+    });
+    return defineProperty.f(target, name, descriptor);
+};
+
+},{"../internals/make-built-in":"cTB4k","../internals/object-define-property":"iJR4w"}],"cTB4k":[function(require,module,exports) {
+var fails = require("../internals/fails");
+var isCallable = require("../internals/is-callable");
+var hasOwn = require("../internals/has-own-property");
+var DESCRIPTORS = require("../internals/descriptors");
+var CONFIGURABLE_FUNCTION_NAME = require("../internals/function-name").CONFIGURABLE;
+var inspectSource = require("../internals/inspect-source");
+var InternalStateModule = require("../internals/internal-state");
+var enforceInternalState = InternalStateModule.enforce;
+var getInternalState = InternalStateModule.get;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function() {
+    return defineProperty(function() {}, "length", {
+        value: 8
+    }).length !== 8;
+});
+var TEMPLATE = String(String).split("String");
+var makeBuiltIn = module.exports = function(value, name, options) {
+    if (String(name).slice(0, 7) === "Symbol(") name = "[" + String(name).replace(/^Symbol\(([^)]*)\)/, "$1") + "]";
+    if (options && options.getter) name = "get " + name;
+    if (options && options.setter) name = "set " + name;
+    if (!hasOwn(value, "name") || CONFIGURABLE_FUNCTION_NAME && value.name !== name) {
+        if (DESCRIPTORS) defineProperty(value, "name", {
+            value: name,
+            configurable: true
+        });
+        else value.name = name;
+    }
+    if (CONFIGURABLE_LENGTH && options && hasOwn(options, "arity") && value.length !== options.arity) defineProperty(value, "length", {
+        value: options.arity
+    });
+    try {
+        if (options && hasOwn(options, "constructor") && options.constructor) {
+            if (DESCRIPTORS) defineProperty(value, "prototype", {
+                writable: false
+            });
+        } else if (value.prototype) value.prototype = undefined;
+    } catch (error) {}
+    var state = enforceInternalState(value);
+    if (!hasOwn(state, "source")) state.source = TEMPLATE.join(typeof name == "string" ? name : "");
+    return value;
+};
+// add fake Function#toString for correct work wrapped methods / constructors with methods like LoDash isNative
+// eslint-disable-next-line no-extend-native -- required
+Function.prototype.toString = makeBuiltIn(function toString() {
+    return isCallable(this) && getInternalState(this).source || inspectSource(this);
+}, "toString");
+
+},{"../internals/fails":"hL6D2","../internals/is-callable":"l3Kyn","../internals/has-own-property":"gC2Q5","../internals/descriptors":"92ZIi","../internals/function-name":"l6Kgd","../internals/inspect-source":"9jh7O","../internals/internal-state":"7AMlF"}],"l3Kyn":[function(require,module,exports) {
+var $documentAll = require("../internals/document-all");
+var documentAll = $documentAll.all;
+// `IsCallable` abstract operation
+// https://tc39.es/ecma262/#sec-iscallable
+module.exports = $documentAll.IS_HTMLDDA ? function(argument) {
+    return typeof argument == "function" || argument === documentAll;
+} : function(argument) {
+    return typeof argument == "function";
+};
+
+},{"../internals/document-all":"5MHqB"}],"5MHqB":[function(require,module,exports) {
+var documentAll = typeof document == "object" && document.all;
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+var IS_HTMLDDA = typeof documentAll == "undefined" && documentAll !== undefined;
+module.exports = {
+    all: documentAll,
+    IS_HTMLDDA: IS_HTMLDDA
+};
+
+},{}],"gC2Q5":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+var toObject = require("../internals/to-object");
+var hasOwnProperty = uncurryThis({}.hasOwnProperty);
+// `HasOwnProperty` abstract operation
+// https://tc39.es/ecma262/#sec-hasownproperty
+// eslint-disable-next-line es/no-object-hasown -- safe
+module.exports = Object.hasOwn || function hasOwn(it, key) {
+    return hasOwnProperty(toObject(it), key);
+};
+
+},{"../internals/function-uncurry-this":"7GlkT","../internals/to-object":"5cb35"}],"7GlkT":[function(require,module,exports) {
+var classofRaw = require("../internals/classof-raw");
+var uncurryThisRaw = require("../internals/function-uncurry-this-raw");
+module.exports = function(fn) {
+    // Nashorn bug:
+    //   https://github.com/zloirock/core-js/issues/1128
+    //   https://github.com/zloirock/core-js/issues/1130
+    if (classofRaw(fn) === "Function") return uncurryThisRaw(fn);
+};
+
+},{"../internals/classof-raw":"bdfmm","../internals/function-uncurry-this-raw":"bAiTz"}],"bdfmm":[function(require,module,exports) {
+var uncurryThisRaw = require("../internals/function-uncurry-this-raw");
+var toString = uncurryThisRaw({}.toString);
+var stringSlice = uncurryThisRaw("".slice);
+module.exports = function(it) {
+    return stringSlice(toString(it), 8, -1);
+};
+
+},{"../internals/function-uncurry-this-raw":"bAiTz"}],"bAiTz":[function(require,module,exports) {
+var NATIVE_BIND = require("../internals/function-bind-native");
+var FunctionPrototype = Function.prototype;
+var call = FunctionPrototype.call;
+var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
+module.exports = NATIVE_BIND ? uncurryThisWithBind : function(fn) {
+    return function() {
+        return call.apply(fn, arguments);
+    };
+};
+
+},{"../internals/function-bind-native":"i16Dq"}],"i16Dq":[function(require,module,exports) {
+var fails = require("../internals/fails");
+module.exports = !fails(function() {
+    // eslint-disable-next-line es/no-function-prototype-bind -- safe
+    var test = (function() {}).bind();
+    // eslint-disable-next-line no-prototype-builtins -- safe
+    return typeof test != "function" || test.hasOwnProperty("prototype");
+});
+
+},{"../internals/fails":"hL6D2"}],"5cb35":[function(require,module,exports) {
+var requireObjectCoercible = require("../internals/require-object-coercible");
+var $Object = Object;
+// `ToObject` abstract operation
+// https://tc39.es/ecma262/#sec-toobject
+module.exports = function(argument) {
+    return $Object(requireObjectCoercible(argument));
+};
+
+},{"../internals/require-object-coercible":"fOR0B"}],"fOR0B":[function(require,module,exports) {
+var isNullOrUndefined = require("../internals/is-null-or-undefined");
+var $TypeError = TypeError;
+// `RequireObjectCoercible` abstract operation
+// https://tc39.es/ecma262/#sec-requireobjectcoercible
+module.exports = function(it) {
+    if (isNullOrUndefined(it)) throw $TypeError("Can't call method on " + it);
+    return it;
+};
+
+},{"../internals/is-null-or-undefined":"gM5ar"}],"gM5ar":[function(require,module,exports) {
+// we can't use just `it == null` since of `document.all` special case
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
+module.exports = function(it) {
+    return it === null || it === undefined;
+};
+
+},{}],"l6Kgd":[function(require,module,exports) {
+var DESCRIPTORS = require("../internals/descriptors");
+var hasOwn = require("../internals/has-own-property");
+var FunctionPrototype = Function.prototype;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
+var EXISTS = hasOwn(FunctionPrototype, "name");
+// additional protection from minified / mangled / dropped function names
+var PROPER = EXISTS && (function something() {}).name === "something";
+var CONFIGURABLE = EXISTS && (!DESCRIPTORS || DESCRIPTORS && getDescriptor(FunctionPrototype, "name").configurable);
+module.exports = {
+    EXISTS: EXISTS,
+    PROPER: PROPER,
+    CONFIGURABLE: CONFIGURABLE
+};
+
+},{"../internals/descriptors":"92ZIi","../internals/has-own-property":"gC2Q5"}],"9jh7O":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+var isCallable = require("../internals/is-callable");
+var store = require("../internals/shared-store");
+var functionToString = uncurryThis(Function.toString);
+// this helper broken in `core-js@3.4.1-3.4.4`, so we can't use `shared` helper
+if (!isCallable(store.inspectSource)) store.inspectSource = function(it) {
+    return functionToString(it);
+};
+module.exports = store.inspectSource;
+
+},{"../internals/function-uncurry-this":"7GlkT","../internals/is-callable":"l3Kyn","../internals/shared-store":"l4ncH"}],"l4ncH":[function(require,module,exports) {
+var global = require("../internals/global");
+var defineGlobalProperty = require("../internals/define-global-property");
+var SHARED = "__core-js_shared__";
+var store = global[SHARED] || defineGlobalProperty(SHARED, {});
+module.exports = store;
+
+},{"../internals/global":"i8HOC","../internals/define-global-property":"ggjnO"}],"ggjnO":[function(require,module,exports) {
+var global = require("../internals/global");
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var defineProperty = Object.defineProperty;
+module.exports = function(key, value) {
+    try {
+        defineProperty(global, key, {
+            value: value,
+            configurable: true,
+            writable: true
+        });
+    } catch (error) {
+        global[key] = value;
+    }
+    return value;
+};
+
+},{"../internals/global":"i8HOC"}],"7AMlF":[function(require,module,exports) {
+var NATIVE_WEAK_MAP = require("../internals/weak-map-basic-detection");
+var global = require("../internals/global");
+var isObject = require("../internals/is-object");
+var createNonEnumerableProperty = require("../internals/create-non-enumerable-property");
+var hasOwn = require("../internals/has-own-property");
+var shared = require("../internals/shared-store");
+var sharedKey = require("../internals/shared-key");
+var hiddenKeys = require("../internals/hidden-keys");
+var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
+var TypeError = global.TypeError;
+var WeakMap = global.WeakMap;
+var set, get, has;
+var enforce = function(it) {
+    return has(it) ? get(it) : set(it, {});
+};
+var getterFor = function(TYPE) {
+    return function(it) {
+        var state;
+        if (!isObject(it) || (state = get(it)).type !== TYPE) throw TypeError("Incompatible receiver, " + TYPE + " required");
+        return state;
+    };
+};
+if (NATIVE_WEAK_MAP || shared.state) {
+    var store = shared.state || (shared.state = new WeakMap());
+    /* eslint-disable no-self-assign -- prototype methods protection */ store.get = store.get;
+    store.has = store.has;
+    store.set = store.set;
+    /* eslint-enable no-self-assign -- prototype methods protection */ set = function(it, metadata) {
+        if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+        metadata.facade = it;
+        store.set(it, metadata);
+        return metadata;
+    };
+    get = function(it) {
+        return store.get(it) || {};
+    };
+    has = function(it) {
+        return store.has(it);
+    };
+} else {
+    var STATE = sharedKey("state");
+    hiddenKeys[STATE] = true;
+    set = function(it, metadata) {
+        if (hasOwn(it, STATE)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+        metadata.facade = it;
+        createNonEnumerableProperty(it, STATE, metadata);
+        return metadata;
+    };
+    get = function(it) {
+        return hasOwn(it, STATE) ? it[STATE] : {};
+    };
+    has = function(it) {
+        return hasOwn(it, STATE);
+    };
+}
+module.exports = {
+    set: set,
+    get: get,
+    has: has,
+    enforce: enforce,
+    getterFor: getterFor
+};
+
+},{"../internals/weak-map-basic-detection":"2PZTl","../internals/global":"i8HOC","../internals/is-object":"Z0pBo","../internals/create-non-enumerable-property":"8CL42","../internals/has-own-property":"gC2Q5","../internals/shared-store":"l4ncH","../internals/shared-key":"eAjGz","../internals/hidden-keys":"661m4"}],"2PZTl":[function(require,module,exports) {
+var global = require("../internals/global");
+var isCallable = require("../internals/is-callable");
+var WeakMap = global.WeakMap;
+module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
+
+},{"../internals/global":"i8HOC","../internals/is-callable":"l3Kyn"}],"Z0pBo":[function(require,module,exports) {
+var isCallable = require("../internals/is-callable");
+var $documentAll = require("../internals/document-all");
+var documentAll = $documentAll.all;
+module.exports = $documentAll.IS_HTMLDDA ? function(it) {
+    return typeof it == "object" ? it !== null : isCallable(it) || it === documentAll;
+} : function(it) {
+    return typeof it == "object" ? it !== null : isCallable(it);
+};
+
+},{"../internals/is-callable":"l3Kyn","../internals/document-all":"5MHqB"}],"8CL42":[function(require,module,exports) {
+var DESCRIPTORS = require("../internals/descriptors");
+var definePropertyModule = require("../internals/object-define-property");
+var createPropertyDescriptor = require("../internals/create-property-descriptor");
+module.exports = DESCRIPTORS ? function(object, key, value) {
+    return definePropertyModule.f(object, key, createPropertyDescriptor(1, value));
+} : function(object, key, value) {
+    object[key] = value;
+    return object;
+};
+
+},{"../internals/descriptors":"92ZIi","../internals/object-define-property":"iJR4w","../internals/create-property-descriptor":"1lpav"}],"iJR4w":[function(require,module,exports) {
+var DESCRIPTORS = require("../internals/descriptors");
+var IE8_DOM_DEFINE = require("../internals/ie8-dom-define");
+var V8_PROTOTYPE_DEFINE_BUG = require("../internals/v8-prototype-define-bug");
+var anObject = require("../internals/an-object");
+var toPropertyKey = require("../internals/to-property-key");
+var $TypeError = TypeError;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
+var $defineProperty = Object.defineProperty;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var ENUMERABLE = "enumerable";
+var CONFIGURABLE = "configurable";
+var WRITABLE = "writable";
+// `Object.defineProperty` method
+// https://tc39.es/ecma262/#sec-object.defineproperty
+exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P, Attributes) {
+    anObject(O);
+    P = toPropertyKey(P);
+    anObject(Attributes);
+    if (typeof O === "function" && P === "prototype" && "value" in Attributes && WRITABLE in Attributes && !Attributes[WRITABLE]) {
+        var current = $getOwnPropertyDescriptor(O, P);
+        if (current && current[WRITABLE]) {
+            O[P] = Attributes.value;
+            Attributes = {
+                configurable: CONFIGURABLE in Attributes ? Attributes[CONFIGURABLE] : current[CONFIGURABLE],
+                enumerable: ENUMERABLE in Attributes ? Attributes[ENUMERABLE] : current[ENUMERABLE],
+                writable: false
+            };
+        }
+    }
+    return $defineProperty(O, P, Attributes);
+} : $defineProperty : function defineProperty(O, P, Attributes) {
+    anObject(O);
+    P = toPropertyKey(P);
+    anObject(Attributes);
+    if (IE8_DOM_DEFINE) try {
+        return $defineProperty(O, P, Attributes);
+    } catch (error) {}
+    if ("get" in Attributes || "set" in Attributes) throw $TypeError("Accessors not supported");
+    if ("value" in Attributes) O[P] = Attributes.value;
+    return O;
+};
+
+},{"../internals/descriptors":"92ZIi","../internals/ie8-dom-define":"qS9uN","../internals/v8-prototype-define-bug":"ka1Un","../internals/an-object":"4isCr","../internals/to-property-key":"5XWKd"}],"qS9uN":[function(require,module,exports) {
+var DESCRIPTORS = require("../internals/descriptors");
+var fails = require("../internals/fails");
+var createElement = require("../internals/document-create-element");
+// Thanks to IE8 for its funny defineProperty
+module.exports = !DESCRIPTORS && !fails(function() {
+    // eslint-disable-next-line es/no-object-defineproperty -- required for testing
+    return Object.defineProperty(createElement("div"), "a", {
+        get: function() {
+            return 7;
+        }
+    }).a != 7;
+});
+
+},{"../internals/descriptors":"92ZIi","../internals/fails":"hL6D2","../internals/document-create-element":"4bOHl"}],"4bOHl":[function(require,module,exports) {
+var global = require("../internals/global");
+var isObject = require("../internals/is-object");
+var document = global.document;
+// typeof document.createElement is 'object' in old IE
+var EXISTS = isObject(document) && isObject(document.createElement);
+module.exports = function(it) {
+    return EXISTS ? document.createElement(it) : {};
+};
+
+},{"../internals/global":"i8HOC","../internals/is-object":"Z0pBo"}],"ka1Un":[function(require,module,exports) {
+var DESCRIPTORS = require("../internals/descriptors");
+var fails = require("../internals/fails");
+// V8 ~ Chrome 36-
+// https://bugs.chromium.org/p/v8/issues/detail?id=3334
+module.exports = DESCRIPTORS && fails(function() {
+    // eslint-disable-next-line es/no-object-defineproperty -- required for testing
+    return Object.defineProperty(function() {}, "prototype", {
+        value: 42,
+        writable: false
+    }).prototype != 42;
+});
+
+},{"../internals/descriptors":"92ZIi","../internals/fails":"hL6D2"}],"4isCr":[function(require,module,exports) {
+var isObject = require("../internals/is-object");
+var $String = String;
+var $TypeError = TypeError;
+// `Assert: Type(argument) is Object`
+module.exports = function(argument) {
+    if (isObject(argument)) return argument;
+    throw $TypeError($String(argument) + " is not an object");
+};
+
+},{"../internals/is-object":"Z0pBo"}],"5XWKd":[function(require,module,exports) {
+var toPrimitive = require("../internals/to-primitive");
+var isSymbol = require("../internals/is-symbol");
+// `ToPropertyKey` abstract operation
+// https://tc39.es/ecma262/#sec-topropertykey
+module.exports = function(argument) {
+    var key = toPrimitive(argument, "string");
+    return isSymbol(key) ? key : key + "";
+};
+
+},{"../internals/to-primitive":"a2mK1","../internals/is-symbol":"4aV4F"}],"a2mK1":[function(require,module,exports) {
+var call = require("../internals/function-call");
+var isObject = require("../internals/is-object");
+var isSymbol = require("../internals/is-symbol");
+var getMethod = require("../internals/get-method");
+var ordinaryToPrimitive = require("../internals/ordinary-to-primitive");
+var wellKnownSymbol = require("../internals/well-known-symbol");
+var $TypeError = TypeError;
+var TO_PRIMITIVE = wellKnownSymbol("toPrimitive");
+// `ToPrimitive` abstract operation
+// https://tc39.es/ecma262/#sec-toprimitive
+module.exports = function(input, pref) {
+    if (!isObject(input) || isSymbol(input)) return input;
+    var exoticToPrim = getMethod(input, TO_PRIMITIVE);
+    var result;
+    if (exoticToPrim) {
+        if (pref === undefined) pref = "default";
+        result = call(exoticToPrim, input, pref);
+        if (!isObject(result) || isSymbol(result)) return result;
+        throw $TypeError("Can't convert object to primitive value");
+    }
+    if (pref === undefined) pref = "number";
+    return ordinaryToPrimitive(input, pref);
+};
+
+},{"../internals/function-call":"d7JlP","../internals/is-object":"Z0pBo","../internals/is-symbol":"4aV4F","../internals/get-method":"9Zfiw","../internals/ordinary-to-primitive":"7MME2","../internals/well-known-symbol":"gTwyA"}],"d7JlP":[function(require,module,exports) {
+var NATIVE_BIND = require("../internals/function-bind-native");
+var call = Function.prototype.call;
+module.exports = NATIVE_BIND ? call.bind(call) : function() {
+    return call.apply(call, arguments);
+};
+
+},{"../internals/function-bind-native":"i16Dq"}],"4aV4F":[function(require,module,exports) {
+var getBuiltIn = require("../internals/get-built-in");
+var isCallable = require("../internals/is-callable");
+var isPrototypeOf = require("../internals/object-is-prototype-of");
+var USE_SYMBOL_AS_UID = require("../internals/use-symbol-as-uid");
+var $Object = Object;
+module.exports = USE_SYMBOL_AS_UID ? function(it) {
+    return typeof it == "symbol";
+} : function(it) {
+    var $Symbol = getBuiltIn("Symbol");
+    return isCallable($Symbol) && isPrototypeOf($Symbol.prototype, $Object(it));
+};
+
+},{"../internals/get-built-in":"6ZUSY","../internals/is-callable":"l3Kyn","../internals/object-is-prototype-of":"3jtKQ","../internals/use-symbol-as-uid":"2Ye8Q"}],"6ZUSY":[function(require,module,exports) {
+var global = require("../internals/global");
+var isCallable = require("../internals/is-callable");
+var aFunction = function(argument) {
+    return isCallable(argument) ? argument : undefined;
+};
+module.exports = function(namespace, method) {
+    return arguments.length < 2 ? aFunction(global[namespace]) : global[namespace] && global[namespace][method];
+};
+
+},{"../internals/global":"i8HOC","../internals/is-callable":"l3Kyn"}],"3jtKQ":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+module.exports = uncurryThis({}.isPrototypeOf);
+
+},{"../internals/function-uncurry-this":"7GlkT"}],"2Ye8Q":[function(require,module,exports) {
+/* eslint-disable es/no-symbol -- required for testing */ var NATIVE_SYMBOL = require("../internals/symbol-constructor-detection");
+module.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == "symbol";
+
+},{"../internals/symbol-constructor-detection":"8KyTD"}],"8KyTD":[function(require,module,exports) {
+/* eslint-disable es/no-symbol -- required for testing */ var V8_VERSION = require("../internals/engine-v8-version");
+var fails = require("../internals/fails");
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
+module.exports = !!Object.getOwnPropertySymbols && !fails(function() {
+    var symbol = Symbol();
+    // Chrome 38 Symbol has incorrect toString conversion
+    // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
+    return !String(symbol) || !(Object(symbol) instanceof Symbol) || // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
+    !Symbol.sham && V8_VERSION && V8_VERSION < 41;
+});
+
+},{"../internals/engine-v8-version":"bjFlO","../internals/fails":"hL6D2"}],"bjFlO":[function(require,module,exports) {
+var global = require("../internals/global");
+var userAgent = require("../internals/engine-user-agent");
+var process = global.process;
+var Deno = global.Deno;
+var versions = process && process.versions || Deno && Deno.version;
+var v8 = versions && versions.v8;
+var match, version;
+if (v8) {
+    match = v8.split(".");
+    // in old Chrome, versions of V8 isn't V8 = Chrome / 10
+    // but their correct versions are not interesting for us
+    version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]);
+}
+// BrowserFS NodeJS `process` polyfill incorrectly set `.v8` to `0.0`
+// so check `userAgent` even if `.v8` exists, but 0
+if (!version && userAgent) {
+    match = userAgent.match(/Edge\/(\d+)/);
+    if (!match || match[1] >= 74) {
+        match = userAgent.match(/Chrome\/(\d+)/);
+        if (match) version = +match[1];
+    }
+}
+module.exports = version;
+
+},{"../internals/global":"i8HOC","../internals/engine-user-agent":"73xBt"}],"73xBt":[function(require,module,exports) {
+var getBuiltIn = require("../internals/get-built-in");
+module.exports = getBuiltIn("navigator", "userAgent") || "";
+
+},{"../internals/get-built-in":"6ZUSY"}],"9Zfiw":[function(require,module,exports) {
+var aCallable = require("../internals/a-callable");
+var isNullOrUndefined = require("../internals/is-null-or-undefined");
+// `GetMethod` abstract operation
+// https://tc39.es/ecma262/#sec-getmethod
+module.exports = function(V, P) {
+    var func = V[P];
+    return isNullOrUndefined(func) ? undefined : aCallable(func);
+};
+
+},{"../internals/a-callable":"gOMir","../internals/is-null-or-undefined":"gM5ar"}],"gOMir":[function(require,module,exports) {
+var isCallable = require("../internals/is-callable");
+var tryToString = require("../internals/try-to-string");
+var $TypeError = TypeError;
+// `Assert: IsCallable(argument) is true`
+module.exports = function(argument) {
+    if (isCallable(argument)) return argument;
+    throw $TypeError(tryToString(argument) + " is not a function");
+};
+
+},{"../internals/is-callable":"l3Kyn","../internals/try-to-string":"4O7d7"}],"4O7d7":[function(require,module,exports) {
+var $String = String;
+module.exports = function(argument) {
+    try {
+        return $String(argument);
+    } catch (error) {
+        return "Object";
+    }
+};
+
+},{}],"7MME2":[function(require,module,exports) {
+var call = require("../internals/function-call");
+var isCallable = require("../internals/is-callable");
+var isObject = require("../internals/is-object");
+var $TypeError = TypeError;
+// `OrdinaryToPrimitive` abstract operation
+// https://tc39.es/ecma262/#sec-ordinarytoprimitive
+module.exports = function(input, pref) {
+    var fn, val;
+    if (pref === "string" && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
+    if (isCallable(fn = input.valueOf) && !isObject(val = call(fn, input))) return val;
+    if (pref !== "string" && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
+    throw $TypeError("Can't convert object to primitive value");
+};
+
+},{"../internals/function-call":"d7JlP","../internals/is-callable":"l3Kyn","../internals/is-object":"Z0pBo"}],"gTwyA":[function(require,module,exports) {
+var global = require("../internals/global");
+var shared = require("../internals/shared");
+var hasOwn = require("../internals/has-own-property");
+var uid = require("../internals/uid");
+var NATIVE_SYMBOL = require("../internals/symbol-constructor-detection");
+var USE_SYMBOL_AS_UID = require("../internals/use-symbol-as-uid");
+var WellKnownSymbolsStore = shared("wks");
+var Symbol = global.Symbol;
+var symbolFor = Symbol && Symbol["for"];
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+module.exports = function(name) {
+    if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == "string")) {
+        var description = "Symbol." + name;
+        if (NATIVE_SYMBOL && hasOwn(Symbol, name)) WellKnownSymbolsStore[name] = Symbol[name];
+        else if (USE_SYMBOL_AS_UID && symbolFor) WellKnownSymbolsStore[name] = symbolFor(description);
+        else WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
+    }
+    return WellKnownSymbolsStore[name];
+};
+
+},{"../internals/global":"i8HOC","../internals/shared":"i1mHK","../internals/has-own-property":"gC2Q5","../internals/uid":"a3SEE","../internals/symbol-constructor-detection":"8KyTD","../internals/use-symbol-as-uid":"2Ye8Q"}],"i1mHK":[function(require,module,exports) {
+var IS_PURE = require("../internals/is-pure");
+var store = require("../internals/shared-store");
+(module.exports = function(key, value) {
+    return store[key] || (store[key] = value !== undefined ? value : {});
+})("versions", []).push({
+    version: "3.26.0",
+    mode: IS_PURE ? "pure" : "global",
+    copyright: "\xa9 2014-2022 Denis Pushkarev (zloirock.ru)",
+    license: "https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE",
+    source: "https://github.com/zloirock/core-js"
+});
+
+},{"../internals/is-pure":"5ZsyC","../internals/shared-store":"l4ncH"}],"5ZsyC":[function(require,module,exports) {
+module.exports = false;
+
+},{}],"a3SEE":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+var id = 0;
+var postfix = Math.random();
+var toString = uncurryThis(1.0.toString);
+module.exports = function(key) {
+    return "Symbol(" + (key === undefined ? "" : key) + ")_" + toString(++id + postfix, 36);
+};
+
+},{"../internals/function-uncurry-this":"7GlkT"}],"1lpav":[function(require,module,exports) {
+module.exports = function(bitmap, value) {
+    return {
+        enumerable: !(bitmap & 1),
+        configurable: !(bitmap & 2),
+        writable: !(bitmap & 4),
+        value: value
+    };
+};
+
+},{}],"eAjGz":[function(require,module,exports) {
+var shared = require("../internals/shared");
+var uid = require("../internals/uid");
+var keys = shared("keys");
+module.exports = function(key) {
+    return keys[key] || (keys[key] = uid(key));
+};
+
+},{"../internals/shared":"i1mHK","../internals/uid":"a3SEE"}],"661m4":[function(require,module,exports) {
+module.exports = {};
+
+},{}],"9bz1x":[function(require,module,exports) {
+"use strict";
+var anObject = require("../internals/an-object");
+// `RegExp.prototype.flags` getter implementation
+// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
+module.exports = function() {
+    var that = anObject(this);
+    var result = "";
+    if (that.hasIndices) result += "d";
+    if (that.global) result += "g";
+    if (that.ignoreCase) result += "i";
+    if (that.multiline) result += "m";
+    if (that.dotAll) result += "s";
+    if (that.unicode) result += "u";
+    if (that.unicodeSets) result += "v";
+    if (that.sticky) result += "y";
+    return result;
+};
+
+},{"../internals/an-object":"4isCr"}],"49tUX":[function(require,module,exports) {
+// TODO: Remove this module from `core-js@4` since it's split to modules listed below
+require("../modules/web.clear-immediate");
+require("../modules/web.set-immediate");
+
+},{"../modules/web.clear-immediate":"fOGFr","../modules/web.set-immediate":"l7FDS"}],"fOGFr":[function(require,module,exports) {
+var $ = require("../internals/export");
+var global = require("../internals/global");
+var clearImmediate = require("../internals/task").clear;
+// `clearImmediate` method
+// http://w3c.github.io/setImmediate/#si-clearImmediate
+$({
+    global: true,
+    bind: true,
+    enumerable: true,
+    forced: global.clearImmediate !== clearImmediate
+}, {
+    clearImmediate: clearImmediate
+});
+
+},{"../internals/export":"dIGt4","../internals/global":"i8HOC","../internals/task":"7jDg7"}],"dIGt4":[function(require,module,exports) {
+var global = require("../internals/global");
+var getOwnPropertyDescriptor = require("../internals/object-get-own-property-descriptor").f;
+var createNonEnumerableProperty = require("../internals/create-non-enumerable-property");
+var defineBuiltIn = require("../internals/define-built-in");
+var defineGlobalProperty = require("../internals/define-global-property");
+var copyConstructorProperties = require("../internals/copy-constructor-properties");
+var isForced = require("../internals/is-forced");
+/*
+  options.target         - name of the target object
+  options.global         - target is the global object
+  options.stat           - export as static methods of target
+  options.proto          - export as prototype methods of target
+  options.real           - real prototype method for the `pure` version
+  options.forced         - export even if the native feature is available
+  options.bind           - bind methods to the target, required for the `pure` version
+  options.wrap           - wrap constructors to preventing global pollution, required for the `pure` version
+  options.unsafe         - use the simple assignment of property instead of delete + defineProperty
+  options.sham           - add a flag to not completely full polyfills
+  options.enumerable     - export as enumerable property
+  options.dontCallGetSet - prevent calling a getter on target
+  options.name           - the .name of the function if it does not match the key
+*/ module.exports = function(options, source) {
+    var TARGET = options.target;
+    var GLOBAL = options.global;
+    var STATIC = options.stat;
+    var FORCED, target, key, targetProperty, sourceProperty, descriptor;
+    if (GLOBAL) target = global;
+    else if (STATIC) target = global[TARGET] || defineGlobalProperty(TARGET, {});
+    else target = (global[TARGET] || {}).prototype;
+    if (target) for(key in source){
+        sourceProperty = source[key];
+        if (options.dontCallGetSet) {
+            descriptor = getOwnPropertyDescriptor(target, key);
+            targetProperty = descriptor && descriptor.value;
+        } else targetProperty = target[key];
+        FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
+        // contained in target
+        if (!FORCED && targetProperty !== undefined) {
+            if (typeof sourceProperty == typeof targetProperty) continue;
+            copyConstructorProperties(sourceProperty, targetProperty);
+        }
+        // add a flag to not completely full polyfills
+        if (options.sham || targetProperty && targetProperty.sham) createNonEnumerableProperty(sourceProperty, "sham", true);
+        defineBuiltIn(target, key, sourceProperty, options);
+    }
+};
+
+},{"../internals/global":"i8HOC","../internals/object-get-own-property-descriptor":"lk5NI","../internals/create-non-enumerable-property":"8CL42","../internals/define-built-in":"6XwEX","../internals/define-global-property":"ggjnO","../internals/copy-constructor-properties":"9Z12i","../internals/is-forced":"6uTCZ"}],"lk5NI":[function(require,module,exports) {
+var DESCRIPTORS = require("../internals/descriptors");
+var call = require("../internals/function-call");
+var propertyIsEnumerableModule = require("../internals/object-property-is-enumerable");
+var createPropertyDescriptor = require("../internals/create-property-descriptor");
+var toIndexedObject = require("../internals/to-indexed-object");
+var toPropertyKey = require("../internals/to-property-key");
+var hasOwn = require("../internals/has-own-property");
+var IE8_DOM_DEFINE = require("../internals/ie8-dom-define");
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+// `Object.getOwnPropertyDescriptor` method
+// https://tc39.es/ecma262/#sec-object.getownpropertydescriptor
+exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDescriptor(O, P) {
+    O = toIndexedObject(O);
+    P = toPropertyKey(P);
+    if (IE8_DOM_DEFINE) try {
+        return $getOwnPropertyDescriptor(O, P);
+    } catch (error) {}
+    if (hasOwn(O, P)) return createPropertyDescriptor(!call(propertyIsEnumerableModule.f, O, P), O[P]);
+};
+
+},{"../internals/descriptors":"92ZIi","../internals/function-call":"d7JlP","../internals/object-property-is-enumerable":"7SuiS","../internals/create-property-descriptor":"1lpav","../internals/to-indexed-object":"jLWwQ","../internals/to-property-key":"5XWKd","../internals/has-own-property":"gC2Q5","../internals/ie8-dom-define":"qS9uN"}],"7SuiS":[function(require,module,exports) {
+"use strict";
+var $propertyIsEnumerable = {}.propertyIsEnumerable;
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+// Nashorn ~ JDK8 bug
+var NASHORN_BUG = getOwnPropertyDescriptor && !$propertyIsEnumerable.call({
+    1: 2
+}, 1);
+// `Object.prototype.propertyIsEnumerable` method implementation
+// https://tc39.es/ecma262/#sec-object.prototype.propertyisenumerable
+exports.f = NASHORN_BUG ? function propertyIsEnumerable(V) {
+    var descriptor = getOwnPropertyDescriptor(this, V);
+    return !!descriptor && descriptor.enumerable;
+} : $propertyIsEnumerable;
+
+},{}],"jLWwQ":[function(require,module,exports) {
+// toObject with fallback for non-array-like ES3 strings
+var IndexedObject = require("../internals/indexed-object");
+var requireObjectCoercible = require("../internals/require-object-coercible");
+module.exports = function(it) {
+    return IndexedObject(requireObjectCoercible(it));
+};
+
+},{"../internals/indexed-object":"kPk5h","../internals/require-object-coercible":"fOR0B"}],"kPk5h":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+var fails = require("../internals/fails");
+var classof = require("../internals/classof-raw");
+var $Object = Object;
+var split = uncurryThis("".split);
+// fallback for non-array-like ES3 and non-enumerable old V8 strings
+module.exports = fails(function() {
+    // throws an error in rhino, see https://github.com/mozilla/rhino/issues/346
+    // eslint-disable-next-line no-prototype-builtins -- safe
+    return !$Object("z").propertyIsEnumerable(0);
+}) ? function(it) {
+    return classof(it) == "String" ? split(it, "") : $Object(it);
+} : $Object;
+
+},{"../internals/function-uncurry-this":"7GlkT","../internals/fails":"hL6D2","../internals/classof-raw":"bdfmm"}],"6XwEX":[function(require,module,exports) {
+var isCallable = require("../internals/is-callable");
+var definePropertyModule = require("../internals/object-define-property");
+var makeBuiltIn = require("../internals/make-built-in");
+var defineGlobalProperty = require("../internals/define-global-property");
+module.exports = function(O, key, value, options) {
+    if (!options) options = {};
+    var simple = options.enumerable;
+    var name = options.name !== undefined ? options.name : key;
+    if (isCallable(value)) makeBuiltIn(value, name, options);
+    if (options.global) {
+        if (simple) O[key] = value;
+        else defineGlobalProperty(key, value);
+    } else {
+        try {
+            if (!options.unsafe) delete O[key];
+            else if (O[key]) simple = true;
+        } catch (error) {}
+        if (simple) O[key] = value;
+        else definePropertyModule.f(O, key, {
+            value: value,
+            enumerable: false,
+            configurable: !options.nonConfigurable,
+            writable: !options.nonWritable
+        });
+    }
+    return O;
+};
+
+},{"../internals/is-callable":"l3Kyn","../internals/object-define-property":"iJR4w","../internals/make-built-in":"cTB4k","../internals/define-global-property":"ggjnO"}],"9Z12i":[function(require,module,exports) {
+var hasOwn = require("../internals/has-own-property");
+var ownKeys = require("../internals/own-keys");
+var getOwnPropertyDescriptorModule = require("../internals/object-get-own-property-descriptor");
+var definePropertyModule = require("../internals/object-define-property");
+module.exports = function(target, source, exceptions) {
+    var keys = ownKeys(source);
+    var defineProperty = definePropertyModule.f;
+    var getOwnPropertyDescriptor = getOwnPropertyDescriptorModule.f;
+    for(var i = 0; i < keys.length; i++){
+        var key = keys[i];
+        if (!hasOwn(target, key) && !(exceptions && hasOwn(exceptions, key))) defineProperty(target, key, getOwnPropertyDescriptor(source, key));
+    }
+};
+
+},{"../internals/has-own-property":"gC2Q5","../internals/own-keys":"1CX1A","../internals/object-get-own-property-descriptor":"lk5NI","../internals/object-define-property":"iJR4w"}],"1CX1A":[function(require,module,exports) {
+var getBuiltIn = require("../internals/get-built-in");
+var uncurryThis = require("../internals/function-uncurry-this");
+var getOwnPropertyNamesModule = require("../internals/object-get-own-property-names");
+var getOwnPropertySymbolsModule = require("../internals/object-get-own-property-symbols");
+var anObject = require("../internals/an-object");
+var concat = uncurryThis([].concat);
+// all object keys, includes non-enumerable and symbols
+module.exports = getBuiltIn("Reflect", "ownKeys") || function ownKeys(it) {
+    var keys = getOwnPropertyNamesModule.f(anObject(it));
+    var getOwnPropertySymbols = getOwnPropertySymbolsModule.f;
+    return getOwnPropertySymbols ? concat(keys, getOwnPropertySymbols(it)) : keys;
+};
+
+},{"../internals/get-built-in":"6ZUSY","../internals/function-uncurry-this":"7GlkT","../internals/object-get-own-property-names":"fjY04","../internals/object-get-own-property-symbols":"4DWO3","../internals/an-object":"4isCr"}],"fjY04":[function(require,module,exports) {
+var internalObjectKeys = require("../internals/object-keys-internal");
+var enumBugKeys = require("../internals/enum-bug-keys");
+var hiddenKeys = enumBugKeys.concat("length", "prototype");
+// `Object.getOwnPropertyNames` method
+// https://tc39.es/ecma262/#sec-object.getownpropertynames
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
+    return internalObjectKeys(O, hiddenKeys);
+};
+
+},{"../internals/object-keys-internal":"hl5T1","../internals/enum-bug-keys":"9RnJm"}],"hl5T1":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+var hasOwn = require("../internals/has-own-property");
+var toIndexedObject = require("../internals/to-indexed-object");
+var indexOf = require("../internals/array-includes").indexOf;
+var hiddenKeys = require("../internals/hidden-keys");
+var push = uncurryThis([].push);
+module.exports = function(object, names) {
+    var O = toIndexedObject(object);
+    var i = 0;
+    var result = [];
+    var key;
+    for(key in O)!hasOwn(hiddenKeys, key) && hasOwn(O, key) && push(result, key);
+    // Don't enum bug & hidden keys
+    while(names.length > i)if (hasOwn(O, key = names[i++])) ~indexOf(result, key) || push(result, key);
+    return result;
+};
+
+},{"../internals/function-uncurry-this":"7GlkT","../internals/has-own-property":"gC2Q5","../internals/to-indexed-object":"jLWwQ","../internals/array-includes":"n5IsC","../internals/hidden-keys":"661m4"}],"n5IsC":[function(require,module,exports) {
+var toIndexedObject = require("../internals/to-indexed-object");
+var toAbsoluteIndex = require("../internals/to-absolute-index");
+var lengthOfArrayLike = require("../internals/length-of-array-like");
+// `Array.prototype.{ indexOf, includes }` methods implementation
+var createMethod = function(IS_INCLUDES) {
+    return function($this, el, fromIndex) {
+        var O = toIndexedObject($this);
+        var length = lengthOfArrayLike(O);
+        var index = toAbsoluteIndex(fromIndex, length);
+        var value;
+        // Array#includes uses SameValueZero equality algorithm
+        // eslint-disable-next-line no-self-compare -- NaN check
+        if (IS_INCLUDES && el != el) while(length > index){
+            value = O[index++];
+            // eslint-disable-next-line no-self-compare -- NaN check
+            if (value != value) return true;
+        // Array#indexOf ignores holes, Array#includes - not
+        }
+        else for(; length > index; index++){
+            if ((IS_INCLUDES || index in O) && O[index] === el) return IS_INCLUDES || index || 0;
+        }
+        return !IS_INCLUDES && -1;
+    };
+};
+module.exports = {
+    // `Array.prototype.includes` method
+    // https://tc39.es/ecma262/#sec-array.prototype.includes
+    includes: createMethod(true),
+    // `Array.prototype.indexOf` method
+    // https://tc39.es/ecma262/#sec-array.prototype.indexof
+    indexOf: createMethod(false)
+};
+
+},{"../internals/to-indexed-object":"jLWwQ","../internals/to-absolute-index":"5yh27","../internals/length-of-array-like":"lY4mS"}],"5yh27":[function(require,module,exports) {
+var toIntegerOrInfinity = require("../internals/to-integer-or-infinity");
+var max = Math.max;
+var min = Math.min;
+// Helper for a popular repeating case of the spec:
+// Let integer be ? ToInteger(index).
+// If integer < 0, let result be max((length + integer), 0); else let result be min(integer, length).
+module.exports = function(index, length) {
+    var integer = toIntegerOrInfinity(index);
+    return integer < 0 ? max(integer + length, 0) : min(integer, length);
+};
+
+},{"../internals/to-integer-or-infinity":"kLXGe"}],"kLXGe":[function(require,module,exports) {
+var trunc = require("../internals/math-trunc");
+// `ToIntegerOrInfinity` abstract operation
+// https://tc39.es/ecma262/#sec-tointegerorinfinity
+module.exports = function(argument) {
+    var number = +argument;
+    // eslint-disable-next-line no-self-compare -- NaN check
+    return number !== number || number === 0 ? 0 : trunc(number);
+};
+
+},{"../internals/math-trunc":"7O8gb"}],"7O8gb":[function(require,module,exports) {
+var ceil = Math.ceil;
+var floor = Math.floor;
+// `Math.trunc` method
+// https://tc39.es/ecma262/#sec-math.trunc
+// eslint-disable-next-line es/no-math-trunc -- safe
+module.exports = Math.trunc || function trunc(x) {
+    var n = +x;
+    return (n > 0 ? floor : ceil)(n);
+};
+
+},{}],"lY4mS":[function(require,module,exports) {
+var toLength = require("../internals/to-length");
+// `LengthOfArrayLike` abstract operation
+// https://tc39.es/ecma262/#sec-lengthofarraylike
+module.exports = function(obj) {
+    return toLength(obj.length);
+};
+
+},{"../internals/to-length":"fU04N"}],"fU04N":[function(require,module,exports) {
+var toIntegerOrInfinity = require("../internals/to-integer-or-infinity");
+var min = Math.min;
+// `ToLength` abstract operation
+// https://tc39.es/ecma262/#sec-tolength
+module.exports = function(argument) {
+    return argument > 0 ? min(toIntegerOrInfinity(argument), 0x1FFFFFFFFFFFFF) : 0; // 2 ** 53 - 1 == 9007199254740991
+};
+
+},{"../internals/to-integer-or-infinity":"kLXGe"}],"9RnJm":[function(require,module,exports) {
+// IE8- don't enum bug keys
+module.exports = [
+    "constructor",
+    "hasOwnProperty",
+    "isPrototypeOf",
+    "propertyIsEnumerable",
+    "toLocaleString",
+    "toString",
+    "valueOf"
+];
+
+},{}],"4DWO3":[function(require,module,exports) {
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
+exports.f = Object.getOwnPropertySymbols;
+
+},{}],"6uTCZ":[function(require,module,exports) {
+var fails = require("../internals/fails");
+var isCallable = require("../internals/is-callable");
+var replacement = /#|\.prototype\./;
+var isForced = function(feature, detection) {
+    var value = data[normalize(feature)];
+    return value == POLYFILL ? true : value == NATIVE ? false : isCallable(detection) ? fails(detection) : !!detection;
+};
+var normalize = isForced.normalize = function(string) {
+    return String(string).replace(replacement, ".").toLowerCase();
+};
+var data = isForced.data = {};
+var NATIVE = isForced.NATIVE = "N";
+var POLYFILL = isForced.POLYFILL = "P";
+module.exports = isForced;
+
+},{"../internals/fails":"hL6D2","../internals/is-callable":"l3Kyn"}],"7jDg7":[function(require,module,exports) {
+var global = require("../internals/global");
+var apply = require("../internals/function-apply");
+var bind = require("../internals/function-bind-context");
+var isCallable = require("../internals/is-callable");
+var hasOwn = require("../internals/has-own-property");
+var fails = require("../internals/fails");
+var html = require("../internals/html");
+var arraySlice = require("../internals/array-slice");
+var createElement = require("../internals/document-create-element");
+var validateArgumentsLength = require("../internals/validate-arguments-length");
+var IS_IOS = require("../internals/engine-is-ios");
+var IS_NODE = require("../internals/engine-is-node");
+var set = global.setImmediate;
+var clear = global.clearImmediate;
+var process = global.process;
+var Dispatch = global.Dispatch;
+var Function = global.Function;
+var MessageChannel = global.MessageChannel;
+var String = global.String;
+var counter = 0;
+var queue = {};
+var ONREADYSTATECHANGE = "onreadystatechange";
+var $location, defer, channel, port;
+try {
+    // Deno throws a ReferenceError on `location` access without `--location` flag
+    $location = global.location;
+} catch (error) {}
+var run = function(id) {
+    if (hasOwn(queue, id)) {
+        var fn = queue[id];
+        delete queue[id];
+        fn();
+    }
+};
+var runner = function(id) {
+    return function() {
+        run(id);
+    };
+};
+var listener = function(event) {
+    run(event.data);
+};
+var post = function(id) {
+    // old engines have not location.origin
+    global.postMessage(String(id), $location.protocol + "//" + $location.host);
+};
+// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+if (!set || !clear) {
+    set = function setImmediate(handler) {
+        validateArgumentsLength(arguments.length, 1);
+        var fn = isCallable(handler) ? handler : Function(handler);
+        var args = arraySlice(arguments, 1);
+        queue[++counter] = function() {
+            apply(fn, undefined, args);
+        };
+        defer(counter);
+        return counter;
+    };
+    clear = function clearImmediate(id) {
+        delete queue[id];
+    };
+    // Node.js 0.8-
+    if (IS_NODE) defer = function(id) {
+        process.nextTick(runner(id));
+    };
+    else if (Dispatch && Dispatch.now) defer = function(id) {
+        Dispatch.now(runner(id));
+    };
+    else if (MessageChannel && !IS_IOS) {
+        channel = new MessageChannel();
+        port = channel.port2;
+        channel.port1.onmessage = listener;
+        defer = bind(port.postMessage, port);
+    // Browsers with postMessage, skip WebWorkers
+    // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+    } else if (global.addEventListener && isCallable(global.postMessage) && !global.importScripts && $location && $location.protocol !== "file:" && !fails(post)) {
+        defer = post;
+        global.addEventListener("message", listener, false);
+    // IE8-
+    } else if (ONREADYSTATECHANGE in createElement("script")) defer = function(id) {
+        html.appendChild(createElement("script"))[ONREADYSTATECHANGE] = function() {
+            html.removeChild(this);
+            run(id);
+        };
+    };
+    else defer = function(id) {
+        setTimeout(runner(id), 0);
+    };
+}
+module.exports = {
+    set: set,
+    clear: clear
+};
+
+},{"../internals/global":"i8HOC","../internals/function-apply":"148ka","../internals/function-bind-context":"7vpmS","../internals/is-callable":"l3Kyn","../internals/has-own-property":"gC2Q5","../internals/fails":"hL6D2","../internals/html":"2pze4","../internals/array-slice":"RsFXo","../internals/document-create-element":"4bOHl","../internals/validate-arguments-length":"b9O3D","../internals/engine-is-ios":"bzGah","../internals/engine-is-node":"2Jcp4"}],"148ka":[function(require,module,exports) {
+var NATIVE_BIND = require("../internals/function-bind-native");
+var FunctionPrototype = Function.prototype;
+var apply = FunctionPrototype.apply;
+var call = FunctionPrototype.call;
+// eslint-disable-next-line es/no-reflect -- safe
+module.exports = typeof Reflect == "object" && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function() {
+    return call.apply(apply, arguments);
+});
+
+},{"../internals/function-bind-native":"i16Dq"}],"7vpmS":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+var aCallable = require("../internals/a-callable");
+var NATIVE_BIND = require("../internals/function-bind-native");
+var bind = uncurryThis(uncurryThis.bind);
+// optional / simple context binding
+module.exports = function(fn, that) {
+    aCallable(fn);
+    return that === undefined ? fn : NATIVE_BIND ? bind(fn, that) : function() {
+        return fn.apply(that, arguments);
+    };
+};
+
+},{"../internals/function-uncurry-this":"7GlkT","../internals/a-callable":"gOMir","../internals/function-bind-native":"i16Dq"}],"2pze4":[function(require,module,exports) {
+var getBuiltIn = require("../internals/get-built-in");
+module.exports = getBuiltIn("document", "documentElement");
+
+},{"../internals/get-built-in":"6ZUSY"}],"RsFXo":[function(require,module,exports) {
+var uncurryThis = require("../internals/function-uncurry-this");
+module.exports = uncurryThis([].slice);
+
+},{"../internals/function-uncurry-this":"7GlkT"}],"b9O3D":[function(require,module,exports) {
+var $TypeError = TypeError;
+module.exports = function(passed, required) {
+    if (passed < required) throw $TypeError("Not enough arguments");
+    return passed;
+};
+
+},{}],"bzGah":[function(require,module,exports) {
+var userAgent = require("../internals/engine-user-agent");
+module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
+
+},{"../internals/engine-user-agent":"73xBt"}],"2Jcp4":[function(require,module,exports) {
+var classof = require("../internals/classof-raw");
+var global = require("../internals/global");
+module.exports = classof(global.process) == "process";
+
+},{"../internals/classof-raw":"bdfmm","../internals/global":"i8HOC"}],"l7FDS":[function(require,module,exports) {
+var $ = require("../internals/export");
+var global = require("../internals/global");
+var setImmediate = require("../internals/task").set;
+// `setImmediate` method
+// http://w3c.github.io/setImmediate/#si-setImmediate
+$({
+    global: true,
+    bind: true,
+    enumerable: true,
+    forced: global.setImmediate !== setImmediate
+}, {
+    setImmediate: setImmediate
+});
+
+},{"../internals/export":"dIGt4","../internals/global":"i8HOC","../internals/task":"7jDg7"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
