@@ -17,7 +17,6 @@ class RecipeView {
 
     renderSpinner() {
         this.#clear();
-        console.log(icons)
         const markup =
             `
       <div class="spinner">
