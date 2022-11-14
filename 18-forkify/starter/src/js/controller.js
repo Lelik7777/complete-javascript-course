@@ -11,7 +11,6 @@ const recipeContainer = document.querySelector('.recipe');
 ///////////////////////////////////////
 
 const controlRecipes = async () => {
-    //get data from API
     try {
         //get id without # from  url bar
         const id = window.location.hash.slice(1);
@@ -27,13 +26,15 @@ const controlRecipes = async () => {
         recipeView.render(recipe)
 
     } catch (e) {
-        alert(e);
+        recipeView.renderError();
+        console.log(e);
     }
 
 }
 //showRecipe();
 //
-const init = () => {
+(function init() {
     recipeView.addHandlerRender(controlRecipes);
-}
-init();
+})();
+//init();
+

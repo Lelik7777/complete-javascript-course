@@ -20,6 +20,8 @@ export const loadRecipe = async (id) => {
             title: recipe.title,
         }
     } catch (e) {
-        alert(e);
+       // console.log(e)
+        //перебрасываю ошибку дальше для обработки в controller
+        throw e;
     }
 }

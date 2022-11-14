@@ -533,7 +533,7 @@ function hmrAcceptRun(bundle, id) {
 
 },{}],"aenu9":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
-var _esRegexpFlagsJs = require("core-js/modules/es.regexp.flags.js");
+var _esRegexpFlagsJs = require("core-js/modules/es.regexp.flags.js"); //init();
 var _webImmediateJs = require("core-js/modules/web.immediate.js");
 var _model = require("./model");
 var _recipeView = require("./views/recipeView");
@@ -542,7 +542,6 @@ const recipeContainer = document.querySelector(".recipe");
 // https://forkify-api.herokuapp.com/v2
 ///////////////////////////////////////
 const controlRecipes = async ()=>{
-    //get data from API
     try {
         //get id without # from  url bar
         const id = window.location.hash.slice(1);
@@ -557,15 +556,15 @@ const controlRecipes = async ()=>{
         //render data
         (0, _recipeViewDefault.default).render(recipe);
     } catch (e) {
-        alert(e);
+        (0, _recipeViewDefault.default).renderError();
+        console.log(e);
     }
 };
 //showRecipe();
 //
-const init = ()=>{
+(function init() {
     (0, _recipeViewDefault.default).addHandlerRender(controlRecipes);
-};
-init();
+})();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -1830,7 +1829,9 @@ const loadRecipe = async (id)=>{
             title: recipe.title
         };
     } catch (e) {
-        alert(e);
+        // console.log(e)
+        //перебрасываю ошибку дальше для обработки в controller
+        throw e;
     }
 };
 
@@ -1864,7 +1865,6 @@ const getJSON = async (url)=>{
         if (!res.ok) throw new Error(`${data.message}(Status:${res.status})`);
         return data;
     } catch (e) {
-        console.log(e);
         //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
         throw e;
     }
@@ -1879,6 +1879,8 @@ var _fractional = require("fractional");
 class RecipeView {
     #data;
     #parentEl = document.querySelector(".recipe");
+    #error = "We couldn`t find this recipe. Try please another one !";
+    #message = "";
     render(data) {
         this.#data = data;
         this.#clear();
@@ -1907,6 +1909,33 @@ class RecipeView {
           </svg>
         </div>
       `;
+        this.#parentEl.insertAdjacentHTML("afterbegin", markup);
+    }
+    renderMessage(message = this.#message) {
+        this.#clear();
+        const markup = `
+            <div class="message">
+          <div>
+            <svg>
+              <use href="${(0, _iconsSvgDefault.default)}#icon-smile"></use>
+            </svg>
+          </div>
+          <p>${message}</p>
+        </div>
+        `;
+    }
+    renderError(message = this.#error) {
+        this.#clear();
+        const markup = `
+            <div class="error">
+            <div>
+              <svg>
+                <use href="${(0, _iconsSvgDefault.default)}#icon-alert-triangle"></use>
+              </svg>
+            </div>
+            <p>${message}</p>
+          </div>
+        `;
         this.#parentEl.insertAdjacentHTML("afterbegin", markup);
     }
     #generateMarkup() {
