@@ -33,8 +33,7 @@ const controlRecipes = async () => {
 }
 //showRecipe();
 //
-//window.addEventListener('hashchange',showRecipe);
-//when page loaded
-//window.addEventListener('load',showRecipe);
-//there is duplicate code that why we use array of events
-['hashchange', 'load'].forEach(ev => window.addEventListener(ev, controlRecipes));
+const init = () => {
+    recipeView.addHandlerRender(controlRecipes);
+}
+init();

@@ -562,14 +562,10 @@ const controlRecipes = async ()=>{
 };
 //showRecipe();
 //
-//window.addEventListener('hashchange',showRecipe);
-//when page loaded
-//window.addEventListener('load',showRecipe);
-//there is duplicate code that why we use array of events
-[
-    "hashchange",
-    "load"
-].forEach((ev)=>window.addEventListener(ev, controlRecipes));
+const init = ()=>{
+    (0, _recipeViewDefault.default).addHandlerRender(controlRecipes);
+};
+init();
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
@@ -1890,6 +1886,17 @@ class RecipeView {
     }
     #clear() {
         this.#parentEl.innerHTML = "";
+    }
+    //window.addEventListener('hashchange',showRecipe);
+    //when page loaded
+    //window.addEventListener('load',showRecipe);
+    //there is duplicate code that why we use array of events
+    //there is using published-subscriber pattern
+    addHandlerRender(handler) {
+        [
+            "hashchange",
+            "load"
+        ].forEach((ev)=>window.addEventListener(ev, handler));
     }
     renderSpinner() {
         this.#clear();

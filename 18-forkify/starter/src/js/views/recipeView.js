@@ -15,6 +15,15 @@ class RecipeView {
         this.#parentEl.innerHTML = '';
     }
 
+//window.addEventListener('hashchange',showRecipe);
+//when page loaded
+//window.addEventListener('load',showRecipe);
+//there is duplicate code that why we use array of events
+//there is using published-subscriber pattern
+    addHandlerRender(handler) {
+        ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+    }
+
     renderSpinner() {
         this.#clear();
         const markup =
