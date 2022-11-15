@@ -1,22 +1,33 @@
-class ResultsView {
-    #parentEl = document.querySelector('.search');
+import View from "./View";
 
-    #clearInput() {
-        this.#parentEl.querySelector('.search__field').value = '';
+class ResultsView extends View {
+    _parentEl = document.querySelector('.results');
+    _error = 'No recipes  found for your query. Please try again!';
+    _message = '';
+
+    _generateMarkup() {
+        return this._data.map(res => this._generateMarkupPreview(res)).join('');
     }
 
-    getQuery() {
-        const query = this.#parentEl.querySelector('.search__field').value;
-        this.#clearInput();
-        return query;
-    }
-
-    addHandlerSearch(handler) {
-        this.#parentEl.addEventListener('submit', function (e) {
-            e.preventDefault();
-            handler();
-        })
-
+    _generateMarkupPreview(res) {
+        return `
+             <li class="preview">
+            <a class="preview__link preview__link--active" href="#${res.id}">
+              <figure class="preview__fig">
+                <img src="${res.image_url}" alt="${res.title}" />
+              </figure>
+              <div class="preview__data">
+                <h4 class="preview__title">${res.title}</h4>
+                <p class="preview__publisher">${res.publisher}</p>
+<!--                <div class="preview__user-generated">-->
+<!--                  <svg>-->
+<!--                    <use href="src/img/i#icon-user"></use>-->
+<!--                  </svg>-->
+<!--                </div>-->
+              </div>
+            </a>
+          </li>
+        `;
     }
 }
 
