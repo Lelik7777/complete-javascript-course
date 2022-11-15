@@ -39,7 +39,7 @@ class RecipeView {
         this.#parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 
-    renderMessage(message = this.#message) {
+    renderMessage(message = this.#message)  {
         this.#clear();
         const markup = `
             <div class="message">

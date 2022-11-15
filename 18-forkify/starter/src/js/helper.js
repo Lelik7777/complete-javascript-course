@@ -16,9 +16,9 @@ export const getJSON = async (url) => {
 
         if (!res.ok) throw new Error(`${data.message}(Status:${res.status})`);
         return data;
-    } catch (e) {
+    } catch (err) {
         //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
-        throw e;
+        throw err;
     }
 
 }
