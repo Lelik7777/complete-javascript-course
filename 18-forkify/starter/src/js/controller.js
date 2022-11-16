@@ -10,9 +10,9 @@ import resultsView from "./views/resultsView";
 
 
 ///////////////////////////////////////
-if(module.hot){
-    module.hot.accept();
-}
+// if(module.hot){
+//     module.hot.accept();
+// }
 
 const controlRecipes = async () => {
     try {
@@ -36,15 +36,16 @@ const controlRecipes = async () => {
 };
 const controlResearchResults = async () => {
     try {
-
+        console.log(model.getSearchResultsPage(1));
         //get search query
         const query = searchView.getQuery();
-       if (!query) return;
+        if (!query) return;
         resultsView.renderSpinner();
         //load query and get results
         await model.loadSearchResults(query);
         //render results
-        resultsView.render(model.state.search.results);
+        const resPerPage = model.getSearchResultsPage(2);
+        resultsView.render(resPerPage);
     } catch (err) {
         console.log(err);
     }

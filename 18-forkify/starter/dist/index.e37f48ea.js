@@ -544,7 +544,9 @@ var _resultsView = require("./views/resultsView");
 var _resultsViewDefault = parcelHelpers.interopDefault(_resultsView);
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 ///////////////////////////////////////
-if (module.hot) module.hot.accept();
+// if(module.hot){
+//     module.hot.accept();
+// }
 const controlRecipes = async ()=>{
     try {
         //get id without # from  url bar
@@ -565,6 +567,7 @@ const controlRecipes = async ()=>{
 };
 const controlResearchResults = async ()=>{
     try {
+        console.log(_model.getSearchResultsPage(1));
         //get search query
         const query = (0, _searchViewDefault.default).getQuery();
         if (!query) return;
@@ -572,7 +575,8 @@ const controlResearchResults = async ()=>{
         //load query and get results
         await _model.loadSearchResults(query);
         //render results
-        (0, _resultsViewDefault.default).render(_model.state.search.results);
+        const resPerPage = _model.getSearchResultsPage(2);
+        (0, _resultsViewDefault.default).render(resPerPage);
     } catch (err) {
         console.log(err);
     }
@@ -1828,13 +1832,16 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
+parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
 var _config = require("./config");
 var _helper = require("./helper");
 const state = {
     recipe: {},
     search: {
         query: "",
-        results: []
+        results: [],
+        page: (0, _config.START_PAGE_SEARCH_RES),
+        resultsPerPage: (0, _config.RES_PER_PAGE)
     }
 };
 const loadRecipe = async (id)=>{
@@ -1871,14 +1878,40 @@ const loadSearchResults = async (query)=>{
         throw err;
     }
 };
+const getSearchResultsPage = (page = state.search.page)=>{
+    state.search.page = page;
+    const numPages = state.search.resultsPerPage;
+    const start = (page - 1) * numPages;
+    const end = page * numPages;
+    return state.search.results.slice(start, end);
+};
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs","./helper":"lVRAz"}],"k5Hzs":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 parcelHelpers.export(exports, "TIME_TIMEOUT", ()=>TIME_TIMEOUT);
+parcelHelpers.export(exports, "START_PAGE_SEARCH_RES", ()=>START_PAGE_SEARCH_RES);
+parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
+var _config = require("../../../final/src/js/config");
 const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes/";
 const TIME_TIMEOUT = 7;
+const START_PAGE_SEARCH_RES = 1;
+const RES_PER_PAGE = 10;
+
+},{"../../../final/src/js/config":"d68EN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"d68EN":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "API_URL", ()=>API_URL);
+parcelHelpers.export(exports, "TIMEOUT_SEC", ()=>TIMEOUT_SEC);
+parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
+parcelHelpers.export(exports, "KEY", ()=>KEY);
+parcelHelpers.export(exports, "MODAL_CLOSE_SEC", ()=>MODAL_CLOSE_SEC);
+const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes/";
+const TIMEOUT_SEC = 10;
+const RES_PER_PAGE = 10;
+const KEY = "<YOUR_KEY>";
+const MODAL_CLOSE_SEC = 2.5;
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lVRAz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
