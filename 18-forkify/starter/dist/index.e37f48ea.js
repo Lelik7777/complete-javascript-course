@@ -542,6 +542,8 @@ var _searchView = require("./views/searchView");
 var _searchViewDefault = parcelHelpers.interopDefault(_searchView);
 var _resultsView = require("./views/resultsView");
 var _resultsViewDefault = parcelHelpers.interopDefault(_resultsView);
+var _paginationView = require("./views/paginationView");
+var _paginationViewDefault = parcelHelpers.interopDefault(_paginationView);
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 ///////////////////////////////////////
 // if(module.hot){
@@ -567,7 +569,6 @@ const controlRecipes = async ()=>{
 };
 const controlResearchResults = async ()=>{
     try {
-        console.log(_model.getSearchResultsPage(1));
         //get search query
         const query = (0, _searchViewDefault.default).getQuery();
         if (!query) return;
@@ -577,11 +578,12 @@ const controlResearchResults = async ()=>{
         //render results
         const resPerPage = _model.getSearchResultsPage(2);
         (0, _resultsViewDefault.default).render(resPerPage);
+        //render buttons for pagination
+        (0, _paginationViewDefault.default).render(_model.state.search);
     } catch (err) {
         console.log(err);
     }
 };
-//showRecipe();
 //
 function init() {
     (0, _recipeViewDefault.default).addHandlerRender(controlRecipes);
@@ -589,7 +591,7 @@ function init() {
 }
 init();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC","./views/searchView":"9OQAM","./views/resultsView":"cSbZE"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC","./views/searchView":"9OQAM","./views/resultsView":"cSbZE","./views/paginationView":"6z7bi"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -2465,6 +2467,51 @@ class ResultsView extends (0, _viewDefault.default) {
 }
 exports.default = new ResultsView();
 
-},{"./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
+},{"./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"6z7bi":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _iconsSvg = require("url:../../img/icons.svg");
+var _iconsSvgDefault = parcelHelpers.interopDefault(_iconsSvg);
+var _view = require("./View");
+var _viewDefault = parcelHelpers.interopDefault(_view);
+class PaginationView extends (0, _viewDefault.default) {
+    _parentEl = document.querySelector(".pagination");
+    _generateMarkup() {
+        const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
+        const currPage = this._data.page;
+        console.log("number of pages", numPages);
+        // show only right button
+        if (currPage === 1 && numPages > 1) return this._markupRightBut(currPage + 1);
+        //show only left button
+        if (currPage === numPages && numPages > 1) return this._markupLeftBut(currPage - 1);
+        // show left and right buttons
+        if (currPage < numPages) return this._markupLeftBut(currPage - 1) + this._markupRightBut(currPage + 1);
+        //don`t show buttons
+        return "";
+    }
+    _markupLeftBut(value) {
+        return `
+           <button class="btn--inline pagination__btn--prev">
+            <svg class="search__icon">
+              <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
+            </svg>
+            <span>${value}</span>
+          </button>
+        `;
+    }
+    _markupRightBut(value) {
+        return `
+            <button class="btn--inline pagination__btn--next">
+            <span>${value}</span>
+            <svg class="search__icon">
+              <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
+            </svg>
+          </button>  
+        `;
+    }
+}
+exports.default = new PaginationView();
+
+},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./View":"5cUXS"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
