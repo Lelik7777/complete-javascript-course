@@ -16,17 +16,22 @@ import paginationView from "./views/paginationView";
 
 const controlRecipes = async () => {
     try {
+
         //get id without # from  url bar
         const id = window.location.hash.slice(1);
 //guard clause if id doesn`t exist
         if (!id) return;
         recipeView.renderSpinner();
-        //load recipe
+        //0)update results view to mark selected search result
+        resultsView.update(model.getSearchResultsPage())
+        //1)load recipe
         //async request for recipe
         await model.loadRecipe(id);
         const {recipe} = model.state;
-        //render data
-        recipeView.render(recipe)
+        //console.log(recipe)
+        //2)render data
+        recipeView.render(recipe);
+
 
     } catch (err) {
         recipeView.renderError();
@@ -36,26 +41,47 @@ const controlRecipes = async () => {
 };
 const controlResearchResults = async () => {
     try {
-        //get search query
+        //1 get search query
         const query = searchView.getQuery();
         if (!query) return;
         resultsView.renderSpinner();
-        //load query and get results
+        //2 load query and get results
         await model.loadSearchResults(query);
-        //render results
-        const resPerPage = model.getSearchResultsPage(2);
+        //3 render results
+        const resPerPage = model.getSearchResultsPage();
+        console.log(resPerPage)
         resultsView.render(resPerPage);
-        //render buttons for pagination
+        //4 render buttons for pagination
         paginationView.render(model.state.search);
     } catch (err) {
         console.log(err);
     }
 }
+const controlPagination = (goToPage) => {
+    //1 render new results
+    const resPerPage = model.getSearchResultsPage(goToPage);
+    resultsView.render(resPerPage);
+    //2 render new pagination buttons
+    paginationView.render(model.state.search);
+}
+
+function controlServings(newServings) {
+    //update state
+    model.updateServings(newServings);
+    //rerender recipe view
+
+    const {recipe} = model.state;
+    //реализую паттерн частичной перерисовки только измененных элементов на страницы,поэтому вместо метода .render использую .update
+    //recipeView.render(recipe)
+    recipeView.update(recipe);
+}
 
 //
 function init() {
     recipeView.addHandlerRender(controlRecipes);
+    recipeView.addHandlerUpdateServings(controlServings);
     searchView.addHandlerSearch(controlResearchResults);
+    paginationView.addHandlerPagination(controlPagination);
 }
 
 init();

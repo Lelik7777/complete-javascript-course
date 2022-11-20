@@ -13,6 +13,33 @@ export default class View {
         this._parentEl.insertAdjacentHTML('afterbegin', this._generateMarkup());
     }
 
+    //похож на render, но только осуществляет отрисовку только того,что изменилось
+    update(data) {
+        this._data = data;
+        //this._generateMarkup() return string with HTML
+        //получаю витуальный DOM,который содержит все элементы,но при этом есть лишь в памяти
+        const newDOM = document.createRange().createContextualFragment(this._generateMarkup());
+
+        //я вытащил все элементы из newDOM
+        const newElements = Array.from(newDOM.querySelectorAll('*'));
+        const currElements = Array.from(this._parentEl.querySelectorAll('*'));
+        //сравниваю элементы со страницы с элементами вируального DOM на наличие отличий
+        newElements.forEach((newEl, i) => {
+            const currEl = currElements[i];
+
+            //updates changed Text in elements
+            //trim() используем,чтобы удалить пустые сроки
+            //firstChild in element - это текст,который содержится в элементе
+            if (!newEl.isEqualNode(currEl) && newEl.firstChild.nodeValue.trim() !== '') {
+                currEl.textContent = newEl.textContent;
+            }
+            //Updates changed Attributes
+            if(!newEl.isEqualNode(currEl)){
+                Array.from(newEl.attributes).forEach(attr=>currEl.setAttribute(attr.name,attr.value));
+            }
+        })
+    }
+
     _clear() {
         this._parentEl.innerHTML = '';
     }

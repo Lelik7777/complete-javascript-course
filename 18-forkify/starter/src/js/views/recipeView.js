@@ -2,9 +2,9 @@ import icons from 'url:../../img/icons.svg';
 import {Fraction} from "fractional";
 import View from "./View";
 
-class RecipeView extends View{
+class RecipeView extends View {
     //поскольку происходит наследование классов,то не могу использовать значок приватности #,поскольку он не поддерживается parcel and babel на данный момент,поэтому все приватные поля и методы выделяем через _
-   _parentEl = document.querySelector('.recipe');
+    _parentEl = document.querySelector('.recipe');
     _error = 'We could not find this recipe. Try please another one !';
     _message = '';
 
@@ -17,6 +17,20 @@ class RecipeView extends View{
     addHandlerRender(handler) {
         ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
     }
+
+    addHandlerUpdateServings(handler) {
+        this._parentEl.addEventListener('click', function (e) {
+            //поскольку кнопка имеет вложенную картинку,то используем метод closest,чтобы поймать всплытие события именно на кнопке с классом .btn--tiny
+            const btn = e.target.closest('.btn--tiny');
+            //если нажатие не на кнопке,то сразу же выйти из ф-ции
+            if (!btn) return;
+            const {updateServings} = btn.dataset;
+            //поскольку из btn.dataset приходит строка, то нам ее нужно конвертировать в число
+            handler(+updateServings);
+        })
+
+    }
+
     _generateMarkup() {
         return (`
          <figure class="recipe__fig">
@@ -42,12 +56,13 @@ class RecipeView extends View{
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
+             <!--используем data ,чтобы из нее достать число,результат выражения при нажатии на кнопку-->
+              <button class="btn--tiny btn--increase-servings" data-update-servings="${this._data.servings - 1}">
                 <svg>
                   <use href="${icons}#icon-minus-circle"></use>
                 </svg>
               </button>
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--increase-servings" data-update-servings="${this._data.servings + 1}">
                 <svg>
                   <use href="${icons}#icon-plus-circle"></use>
                 </svg>

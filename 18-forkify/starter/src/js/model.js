@@ -46,10 +46,18 @@ export const loadSearchResults = async (query) => {
 
 }
 //create function for dividing search results for portions by 10 elements
-export const getSearchResultsPage = (page = state.search.page) => {
+export const getSearchResultsPage = (page = START_PAGE_SEARCH_RES) => {
     state.search.page = page;
     const numPages = state.search.resultsPerPage;
     const start = (page - 1) * numPages;
     const end = page * numPages;
     return state.search.results.slice(start, end);
+}
+
+export const updateServings = (newServings) => {
+    //formula for update servings: newQuantity=oldQuantity*newServings/oldServings
+    //мутируем state,производя переназначение количества всех ингридиентов
+    state.recipe.ingredients.forEach(ing => ing.quantity = ing.quantity * newServings / state.recipe.servings);
+    //переопределяем количество порций
+    state.recipe.servings = newServings;
 }

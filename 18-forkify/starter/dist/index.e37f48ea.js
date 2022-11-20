@@ -556,11 +556,14 @@ const controlRecipes = async ()=>{
         //guard clause if id doesn`t exist
         if (!id) return;
         (0, _recipeViewDefault.default).renderSpinner();
-        //load recipe
+        //0)update results view to mark selected search result
+        (0, _resultsViewDefault.default).update(_model.getSearchResultsPage());
+        //1)load recipe
         //async request for recipe
         await _model.loadRecipe(id);
         const { recipe  } = _model.state;
-        //render data
+        //console.log(recipe)
+        //2)render data
         (0, _recipeViewDefault.default).render(recipe);
     } catch (err) {
         (0, _recipeViewDefault.default).renderError();
@@ -569,25 +572,44 @@ const controlRecipes = async ()=>{
 };
 const controlResearchResults = async ()=>{
     try {
-        //get search query
+        //1 get search query
         const query = (0, _searchViewDefault.default).getQuery();
         if (!query) return;
         (0, _resultsViewDefault.default).renderSpinner();
-        //load query and get results
+        //2 load query and get results
         await _model.loadSearchResults(query);
-        //render results
-        const resPerPage = _model.getSearchResultsPage(2);
+        //3 render results
+        const resPerPage = _model.getSearchResultsPage();
+        console.log(resPerPage);
         (0, _resultsViewDefault.default).render(resPerPage);
-        //render buttons for pagination
+        //4 render buttons for pagination
         (0, _paginationViewDefault.default).render(_model.state.search);
     } catch (err) {
         console.log(err);
     }
 };
+const controlPagination = (goToPage)=>{
+    //1 render new results
+    const resPerPage = _model.getSearchResultsPage(goToPage);
+    (0, _resultsViewDefault.default).render(resPerPage);
+    //2 render new pagination buttons
+    (0, _paginationViewDefault.default).render(_model.state.search);
+};
+function controlServings(newServings) {
+    //update state
+    _model.updateServings(newServings);
+    //rerender recipe view
+    const { recipe  } = _model.state;
+    //реализую паттерн частичной перерисовки только измененных элементов на страницы,поэтому вместо метода .render использую .update
+    //recipeView.render(recipe)
+    (0, _recipeViewDefault.default).update(recipe);
+}
 //
 function init() {
     (0, _recipeViewDefault.default).addHandlerRender(controlRecipes);
+    (0, _recipeViewDefault.default).addHandlerUpdateServings(controlServings);
     (0, _searchViewDefault.default).addHandlerSearch(controlResearchResults);
+    (0, _paginationViewDefault.default).addHandlerPagination(controlPagination);
 }
 init();
 
@@ -1835,6 +1857,7 @@ parcelHelpers.export(exports, "state", ()=>state);
 parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
 parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
+parcelHelpers.export(exports, "updateServings", ()=>updateServings);
 var _config = require("./config");
 var _helper = require("./helper");
 const state = {
@@ -1880,12 +1903,19 @@ const loadSearchResults = async (query)=>{
         throw err;
     }
 };
-const getSearchResultsPage = (page = state.search.page)=>{
+const getSearchResultsPage = (page = (0, _config.START_PAGE_SEARCH_RES))=>{
     state.search.page = page;
     const numPages = state.search.resultsPerPage;
     const start = (page - 1) * numPages;
     const end = page * numPages;
     return state.search.results.slice(start, end);
+};
+const updateServings = (newServings)=>{
+    //formula for update servings: newQuantity=oldQuantity*newServings/oldServings
+    //мутируем state,производя переназначение количества всех ингридиентов
+    state.recipe.ingredients.forEach((ing)=>ing.quantity = ing.quantity * newServings / state.recipe.servings);
+    //переопределяем количество порций
+    state.recipe.servings = newServings;
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs","./helper":"lVRAz"}],"k5Hzs":[function(require,module,exports) {
@@ -1966,6 +1996,17 @@ class RecipeView extends (0, _viewDefault.default) {
             "load"
         ].forEach((ev)=>window.addEventListener(ev, handler));
     }
+    addHandlerUpdateServings(handler) {
+        this._parentEl.addEventListener("click", function(e) {
+            //поскольку кнопка имеет вложенную картинку,то используем метод closest,чтобы поймать всплытие события именно на кнопке с классом .btn--tiny
+            const btn = e.target.closest(".btn--tiny");
+            //если нажатие не на кнопке,то сразу же выйти из ф-ции
+            if (!btn) return;
+            const { updateServings  } = btn.dataset;
+            //поскольку из btn.dataset приходит строка, то нам ее нужно конвертировать в число
+            handler(+updateServings);
+        });
+    }
     _generateMarkup() {
         return `
          <figure class="recipe__fig">
@@ -1991,12 +2032,13 @@ class RecipeView extends (0, _viewDefault.default) {
             <span class="recipe__info-text">servings</span>
 
             <div class="recipe__info-buttons">
-              <button class="btn--tiny btn--increase-servings">
+             <!--используем data ,чтобы из нее достать число,результат выражения при нажатии на кнопку-->
+              <button class="btn--tiny btn--increase-servings" data-update-servings="${this._data.servings - 1}">
                 <svg>
                   <use href="${0, _iconsSvgDefault.default}#icon-minus-circle"></use>
                 </svg>
               </button>
-              <button class="btn--tiny btn--increase-servings">
+              <button class="btn--tiny btn--increase-servings" data-update-servings="${this._data.servings + 1}">
                 <svg>
                   <use href="${0, _iconsSvgDefault.default}#icon-plus-circle"></use>
                 </svg>
@@ -2365,6 +2407,26 @@ class View {
         this._clear();
         this._parentEl.insertAdjacentHTML("afterbegin", this._generateMarkup());
     }
+    //похож на render, но только осуществляет отрисовку только того,что изменилось
+    update(data) {
+        this._data = data;
+        //this._generateMarkup() return string with HTML
+        //получаю витуальный DOM,который содержит все элементы,но при этом есть лишь в памяти
+        const newDOM = document.createRange().createContextualFragment(this._generateMarkup());
+        //я вытащил все элементы из newDOM
+        const newElements = Array.from(newDOM.querySelectorAll("*"));
+        const currElements = Array.from(this._parentEl.querySelectorAll("*"));
+        //сравниваю элементы со страницы с элементами вируального DOM на наличие отличий
+        newElements.forEach((newEl, i)=>{
+            const currEl = currElements[i];
+            //updates changed Text in elements
+            //trim() используем,чтобы удалить пустые сроки
+            //firstChild in element - это текст,который содержится в элементе
+            if (!newEl.isEqualNode(currEl) && newEl.firstChild.nodeValue.trim() !== "") currEl.textContent = newEl.textContent;
+            //Updates changed Attributes
+            if (!newEl.isEqualNode(currEl)) Array.from(newEl.attributes).forEach((attr)=>currEl.setAttribute(attr.name, attr.value));
+        });
+    }
     _clear() {
         this._parentEl.innerHTML = "";
     }
@@ -2445,9 +2507,11 @@ class ResultsView extends (0, _viewDefault.default) {
         return this._data.map((res)=>this._generateMarkupPreview(res)).join("");
     }
     _generateMarkupPreview(res) {
+        const id = window.location.hash.slice(1);
+        const linkAct = "preview__link--active";
         return `
              <li class="preview">
-            <a class="preview__link preview__link--active" href="#${res.id}">
+            <a class="preview__link ${id === res.id ? linkAct : ""} " href="#${res.id}">
               <figure class="preview__fig">
                 <img src="${res.image_url}" alt="${res.title}" />
               </figure>
@@ -2476,10 +2540,19 @@ var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class PaginationView extends (0, _viewDefault.default) {
     _parentEl = document.querySelector(".pagination");
+    addHandlerPagination(handler) {
+        this._parentEl.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--inline");
+            if (!btn) return;
+            const { page: goToPage  } = btn.dataset;
+            //поскольку из кнопки получаем строку goToPage
+            handler(Number(goToPage));
+        });
+    }
     _generateMarkup() {
         const numPages = Math.ceil(this._data.results.length / this._data.resultsPerPage);
         const currPage = this._data.page;
-        console.log("number of pages", numPages);
+        //console.log('number of pages', numPages)
         // show only right button
         if (currPage === 1 && numPages > 1) return this._markupRightBut(currPage + 1);
         //show only left button
@@ -2491,7 +2564,7 @@ class PaginationView extends (0, _viewDefault.default) {
     }
     _markupLeftBut(value) {
         return `
-           <button class="btn--inline pagination__btn--prev">
+           <button data-page="${value}" class="btn--inline pagination__btn--prev">
             <svg class="search__icon">
               <use href="${0, _iconsSvgDefault.default}#icon-arrow-left"></use>
             </svg>
@@ -2501,7 +2574,7 @@ class PaginationView extends (0, _viewDefault.default) {
     }
     _markupRightBut(value) {
         return `
-            <button class="btn--inline pagination__btn--next">
+            <button data-page="${value}" class="btn--inline pagination__btn--next">
             <span>${value}</span>
             <svg class="search__icon">
               <use href="${0, _iconsSvgDefault.default}#icon-arrow-right"></use>
@@ -2512,6 +2585,6 @@ class PaginationView extends (0, _viewDefault.default) {
 }
 exports.default = new PaginationView();
 
-},{"url:../../img/icons.svg":"loVOp","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./View":"5cUXS"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
+},{"url:../../img/icons.svg":"loVOp","./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map
