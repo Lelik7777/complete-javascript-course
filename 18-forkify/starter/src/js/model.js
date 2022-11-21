@@ -8,7 +8,8 @@ export const state = {
         results: [],
         page: START_PAGE_SEARCH_RES,
         resultsPerPage: RES_PER_PAGE,
-    }
+    },
+    bookmarks: [],
 }
 export const loadRecipe = async (id) => {
     try {
@@ -25,6 +26,9 @@ export const loadRecipe = async (id) => {
             source_url: recipe.source_url,
             cooking_time: recipe.cooking_time,
         }
+        if (state.bookmarks.some(bookmark => bookmark.id === id))
+            state.recipe.bookmarked = true;
+        else state.recipe.bookmarked = false;
     } catch (err) {
         // console.log(err);
         //перебрасываю ошибку дальше для обработки в controller
@@ -60,4 +64,17 @@ export const updateServings = (newServings) => {
     state.recipe.ingredients.forEach(ing => ing.quantity = ing.quantity * newServings / state.recipe.servings);
     //переопределяем количество порций
     state.recipe.servings = newServings;
+}
+
+export const addBookmark = (recipe) => {
+    //add recipe in bookmarks array
+    state.bookmarks.push(recipe);
+    //mark selected recipe
+    //create new property bookmarked and put value
+    if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+}
+export const removeBookmark = (id) => {
+    const index = state.bookmarks.findIndex(bm => bm.id === id);
+    state.bookmarks.splice(index, 1);
+    state.recipe.bookmarked = false;
 }

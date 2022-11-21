@@ -30,7 +30,7 @@ export default class View {
             //updates changed Text in elements
             //trim() используем,чтобы удалить пустые сроки
             //firstChild in element - это текст,который содержится в элементе
-            if (!newEl.isEqualNode(currEl) && newEl.firstChild.nodeValue.trim() !== '') {
+            if (!newEl.isEqualNode(currEl) && newEl.firstChild?.nodeValue.trim() !== '') {
                 currEl.textContent = newEl.textContent;
             }
             //Updates changed Attributes

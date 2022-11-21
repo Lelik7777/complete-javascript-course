@@ -604,10 +604,18 @@ function controlServings(newServings) {
     //recipeView.render(recipe)
     (0, _recipeViewDefault.default).update(recipe);
 }
+function controlAddBookmark() {
+    const { recipe  } = _model.state;
+    if (recipe.bookmarked) _model.removeBookmark(recipe.id);
+    else _model.addBookmark(recipe);
+    console.log(recipe);
+    (0, _recipeViewDefault.default).update(recipe);
+}
 //
 function init() {
     (0, _recipeViewDefault.default).addHandlerRender(controlRecipes);
     (0, _recipeViewDefault.default).addHandlerUpdateServings(controlServings);
+    (0, _recipeViewDefault.default).addHandlerAddBookmark(controlAddBookmark);
     (0, _searchViewDefault.default).addHandlerSearch(controlResearchResults);
     (0, _paginationViewDefault.default).addHandlerPagination(controlPagination);
 }
@@ -1858,6 +1866,8 @@ parcelHelpers.export(exports, "loadRecipe", ()=>loadRecipe);
 parcelHelpers.export(exports, "loadSearchResults", ()=>loadSearchResults);
 parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
 parcelHelpers.export(exports, "updateServings", ()=>updateServings);
+parcelHelpers.export(exports, "addBookmark", ()=>addBookmark);
+parcelHelpers.export(exports, "removeBookmark", ()=>removeBookmark);
 var _config = require("./config");
 var _helper = require("./helper");
 const state = {
@@ -1867,7 +1877,8 @@ const state = {
         results: [],
         page: (0, _config.START_PAGE_SEARCH_RES),
         resultsPerPage: (0, _config.RES_PER_PAGE)
-    }
+    },
+    bookmarks: []
 };
 const loadRecipe = async (id)=>{
     try {
@@ -1884,6 +1895,8 @@ const loadRecipe = async (id)=>{
             source_url: recipe.source_url,
             cooking_time: recipe.cooking_time
         };
+        if (state.bookmarks.some((bookmark)=>bookmark.id === id)) state.recipe.bookmarked = true;
+        else state.recipe.bookmarked = false;
     } catch (err) {
         // console.log(err);
         //перебрасываю ошибку дальше для обработки в controller
@@ -1916,6 +1929,18 @@ const updateServings = (newServings)=>{
     state.recipe.ingredients.forEach((ing)=>ing.quantity = ing.quantity * newServings / state.recipe.servings);
     //переопределяем количество порций
     state.recipe.servings = newServings;
+};
+const addBookmark = (recipe)=>{
+    //add recipe in bookmarks array
+    state.bookmarks.push(recipe);
+    //mark selected recipe
+    //create new property bookmarked and put value
+    if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+};
+const removeBookmark = (id)=>{
+    const index = state.bookmarks.findIndex((bm)=>bm.id === id);
+    state.bookmarks.splice(index, 1);
+    state.recipe.bookmarked = false;
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs","./helper":"lVRAz"}],"k5Hzs":[function(require,module,exports) {
@@ -1996,6 +2021,13 @@ class RecipeView extends (0, _viewDefault.default) {
             "load"
         ].forEach((ev)=>window.addEventListener(ev, handler));
     }
+    addHandlerAddBookmark(handler) {
+        this._parentEl.addEventListener("click", function(e) {
+            const btn = e.target.closest(".btn--bookmark");
+            if (!btn) return;
+            handler();
+        });
+    }
     addHandlerUpdateServings(handler) {
         this._parentEl.addEventListener("click", function(e) {
             //поскольку кнопка имеет вложенную картинку,то используем метод closest,чтобы поймать всплытие события именно на кнопке с классом .btn--tiny
@@ -2049,9 +2081,9 @@ class RecipeView extends (0, _viewDefault.default) {
           <div class="recipe__user-generated">
            
           </div>
-          <button class="btn--round">
+          <button class="btn--round btn--bookmark">
             <svg class="">
-              <use href="${0, _iconsSvgDefault.default}#icon-bookmark-fill"></use>
+              <use href="${0, _iconsSvgDefault.default}#icon-bookmark${this._data.bookmarked ? "-fill" : ""}"></use>
             </svg>
           </button>
         </div>
@@ -2422,7 +2454,7 @@ class View {
             //updates changed Text in elements
             //trim() используем,чтобы удалить пустые сроки
             //firstChild in element - это текст,который содержится в элементе
-            if (!newEl.isEqualNode(currEl) && newEl.firstChild.nodeValue.trim() !== "") currEl.textContent = newEl.textContent;
+            if (!newEl.isEqualNode(currEl) && newEl.firstChild?.nodeValue.trim() !== "") currEl.textContent = newEl.textContent;
             //Updates changed Attributes
             if (!newEl.isEqualNode(currEl)) Array.from(newEl.attributes).forEach((attr)=>currEl.setAttribute(attr.name, attr.value));
         });
