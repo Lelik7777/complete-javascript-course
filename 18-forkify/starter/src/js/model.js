@@ -9,7 +9,7 @@ export const state = {
         page: START_PAGE_SEARCH_RES,
         resultsPerPage: RES_PER_PAGE,
     },
-    bookmarks: [],
+    bookmarks: JSON.parse(localStorage.getItem('bookmarks')) ?? [],
 }
 export const loadRecipe = async (id) => {
     try {
@@ -30,7 +30,7 @@ export const loadRecipe = async (id) => {
             state.recipe.bookmarked = true;
         else state.recipe.bookmarked = false;
     } catch (err) {
-        // console.log(err);
+         console.log(err);
         //перебрасываю ошибку дальше для обработки в controller
         throw err;
     }
@@ -65,16 +65,21 @@ export const updateServings = (newServings) => {
     //переопределяем количество порций
     state.recipe.servings = newServings;
 }
-
+const addBookmarksToLocalStorage = () => {
+    const bookmarks = JSON.stringify(state.bookmarks);
+    localStorage.setItem('bookmarks', bookmarks);
+}
 export const addBookmark = (recipe) => {
     //add recipe in bookmarks array
     state.bookmarks.push(recipe);
     //mark selected recipe
     //create new property bookmarked and put value
     if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+    addBookmarksToLocalStorage();
 }
 export const removeBookmark = (id) => {
     const index = state.bookmarks.findIndex(bm => bm.id === id);
     state.bookmarks.splice(index, 1);
     state.recipe.bookmarked = false;
+    addBookmarksToLocalStorage();
 }

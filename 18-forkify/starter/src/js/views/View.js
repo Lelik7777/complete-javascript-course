@@ -5,13 +5,15 @@ export default class View {
     _parentEl;
     _error;
     _message;
-
-    render(data) {
+//этот метод как бы универсальный - он может вставлять разметку в ДОМ, а также может возвращать строку с HTML
+    render(data, render = true) {
         if (!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
         this._data = data;
+        const markup = this._generateMarkup();
+        //этот if используется для отрисовки результов и закладок
+        if (!render) return markup;
         this._clear();
-
-        this._parentEl.insertAdjacentHTML('afterbegin', this._generateMarkup());
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 
     //похож на render, но только осуществляет отрисовку только того,что изменилось
@@ -24,6 +26,7 @@ export default class View {
         //я вытащил все элементы из newDOM
         const newElements = Array.from(newDOM.querySelectorAll('*'));
         const currElements = Array.from(this._parentEl.querySelectorAll('*'));
+
         //сравниваю элементы со страницы с элементами вируального DOM на наличие отличий
         newElements.forEach((newEl, i) => {
             const currEl = currElements[i];
@@ -35,8 +38,8 @@ export default class View {
                 currEl.textContent = newEl.textContent;
             }
             //Updates changed Attributes
-            if(!newEl.isEqualNode(currEl)){
-                Array.from(newEl.attributes).forEach(attr=>currEl.setAttribute(attr.name,attr.value));
+            if (!newEl.isEqualNode(currEl)) {
+                Array.from(newEl.attributes).forEach(attr => currEl.setAttribute(attr.name, attr.value));
             }
         })
     }

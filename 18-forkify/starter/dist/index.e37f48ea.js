@@ -546,6 +546,8 @@ var _paginationView = require("./views/paginationView");
 var _paginationViewDefault = parcelHelpers.interopDefault(_paginationView);
 var _bookmarksView = require("./views/bookmarksView");
 var _bookmarksViewDefault = parcelHelpers.interopDefault(_bookmarksView);
+//я могу просто импортировать все из любого js файла и все вызовы ф-ций и все консоли  отработают
+var _someJs = require("./some.js");
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 ///////////////////////////////////////
 // if(module.hot){
@@ -618,8 +620,12 @@ function controlAddBookmark() {
     //
     (0, _bookmarksViewDefault.default).render(bookmarks);
 }
+function controlBookmarks() {
+    (0, _bookmarksViewDefault.default).render(_model.state.bookmarks);
+}
 //
 function init() {
+    (0, _bookmarksViewDefault.default).addHandlerRenderBookmarks(controlBookmarks);
     (0, _recipeViewDefault.default).addHandlerRender(controlRecipes);
     (0, _recipeViewDefault.default).addHandlerUpdateServings(controlServings);
     (0, _recipeViewDefault.default).addHandlerAddBookmark(controlAddBookmark);
@@ -628,7 +634,7 @@ function init() {
 }
 init();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC","./views/searchView":"9OQAM","./views/resultsView":"cSbZE","./views/paginationView":"6z7bi","./views/bookmarksView":"4Lqzq"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC","./views/searchView":"9OQAM","./views/resultsView":"cSbZE","./views/paginationView":"6z7bi","./views/bookmarksView":"4Lqzq","./some.js":"eIJda"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -1885,7 +1891,7 @@ const state = {
         page: (0, _config.START_PAGE_SEARCH_RES),
         resultsPerPage: (0, _config.RES_PER_PAGE)
     },
-    bookmarks: []
+    bookmarks: JSON.parse(localStorage.getItem("bookmarks")) ?? []
 };
 const loadRecipe = async (id)=>{
     try {
@@ -1905,7 +1911,7 @@ const loadRecipe = async (id)=>{
         if (state.bookmarks.some((bookmark)=>bookmark.id === id)) state.recipe.bookmarked = true;
         else state.recipe.bookmarked = false;
     } catch (err) {
-        // console.log(err);
+        console.log(err);
         //перебрасываю ошибку дальше для обработки в controller
         throw err;
     }
@@ -1937,17 +1943,23 @@ const updateServings = (newServings)=>{
     //переопределяем количество порций
     state.recipe.servings = newServings;
 };
+const addBookmarksToLocalStorage = ()=>{
+    const bookmarks = JSON.stringify(state.bookmarks);
+    localStorage.setItem("bookmarks", bookmarks);
+};
 const addBookmark = (recipe)=>{
     //add recipe in bookmarks array
     state.bookmarks.push(recipe);
     //mark selected recipe
     //create new property bookmarked and put value
     if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
+    addBookmarksToLocalStorage();
 };
 const removeBookmark = (id)=>{
     const index = state.bookmarks.findIndex((bm)=>bm.id === id);
     state.bookmarks.splice(index, 1);
     state.recipe.bookmarked = false;
+    addBookmarksToLocalStorage();
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs","./helper":"lVRAz"}],"k5Hzs":[function(require,module,exports) {
@@ -2440,11 +2452,15 @@ class View {
     _parentEl;
     _error;
     _message;
-    render(data) {
+    //этот метод как бы универсальный - он может вставлять разметку в ДОМ, а также может возвращать строку с HTML
+    render(data, render = true) {
         if (!data || Array.isArray(data) && data.length === 0) return this.renderError();
         this._data = data;
+        const markup = this._generateMarkup();
+        //этот if используется для отрисовки результов и закладок
+        if (!render) return markup;
         this._clear();
-        this._parentEl.insertAdjacentHTML("afterbegin", this._generateMarkup());
+        this._parentEl.insertAdjacentHTML("afterbegin", markup);
     }
     //похож на render, но только осуществляет отрисовку только того,что изменилось
     update(data) {
@@ -2545,7 +2561,7 @@ class ResultsView extends (0, _viewDefault.default) {
     _error = "No recipes  found for your query. Please try again!";
     _message = "";
     _generateMarkup() {
-        return this._data.map((res)=>(0, _previewViewDefault.default)._generateMarkupPreview(res)).join("");
+        return this._data.map((recipe)=>(0, _previewViewDefault.default).render(recipe, false)).join("");
     }
 }
 exports.default = new ResultsView();
@@ -2557,18 +2573,18 @@ var _view = require("./View");
 var _viewDefault = parcelHelpers.interopDefault(_view);
 class PreviewView extends (0, _viewDefault.default) {
     _parentEl = "";
-    _generateMarkupPreview(res) {
+    _generateMarkup() {
         const id = window.location.hash.slice(1);
         const linkAct = "preview__link--active";
         return `
              <li class="preview">
-            <a class="preview__link ${id === res.id ? linkAct : ""} " href="#${res.id}">
+            <a class="preview__link ${id === this._data.id ? linkAct : ""} " href="#${this._data.id}">
               <figure class="preview__fig">
-                <img src="${res.image_url}" alt="${res.title}" />
+                <img src="${this._data.image_url}" alt="${this._data.title}" />
               </figure>
               <div class="preview__data">
-                <h4 class="preview__title">${res.title}</h4>
-                <p class="preview__publisher">${res.publisher}</p>
+                <h4 class="preview__title">${this._data.title}</h4>
+                <p class="preview__publisher">${this._data.publisher}</p>
 <!--                <div class="preview__user-generated">-->
 <!--                  <svg>-->
 <!--                    <use href="src/img/i#icon-user"></use>-->
@@ -2648,11 +2664,17 @@ class BookmarksView extends (0, _viewDefault.default) {
     _error = "Not bookmarks yet.Find a nice recipe and bookmark it !";
     _message = "";
     _generateMarkup() {
-        return this._data.map((res)=>(0, _previewViewDefault.default)._generateMarkupPreview(res)).join("");
+        return this._data.map((bookmark)=>(0, _previewViewDefault.default).render(bookmark, false)).join("");
+    }
+    addHandlerRenderBookmarks(handler) {
+        window.addEventListener("load", handler);
     }
 }
 exports.default = new BookmarksView();
 
-},{"./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./previewView":"1FDQ6"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
+},{"./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./previewView":"1FDQ6"}],"eIJda":[function(require,module,exports) {
+console.log("from some");
+
+},{}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map

@@ -6,6 +6,8 @@ import searchView from "./views/searchView";
 import resultsView from "./views/resultsView";
 import paginationView from "./views/paginationView";
 import bookmarksView from "./views/bookmarksView";
+//я могу просто импортировать все из любого js файла и все вызовы ф-ций и все консоли  отработают
+import * as some from './some.js';
 
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 
@@ -90,13 +92,19 @@ function controlAddBookmark() {
     bookmarksView.render(bookmarks);
 }
 
+function controlBookmarks() {
+    bookmarksView.render(model.state.bookmarks);
+}
+
 //
 function init() {
+    bookmarksView.addHandlerRenderBookmarks(controlBookmarks);
     recipeView.addHandlerRender(controlRecipes);
     recipeView.addHandlerUpdateServings(controlServings);
     recipeView.addHandlerAddBookmark(controlAddBookmark);
     searchView.addHandlerSearch(controlResearchResults);
     paginationView.addHandlerPagination(controlPagination);
+
 }
 
 init();
