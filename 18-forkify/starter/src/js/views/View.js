@@ -10,6 +10,7 @@ export default class View {
         if (!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
         this._data = data;
         this._clear();
+
         this._parentEl.insertAdjacentHTML('afterbegin', this._generateMarkup());
     }
 
