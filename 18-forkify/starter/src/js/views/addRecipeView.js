@@ -3,7 +3,6 @@ import {CLICK, HIDDEN} from "../config";
 import {toggle} from "../helper";
 
 
-
 class AddRecipeView extends View {
     _parentEl = document.querySelector('.upload');
 
@@ -15,6 +14,7 @@ class AddRecipeView extends View {
     constructor() {
         super();
         this._addHandlerShowWindow();
+        this._addHandlerCloseWindow();
     }
 
     _toggleWindow() {
@@ -24,6 +24,11 @@ class AddRecipeView extends View {
 
     _addHandlerShowWindow() {
         this._btnOpen.addEventListener(CLICK, this._toggleWindow.bind(this));
+    }
+
+    _addHandlerCloseWindow() {
+        this._btnClose.addEventListener(CLICK, this._toggleWindow.bind(this));
+        this._overlay.addEventListener(CLICK, this._toggleWindow.bind(this));
     }
 
     _generateMarkup() {
