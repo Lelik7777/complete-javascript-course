@@ -22,3 +22,10 @@ export const getJSON = async (url) => {
     }
 
 }
+
+ export function toggle(el, nameClass) {
+    el.classList.toggle(nameClass);
+}
+
+
+

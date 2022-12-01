@@ -6,6 +6,7 @@ import searchView from "./views/searchView";
 import resultsView from "./views/resultsView";
 import paginationView from "./views/paginationView";
 import bookmarksView from "./views/bookmarksView";
+import addRecipeView from "./views/addRecipeView";
 //я могу просто импортировать все из любого js файла и все вызовы ф-ций и все консоли  отработают
 import * as some from './some.js';
 
