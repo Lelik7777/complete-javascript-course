@@ -625,8 +625,13 @@ function controlAddBookmark() {
 function controlBookmarks() {
     (0, _bookmarksViewDefault.default).render(_model.state.bookmarks);
 }
-function controlAddRecipe(newRecipe) {
-    console.log(newRecipe);
+async function controlAddRecipe(newRecipe) {
+    try {
+        console.log(await (0, _model.uploadRecipe)(newRecipe));
+    } catch (e) {
+        (0, _addRecipeViewDefault.default).renderError(e);
+        console.log(e);
+    }
 }
 //
 function init() {
@@ -1887,6 +1892,7 @@ parcelHelpers.export(exports, "getSearchResultsPage", ()=>getSearchResultsPage);
 parcelHelpers.export(exports, "updateServings", ()=>updateServings);
 parcelHelpers.export(exports, "addBookmark", ()=>addBookmark);
 parcelHelpers.export(exports, "removeBookmark", ()=>removeBookmark);
+parcelHelpers.export(exports, "uploadRecipe", ()=>uploadRecipe);
 var _config = require("./config");
 var _helper = require("./helper");
 const state = {
@@ -1903,6 +1909,7 @@ const loadRecipe = async (id)=>{
     try {
         const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}${id}`);
         let { recipe  } = data.data;
+        console.log(recipe);
         //устанавливаем данные в state
         state.recipe = {
             id: recipe.id,
@@ -1966,6 +1973,31 @@ const removeBookmark = (id)=>{
     state.bookmarks.splice(index, 1);
     state.recipe.bookmarked = false;
     addBookmarksToLocalStorage();
+};
+const uploadRecipe = async (newRecipe)=>{
+    try {
+        const ingredients = Object.entries(newRecipe).filter((entry)=>entry[0].startsWith("ingredient") && entry[1] !== " ").map((ing)=>{
+            const arrIng = ing[1].replace(" ", "").split(",");
+            if (arrIng.length !== 3) throw new Error("wrong recipe format");
+            const [quantity, unit, description] = arrIng;
+            return {
+                quantity: quantity ? +quantity : null,
+                unit,
+                description
+            };
+        });
+        return {
+            title: newRecipe.title,
+            publisher: newRecipe.publisher,
+            image_url: newRecipe.image,
+            ingredients,
+            servings: +newRecipe.servings,
+            source_url: newRecipe.sourceUrl,
+            cooking_time: +newRecipe.cookingTime
+        };
+    } catch (e) {
+        throw e;
+    }
 };
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs","./helper":"lVRAz"}],"k5Hzs":[function(require,module,exports) {

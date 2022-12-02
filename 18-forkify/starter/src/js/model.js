@@ -15,6 +15,7 @@ export const loadRecipe = async (id) => {
     try {
         const data = await getJSON(`${API_URL}${id}`);
         let {recipe} = data.data;
+        console.log(recipe)
 //устанавливаем данные в state
         state.recipe = {
             id: recipe.id,
@@ -30,7 +31,7 @@ export const loadRecipe = async (id) => {
             state.recipe.bookmarked = true;
         else state.recipe.bookmarked = false;
     } catch (err) {
-         console.log(err);
+        console.log(err);
         //перебрасываю ошибку дальше для обработки в controller
         throw err;
     }
@@ -82,4 +83,30 @@ export const removeBookmark = (id) => {
     state.bookmarks.splice(index, 1);
     state.recipe.bookmarked = false;
     addBookmarksToLocalStorage();
+}
+
+//{quantity: 1, unit: '', description: 'medium head cauliflower cut into florets'}
+export const uploadRecipe = async (newRecipe) => {
+    try {
+        const ingredients = Object.entries(newRecipe)
+            .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== ' ')
+            .map(ing => {
+                const arrIng = ing[1].replace(' ', '').split(',');
+                if (arrIng.length !== 3) throw new Error('wrong recipe format');
+                const [quantity, unit, description] = arrIng;
+                return {quantity: quantity ? +quantity : null, unit, description}
+            })
+        return {
+            title: newRecipe.title,
+            publisher: newRecipe.publisher,
+            image_url: newRecipe.image,
+            ingredients,
+            servings: +newRecipe.servings,
+            source_url: newRecipe.sourceUrl,
+            cooking_time: +newRecipe.cookingTime
+        }
+    } catch (e) {
+        throw e;
+    }
+
 }

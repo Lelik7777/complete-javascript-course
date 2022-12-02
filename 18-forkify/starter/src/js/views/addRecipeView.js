@@ -24,6 +24,7 @@ class AddRecipeView extends View {
     }
 
     _addHandlerShowWindow() {
+
         this._btnOpen.addEventListener(CLICK, this._toggleWindow.bind(this));
     }
 

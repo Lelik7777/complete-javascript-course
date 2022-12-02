@@ -9,6 +9,7 @@ import bookmarksView from "./views/bookmarksView";
 import addRecipeView from "./views/addRecipeView";
 //я могу просто импортировать все из любого js файла и все вызовы ф-ций и все консоли  отработают
 import * as some from './some.js';
+import {uploadRecipe} from "./model";
 
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 
@@ -97,8 +98,13 @@ function controlBookmarks() {
     bookmarksView.render(model.state.bookmarks);
 }
 
-function controlAddRecipe(newRecipe) {
-    console.log(newRecipe);
+async function controlAddRecipe(newRecipe) {
+   try {
+       console.log( await uploadRecipe(newRecipe));
+   }catch (e) {
+       addRecipeView.renderError(e)
+       console.log(e)
+   }
 }
 
 //
