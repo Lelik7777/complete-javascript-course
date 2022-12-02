@@ -625,6 +625,9 @@ function controlAddBookmark() {
 function controlBookmarks() {
     (0, _bookmarksViewDefault.default).render(_model.state.bookmarks);
 }
+function controlAddRecipe(newRecipe) {
+    console.log(newRecipe);
+}
 //
 function init() {
     (0, _bookmarksViewDefault.default).addHandlerRenderBookmarks(controlBookmarks);
@@ -633,6 +636,7 @@ function init() {
     (0, _recipeViewDefault.default).addHandlerAddBookmark(controlAddBookmark);
     (0, _searchViewDefault.default).addHandlerSearch(controlResearchResults);
     (0, _paginationViewDefault.default).addHandlerPagination(controlPagination);
+    (0, _addRecipeViewDefault.default).addHandlerAddRecipe(controlAddRecipe);
 }
 init();
 
@@ -2699,10 +2703,22 @@ class AddRecipeView extends (0, _viewDefault.default) {
         this._btnClose.addEventListener((0, _config.CLICK), this._toggleWindow.bind(this));
         this._overlay.addEventListener((0, _config.CLICK), this._toggleWindow.bind(this));
     }
+    addHandlerAddRecipe(handler) {
+        this._parentEl.addEventListener("submit", function(e) {
+            e.preventDefault();
+            //этот конструктор принимает элемент форма и возвращает объект с entries,поэтому его деструктурируем
+            const arrData = [
+                ...new FormData(this)
+            ];
+            //transform array to object
+            const data = Object.fromEntries(arrData);
+            handler(data);
+        });
+    }
     _generateMarkup() {}
 }
 exports.default = new AddRecipeView();
 
-},{"./View":"5cUXS","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../config":"k5Hzs","../helper":"lVRAz"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
+},{"./View":"5cUXS","../config":"k5Hzs","../helper":"lVRAz","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["fA0o9","aenu9"], "aenu9", "parcelRequire3a11")
 
 //# sourceMappingURL=index.e37f48ea.js.map

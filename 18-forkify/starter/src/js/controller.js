@@ -97,6 +97,10 @@ function controlBookmarks() {
     bookmarksView.render(model.state.bookmarks);
 }
 
+function controlAddRecipe(newRecipe) {
+    console.log(newRecipe);
+}
+
 //
 function init() {
     bookmarksView.addHandlerRenderBookmarks(controlBookmarks);
@@ -105,7 +109,7 @@ function init() {
     recipeView.addHandlerAddBookmark(controlAddBookmark);
     searchView.addHandlerSearch(controlResearchResults);
     paginationView.addHandlerPagination(controlPagination);
-
+    addRecipeView.addHandlerAddRecipe(controlAddRecipe);
 }
 
 init();

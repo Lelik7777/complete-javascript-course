@@ -15,6 +15,7 @@ class AddRecipeView extends View {
         super();
         this._addHandlerShowWindow();
         this._addHandlerCloseWindow();
+
     }
 
     _toggleWindow() {
@@ -29,6 +30,17 @@ class AddRecipeView extends View {
     _addHandlerCloseWindow() {
         this._btnClose.addEventListener(CLICK, this._toggleWindow.bind(this));
         this._overlay.addEventListener(CLICK, this._toggleWindow.bind(this));
+    }
+
+    addHandlerAddRecipe(handler) {
+        this._parentEl.addEventListener('submit', function (e) {
+            e.preventDefault();
+            //этот конструктор принимает элемент форма и возвращает объект с entries,поэтому его деструктурируем
+            const arrData = [...new FormData(this)];
+            //transform array to object
+            const data = Object.fromEntries(arrData);
+            handler(data);
+        })
     }
 
     _generateMarkup() {
