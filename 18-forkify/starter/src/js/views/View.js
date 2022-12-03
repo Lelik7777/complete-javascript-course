@@ -5,6 +5,7 @@ export default class View {
     _parentEl;
     _error;
     _message;
+
 //этот метод как бы универсальный - он может вставлять разметку в ДОМ, а также может возвращать строку с HTML
     render(data, render = true) {
         if (!data || (Array.isArray(data) && data.length === 0)) return this.renderError();
@@ -50,7 +51,7 @@ export default class View {
 
 
     renderSpinner() {
-        this._clear();
+
         const markup =
             `
       <div class="spinner">
@@ -59,6 +60,7 @@ export default class View {
           </svg>
         </div>
       `;
+        this._clear();
         this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 
@@ -74,6 +76,7 @@ export default class View {
           <p>${message}</p>
         </div>
         `
+        this._parentEl.insertAdjacentHTML('afterbegin', markup);
     }
 
     renderError(message = this._error) {

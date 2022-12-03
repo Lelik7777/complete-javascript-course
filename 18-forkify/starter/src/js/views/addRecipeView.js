@@ -5,7 +5,7 @@ import {toggle} from "../helper";
 
 class AddRecipeView extends View {
     _parentEl = document.querySelector('.upload');
-
+    _message = 'Recipe was successfully uploaded';
     _window = document.querySelector('.add-recipe-window');
     _overlay = document.querySelector('.overlay');
     _btnClose = document.querySelector('.btn--close-modal');
@@ -18,19 +18,19 @@ class AddRecipeView extends View {
 
     }
 
-    _toggleWindow() {
+    toggleWindow() {
         toggle(this._overlay, HIDDEN);
         toggle(this._window, HIDDEN);
     }
 
     _addHandlerShowWindow() {
 
-        this._btnOpen.addEventListener(CLICK, this._toggleWindow.bind(this));
+        this._btnOpen.addEventListener(CLICK, this.toggleWindow.bind(this));
     }
 
     _addHandlerCloseWindow() {
-        this._btnClose.addEventListener(CLICK, this._toggleWindow.bind(this));
-        this._overlay.addEventListener(CLICK, this._toggleWindow.bind(this));
+        this._btnClose.addEventListener(CLICK, this.toggleWindow.bind(this));
+        this._overlay.addEventListener(CLICK, this.toggleWindow.bind(this));
     }
 
     addHandlerAddRecipe(handler) {

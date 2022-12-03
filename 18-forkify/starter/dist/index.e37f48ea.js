@@ -550,6 +550,7 @@ var _addRecipeView = require("./views/addRecipeView");
 var _addRecipeViewDefault = parcelHelpers.interopDefault(_addRecipeView);
 //я могу просто импортировать все из любого js файла и все вызовы ф-ций и все консоли  отработают
 var _someJs = require("./some.js");
+var _config = require("./config");
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 ///////////////////////////////////////
 // if(module.hot){
@@ -627,7 +628,17 @@ function controlBookmarks() {
 }
 async function controlAddRecipe(newRecipe) {
     try {
+        (0, _addRecipeViewDefault.default).renderSpinner();
+        //upload new custom  recipe
         await (0, _model.uploadRecipe)(newRecipe);
+        //render recipe
+        (0, _recipeViewDefault.default).render(_model.state.recipe);
+        //success message
+        (0, _addRecipeViewDefault.default).renderMessage();
+        //close form window
+        setTimeout(()=>{
+            (0, _addRecipeViewDefault.default).toggleWindow();
+        }, (0, _config.MODEL_CLOSE_SEC) * 1000);
     } catch (e) {
         (0, _addRecipeViewDefault.default).renderError(e);
         console.log(e);
@@ -645,7 +656,7 @@ function init() {
 }
 init();
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC","./views/searchView":"9OQAM","./views/resultsView":"cSbZE","./views/paginationView":"6z7bi","./views/bookmarksView":"4Lqzq","./some.js":"eIJda","./views/addRecipeView":"i6DNj"}],"gkKU3":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","core-js/modules/es.regexp.flags.js":"gSXXb","core-js/modules/web.immediate.js":"49tUX","./model":"Y4A21","./views/recipeView":"l60JC","./views/searchView":"9OQAM","./views/resultsView":"cSbZE","./views/paginationView":"6z7bi","./views/bookmarksView":"4Lqzq","./some.js":"eIJda","./views/addRecipeView":"i6DNj","./config":"k5Hzs"}],"gkKU3":[function(require,module,exports) {
 exports.interopDefault = function(a) {
     return a && a.__esModule ? a : {
         default: a
@@ -1905,22 +1916,28 @@ const state = {
     },
     bookmarks: JSON.parse(localStorage.getItem("bookmarks")) ?? []
 };
+const createRecipeObject = (data)=>{
+    let { recipe  } = data.data;
+    console.log(recipe);
+    return {
+        ...recipe.key && {
+            key: recipe.key
+        },
+        id: recipe.id,
+        title: recipe.title,
+        publisher: recipe.publisher,
+        image_url: recipe.image_url,
+        ingredients: recipe.ingredients,
+        servings: recipe.servings,
+        source_url: recipe.source_url,
+        cooking_time: recipe.cooking_time
+    };
+};
 const loadRecipe = async (id)=>{
     try {
-        const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}/${id}`);
-        let { recipe  } = data.data;
-        console.log(recipe);
-        //устанавливаем данные в state
-        state.recipe = {
-            id: recipe.id,
-            title: recipe.title,
-            publisher: recipe.publisher,
-            image_url: recipe.image_url,
-            ingredients: recipe.ingredients,
-            servings: recipe.servings,
-            source_url: recipe.source_url,
-            cooking_time: recipe.cooking_time
-        };
+        const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}${id}`);
+        state.recipe = createRecipeObject(data);
+        console.log(state.recipe);
         if (state.bookmarks.some((bookmark)=>bookmark.id === id)) state.recipe.bookmarked = true;
         else state.recipe.bookmarked = false;
     } catch (err) {
@@ -1997,9 +2014,9 @@ const uploadRecipe = async (newRecipe)=>{
             cooking_time: +newRecipe.cookingTime
         };
         const data = await (0, _helper.sendJSON)(`${(0, _config.API_URL)}?key=${(0, _config.KEY)}`, recipeNew);
-        const { recipe  } = data.data;
-        console.log(recipe);
-    // state.recipe=data;
+        state.recipe = createRecipeObject(data);
+        addBookmark(state.recipe);
+        console.log(state.recipe);
     } catch (e) {
         throw e;
     }
@@ -2012,13 +2029,15 @@ parcelHelpers.export(exports, "API_URL", ()=>API_URL);
 parcelHelpers.export(exports, "TIME_TIMEOUT", ()=>TIME_TIMEOUT);
 parcelHelpers.export(exports, "START_PAGE_SEARCH_RES", ()=>START_PAGE_SEARCH_RES);
 parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
+parcelHelpers.export(exports, "MODEL_CLOSE_SEC", ()=>MODEL_CLOSE_SEC);
 parcelHelpers.export(exports, "HIDDEN", ()=>HIDDEN);
 parcelHelpers.export(exports, "CLICK", ()=>CLICK);
 parcelHelpers.export(exports, "KEY", ()=>KEY);
-const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
+const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes/";
 const TIME_TIMEOUT = 7;
 const START_PAGE_SEARCH_RES = 1;
 const RES_PER_PAGE = 10;
+const MODEL_CLOSE_SEC = 2.5;
 const HIDDEN = "hidden";
 const CLICK = "click";
 const KEY = "52dd54d9-fc30-42e4-b980-3a9e3598dc8f";
@@ -2037,7 +2056,7 @@ const timeout = function(s) {
         }, s * 1000);
     });
 };
-const promiseRes = async (proFetch)=>{
+const resPromise = async (proFetch)=>{
     try {
         const res = await Promise.race([
             proFetch,
@@ -2053,22 +2072,22 @@ const promiseRes = async (proFetch)=>{
 const getJSON = async (url)=>{
     try {
         const proFetch = fetch(url);
-        return await promiseRes(proFetch);
+        return await resPromise(proFetch);
     } catch (err) {
         //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
         throw err;
     }
 };
-const sendJSON = async (url, recipe)=>{
+const sendJSON = async (url, recipeNew)=>{
     try {
         const proFetch = await fetch(`${url}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify(recipe)
+            body: JSON.stringify(recipeNew)
         });
-        return await promiseRes(proFetch);
+        return await resPromise(proFetch);
     } catch (e) {
         throw e;
     }
@@ -2547,7 +2566,6 @@ class View {
         this._parentEl.innerHTML = "";
     }
     renderSpinner() {
-        this._clear();
         const markup = `
       <div class="spinner">
           <svg>
@@ -2555,6 +2573,7 @@ class View {
           </svg>
         </div>
       `;
+        this._clear();
         this._parentEl.insertAdjacentHTML("afterbegin", markup);
     }
     renderMessage(message = this._message) {
@@ -2569,6 +2588,7 @@ class View {
           <p>${message}</p>
         </div>
         `;
+        this._parentEl.insertAdjacentHTML("afterbegin", markup);
     }
     renderError(message = this._error) {
         this._clear();
@@ -2745,6 +2765,7 @@ var _config = require("../config");
 var _helper = require("../helper");
 class AddRecipeView extends (0, _viewDefault.default) {
     _parentEl = document.querySelector(".upload");
+    _message = "Recipe was successfully uploaded";
     _window = document.querySelector(".add-recipe-window");
     _overlay = document.querySelector(".overlay");
     _btnClose = document.querySelector(".btn--close-modal");
@@ -2754,16 +2775,16 @@ class AddRecipeView extends (0, _viewDefault.default) {
         this._addHandlerShowWindow();
         this._addHandlerCloseWindow();
     }
-    _toggleWindow() {
+    toggleWindow() {
         (0, _helper.toggle)(this._overlay, (0, _config.HIDDEN));
         (0, _helper.toggle)(this._window, (0, _config.HIDDEN));
     }
     _addHandlerShowWindow() {
-        this._btnOpen.addEventListener((0, _config.CLICK), this._toggleWindow.bind(this));
+        this._btnOpen.addEventListener((0, _config.CLICK), this.toggleWindow.bind(this));
     }
     _addHandlerCloseWindow() {
-        this._btnClose.addEventListener((0, _config.CLICK), this._toggleWindow.bind(this));
-        this._overlay.addEventListener((0, _config.CLICK), this._toggleWindow.bind(this));
+        this._btnClose.addEventListener((0, _config.CLICK), this.toggleWindow.bind(this));
+        this._overlay.addEventListener((0, _config.CLICK), this.toggleWindow.bind(this));
     }
     addHandlerAddRecipe(handler) {
         this._parentEl.addEventListener("submit", function(e) {

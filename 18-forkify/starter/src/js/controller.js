@@ -10,6 +10,7 @@ import addRecipeView from "./views/addRecipeView";
 //я могу просто импортировать все из любого js файла и все вызовы ф-ций и все консоли  отработают
 import * as some from './some.js';
 import {uploadRecipe} from "./model";
+import {MODEL_CLOSE_SEC} from "./config";
 
 //https://forkify-api.herokuapp.com/v2 - documentation by forkify
 
@@ -99,12 +100,28 @@ function controlBookmarks() {
 }
 
 async function controlAddRecipe(newRecipe) {
-   try {
-       await uploadRecipe(newRecipe);
-   }catch (e) {
-       addRecipeView.renderError(e)
-       console.log(e)
-   }
+    try {
+
+        addRecipeView.renderSpinner();
+
+        //upload new custom  recipe
+        await uploadRecipe(newRecipe);
+
+        //render recipe
+        recipeView.render(model.state.recipe);
+
+        //success message
+        addRecipeView.renderMessage()
+
+        //close form window
+        setTimeout(() => {
+            addRecipeView.toggleWindow();
+        }, MODEL_CLOSE_SEC * 1000);
+
+    } catch (e) {
+        addRecipeView.renderError(e)
+        console.log(e)
+    }
 }
 
 //
