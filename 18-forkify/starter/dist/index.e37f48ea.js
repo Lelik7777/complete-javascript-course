@@ -631,8 +631,12 @@ async function controlAddRecipe(newRecipe) {
         (0, _addRecipeViewDefault.default).renderSpinner();
         //upload new custom  recipe
         await (0, _model.uploadRecipe)(newRecipe);
+        //change id in url
+        window.history.pushState(null, "", `#${_model.state.recipe.id}`);
         //render recipe
         (0, _recipeViewDefault.default).render(_model.state.recipe);
+        //render bookmark view
+        (0, _bookmarksViewDefault.default).render(_model.state.bookmarks);
         //success message
         (0, _addRecipeViewDefault.default).renderMessage();
         //close form window
@@ -1935,7 +1939,7 @@ const createRecipeObject = (data)=>{
 };
 const loadRecipe = async (id)=>{
     try {
-        const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}${id}`);
+        const data = await (0, _helper.AJAX)(`${(0, _config.API_URL)}${id}`);
         state.recipe = createRecipeObject(data);
         console.log(state.recipe);
         if (state.bookmarks.some((bookmark)=>bookmark.id === id)) state.recipe.bookmarked = true;
@@ -1948,7 +1952,7 @@ const loadRecipe = async (id)=>{
 };
 const loadSearchResults = async (query)=>{
     try {
-        const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}?search=${query}`);
+        const data = await (0, _helper.AJAX)(`${(0, _config.API_URL)}?search=${query}`);
         state.search.results = data.data.recipes.map((rec)=>({
                 id: rec.id,
                 title: rec.title,
@@ -2013,7 +2017,7 @@ const uploadRecipe = async (newRecipe)=>{
             source_url: newRecipe.sourceUrl,
             cooking_time: +newRecipe.cookingTime
         };
-        const data = await (0, _helper.sendJSON)(`${(0, _config.API_URL)}?key=${(0, _config.KEY)}`, recipeNew);
+        const data = await (0, _helper.AJAX)(`${(0, _config.API_URL)}?key=${(0, _config.KEY)}`, recipeNew);
         state.recipe = createRecipeObject(data);
         addBookmark(state.recipe);
         console.log(state.recipe);
@@ -2045,8 +2049,44 @@ const KEY = "52dd54d9-fc30-42e4-b980-3a9e3598dc8f";
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lVRAz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "getJSON", ()=>getJSON);
-parcelHelpers.export(exports, "sendJSON", ()=>sendJSON);
+parcelHelpers.export(exports, "AJAX", ()=>AJAX);
+// const resPromise = async (proFetch) => {
+//     try {
+//         const res = await Promise.race([proFetch, timeout(TIME_TIMEOUT)]);
+//         const data = await res.json();
+//
+//         if (!res.ok) throw new Error(`${data.message}(Status:${res.status})`);
+//         return data;
+//     } catch (e) {
+//         throw e;
+//     }
+//
+// }
+// export const getJSON = async (url) => {
+//     try {
+//         const proFetch = fetch(url);
+//         return await resPromise(proFetch);
+//     } catch (err) {
+//         //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
+//         throw err;
+//     }
+//
+// }
+//
+// export const sendJSON = async (url, recipeNew) => {
+//     try {
+//         const proFetch = await fetch(`${url}`, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify(recipeNew),
+//         });
+//         return await resPromise(proFetch);
+//     } catch (e) {
+//         throw e;
+//     }
+// }
 parcelHelpers.export(exports, "toggle", ()=>toggle);
 var _config = require("./config");
 const timeout = function(s) {
@@ -2056,10 +2096,17 @@ const timeout = function(s) {
         }, s * 1000);
     });
 };
-const resPromise = async (proFetch)=>{
+const AJAX = async (url, uploadData)=>{
     try {
-        const res = await Promise.race([
-            proFetch,
+        const fetchPro = uploadData ? fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(uploadData)
+        }) : fetch(url);
+        let res = await Promise.race([
+            fetchPro,
             timeout((0, _config.TIME_TIMEOUT))
         ]);
         const data = await res.json();
@@ -2069,34 +2116,11 @@ const resPromise = async (proFetch)=>{
         throw e;
     }
 };
-const getJSON = async (url)=>{
-    try {
-        const proFetch = fetch(url);
-        return await resPromise(proFetch);
-    } catch (err) {
-        //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
-        throw err;
-    }
-};
-const sendJSON = async (url, recipeNew)=>{
-    try {
-        const proFetch = await fetch(`${url}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(recipeNew)
-        });
-        return await resPromise(proFetch);
-    } catch (e) {
-        throw e;
-    }
-};
 function toggle(el, nameClass) {
     el.classList.toggle(nameClass);
 }
 
-},{"./config":"k5Hzs","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"l60JC":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./config":"k5Hzs"}],"l60JC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _iconsSvg = require("url:../../img/icons.svg");

@@ -1,5 +1,6 @@
 import {API_URL, START_PAGE_SEARCH_RES, RES_PER_PAGE, KEY} from "./config";
-import {getJSON, sendJSON} from "./helper";
+import {AJAX} from "./helper";
+
 
 export const state = {
     recipe: {},
@@ -29,7 +30,7 @@ const createRecipeObject = (data) => {
 }
 export const loadRecipe = async (id) => {
     try {
-        const data = await getJSON(`${API_URL}${id}`);
+        const data = await AJAX(`${API_URL}${id}`);
         state.recipe = createRecipeObject(data);
         console.log(state.recipe);
         if (state.bookmarks.some(bookmark => bookmark.id === id))
@@ -43,7 +44,7 @@ export const loadRecipe = async (id) => {
 }
 export const loadSearchResults = async (query) => {
     try {
-        const data = await getJSON(`${API_URL}?search=${query}`);
+        const data = await AJAX(`${API_URL}?search=${query}`);
         state.search.results = data.data.recipes.map(rec => ({
             id: rec.id,
             title: rec.title,
@@ -111,7 +112,7 @@ export const uploadRecipe = async (newRecipe) => {
             source_url: newRecipe.sourceUrl,
             cooking_time: +newRecipe.cookingTime
         }
-        const data = await sendJSON(`${API_URL}?key=${KEY}`, recipeNew);
+        const data = await AJAX(`${API_URL}?key=${KEY}`, recipeNew);
         state.recipe = createRecipeObject(data);
         addBookmark(state.recipe);
         console.log(state.recipe)

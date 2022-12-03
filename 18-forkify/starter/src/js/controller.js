@@ -107,8 +107,14 @@ async function controlAddRecipe(newRecipe) {
         //upload new custom  recipe
         await uploadRecipe(newRecipe);
 
+        //change id in url
+        window.history.pushState(null,'',`#${model.state.recipe.id}`);
+
         //render recipe
         recipeView.render(model.state.recipe);
+
+        //render bookmark view
+        bookmarksView.render(model.state.bookmarks);
 
         //success message
         addRecipeView.renderMessage()
