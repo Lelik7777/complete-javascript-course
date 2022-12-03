@@ -1,5 +1,5 @@
-import {API_URL, START_PAGE_SEARCH_RES, RES_PER_PAGE} from "./config";
-import {getJSON} from "./helper";
+import {API_URL, START_PAGE_SEARCH_RES, RES_PER_PAGE,KEY} from "./config";
+import {getJSON, sendJSON} from "./helper";
 
 export const state = {
     recipe: {},
@@ -13,7 +13,7 @@ export const state = {
 }
 export const loadRecipe = async (id) => {
     try {
-        const data = await getJSON(`${API_URL}${id}`);
+        const data = await getJSON(`${API_URL}/${id}`);
         let {recipe} = data.data;
         console.log(recipe)
 //устанавливаем данные в state
@@ -88,15 +88,16 @@ export const removeBookmark = (id) => {
 //{quantity: 1, unit: '', description: 'medium head cauliflower cut into florets'}
 export const uploadRecipe = async (newRecipe) => {
     try {
+        console.log(newRecipe)
         const ingredients = Object.entries(newRecipe)
-            .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== ' ')
+            .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
             .map(ing => {
                 const arrIng = ing[1].replace(' ', '').split(',');
                 if (arrIng.length !== 3) throw new Error('wrong recipe format');
                 const [quantity, unit, description] = arrIng;
                 return {quantity: quantity ? +quantity : null, unit, description}
             })
-        return {
+        const recipeNew = {
             title: newRecipe.title,
             publisher: newRecipe.publisher,
             image_url: newRecipe.image,
@@ -105,6 +106,10 @@ export const uploadRecipe = async (newRecipe) => {
             source_url: newRecipe.sourceUrl,
             cooking_time: +newRecipe.cookingTime
         }
+      const data= await sendJSON(`${API_URL}?key=${KEY}`,recipeNew);
+        const {recipe}=data.data;
+        console.log(recipe)
+       // state.recipe=data;
     } catch (e) {
         throw e;
     }

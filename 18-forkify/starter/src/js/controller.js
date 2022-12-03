@@ -100,7 +100,7 @@ function controlBookmarks() {
 
 async function controlAddRecipe(newRecipe) {
    try {
-       console.log( await uploadRecipe(newRecipe));
+       await uploadRecipe(newRecipe);
    }catch (e) {
        addRecipeView.renderError(e)
        console.log(e)

@@ -8,14 +8,22 @@ const timeout = function (s) {
     });
 };
 
-
-export const getJSON = async (url) => {
+const promiseRes = async (proFetch) => {
     try {
-        const res = await Promise.race([fetch(url), timeout(TIME_TIMEOUT)]);
+        const res = await Promise.race([proFetch, timeout(TIME_TIMEOUT)]);
         const data = await res.json();
 
         if (!res.ok) throw new Error(`${data.message}(Status:${res.status})`);
         return data;
+    }catch (e) {
+       throw e;
+    }
+
+}
+export const getJSON = async (url) => {
+    try {
+        const proFetch = fetch(url);
+        return await promiseRes(proFetch);
     } catch (err) {
         //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
         throw err;
@@ -23,7 +31,23 @@ export const getJSON = async (url) => {
 
 }
 
- export function toggle(el, nameClass) {
+export const sendJSON = async (url, recipe) => {
+    try {
+        const proFetch = await fetch(`${url}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(recipe),
+        });
+        return await promiseRes(proFetch);
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+export function toggle(el, nameClass) {
     el.classList.toggle(nameClass);
 }
 

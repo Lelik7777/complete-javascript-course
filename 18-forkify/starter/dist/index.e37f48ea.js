@@ -627,7 +627,7 @@ function controlBookmarks() {
 }
 async function controlAddRecipe(newRecipe) {
     try {
-        console.log(await (0, _model.uploadRecipe)(newRecipe));
+        await (0, _model.uploadRecipe)(newRecipe);
     } catch (e) {
         (0, _addRecipeViewDefault.default).renderError(e);
         console.log(e);
@@ -1907,7 +1907,7 @@ const state = {
 };
 const loadRecipe = async (id)=>{
     try {
-        const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}${id}`);
+        const data = await (0, _helper.getJSON)(`${(0, _config.API_URL)}/${id}`);
         let { recipe  } = data.data;
         console.log(recipe);
         //устанавливаем данные в state
@@ -1976,7 +1976,8 @@ const removeBookmark = (id)=>{
 };
 const uploadRecipe = async (newRecipe)=>{
     try {
-        const ingredients = Object.entries(newRecipe).filter((entry)=>entry[0].startsWith("ingredient") && entry[1] !== " ").map((ing)=>{
+        console.log(newRecipe);
+        const ingredients = Object.entries(newRecipe).filter((entry)=>entry[0].startsWith("ingredient") && entry[1] !== "").map((ing)=>{
             const arrIng = ing[1].replace(" ", "").split(",");
             if (arrIng.length !== 3) throw new Error("wrong recipe format");
             const [quantity, unit, description] = arrIng;
@@ -1986,7 +1987,7 @@ const uploadRecipe = async (newRecipe)=>{
                 description
             };
         });
-        return {
+        const recipeNew = {
             title: newRecipe.title,
             publisher: newRecipe.publisher,
             image_url: newRecipe.image,
@@ -1995,6 +1996,10 @@ const uploadRecipe = async (newRecipe)=>{
             source_url: newRecipe.sourceUrl,
             cooking_time: +newRecipe.cookingTime
         };
+        const data = await (0, _helper.sendJSON)(`${(0, _config.API_URL)}?key=${(0, _config.KEY)}`, recipeNew);
+        const { recipe  } = data.data;
+        console.log(recipe);
+    // state.recipe=data;
     } catch (e) {
         throw e;
     }
@@ -2009,17 +2014,20 @@ parcelHelpers.export(exports, "START_PAGE_SEARCH_RES", ()=>START_PAGE_SEARCH_RES
 parcelHelpers.export(exports, "RES_PER_PAGE", ()=>RES_PER_PAGE);
 parcelHelpers.export(exports, "HIDDEN", ()=>HIDDEN);
 parcelHelpers.export(exports, "CLICK", ()=>CLICK);
-const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes/";
+parcelHelpers.export(exports, "KEY", ()=>KEY);
+const API_URL = "https://forkify-api.herokuapp.com/api/v2/recipes";
 const TIME_TIMEOUT = 7;
 const START_PAGE_SEARCH_RES = 1;
 const RES_PER_PAGE = 10;
 const HIDDEN = "hidden";
 const CLICK = "click";
+const KEY = "52dd54d9-fc30-42e4-b980-3a9e3598dc8f";
 
 },{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lVRAz":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "getJSON", ()=>getJSON);
+parcelHelpers.export(exports, "sendJSON", ()=>sendJSON);
 parcelHelpers.export(exports, "toggle", ()=>toggle);
 var _config = require("./config");
 const timeout = function(s) {
@@ -2029,18 +2037,40 @@ const timeout = function(s) {
         }, s * 1000);
     });
 };
-const getJSON = async (url)=>{
+const promiseRes = async (proFetch)=>{
     try {
         const res = await Promise.race([
-            fetch(url),
+            proFetch,
             timeout((0, _config.TIME_TIMEOUT))
         ]);
         const data = await res.json();
         if (!res.ok) throw new Error(`${data.message}(Status:${res.status})`);
         return data;
+    } catch (e) {
+        throw e;
+    }
+};
+const getJSON = async (url)=>{
+    try {
+        const proFetch = fetch(url);
+        return await promiseRes(proFetch);
     } catch (err) {
         //мне необходимо еще раз выбросить ошибку,чтобы ее можно было поймать  catch в следующем блоке try..catch,где будет вызывать эта ф-ция getJSON
         throw err;
+    }
+};
+const sendJSON = async (url, recipe)=>{
+    try {
+        const proFetch = await fetch(`${url}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(recipe)
+        });
+        return await promiseRes(proFetch);
+    } catch (e) {
+        throw e;
     }
 };
 function toggle(el, nameClass) {
